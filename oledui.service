@@ -1,0 +1,15 @@
+[Unit]
+Description=Volumio oled UI
+ 
+[Service]
+Type=simple
+WorkingDirectory=/home/volumio
+ExecStart=/usr/bin/python -u /home/volumio/Volumio-OledUI/oledui.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=oledui
+User=volumio
+Group=volumio
+ 
+[Install]
+WantedBy=multi-user.target
