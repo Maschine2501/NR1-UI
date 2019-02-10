@@ -420,7 +420,7 @@ def RightKnob_RotaryEvent(dir):
 
 
 def RightKnob_PushEvent(hold_time):
-    if hold_time < 2:
+    if hold_time < 1:
         print ('RightKnob_PushEvent SHORT')
         if oled.state == STATE_QUEUE_MENU:
             oled.stateTimeout = 0          # return to player mode
@@ -445,7 +445,7 @@ LeftKnob_Push.setCallback(LeftKnob_PushEvent)
 LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
 LeftKnob_Rotation.setCallback(LeftKnob_RotaryEvent)
 
-RightKnob_Push = PushButton(27, max_time=2)
+RightKnob_Push = PushButton(27, max_time=1)
 RightKnob_Push.setCallback(RightKnob_PushEvent)
 RightKnob_Rotation = RotaryEncoder(22, 23, pulses_per_cycle=4)
 RightKnob_Rotation.setCallback(RightKnob_RotaryEvent)
