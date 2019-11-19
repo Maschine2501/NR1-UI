@@ -2,8 +2,8 @@ All Credits to: https://github.com/diehardsk
 
 #actually nothing from the original Code has been changed!
 
-I try to figure out how the code works and coment it on the code
-when i've tested it and finished every coment, i update the files here
+I try to figure out how the code works and coment it on the code.
+When i've tested it and finished every coment, i update the files here
 
 I'm trying to change: 
 * the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
