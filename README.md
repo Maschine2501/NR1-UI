@@ -6,12 +6,12 @@ I try to figure out how the code works and coment it on the code
 when i've tested it and finished every coment, i update the files here
 
 I'm trying to change: 
--the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
--Play- Pause- and Stop- Icons
--Bootup and Shutdown Logos
--More Buttons via GPIO
--remove one Rotary
--remove rotary Button
+* the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
+* Play- Pause- and Stop- Icons
+* Bootup and Shutdown Logos
+* More Buttons via GPIO
+* remove one Rotary
+* remove rotary Button
 
 
 # Volumio-OledUI
