@@ -1,3 +1,19 @@
+All Credits to: https://github.com/diehardsk
+
+#actually nothing from the original Code has been changed!
+
+I try to figure out how the code works and coment it on the code
+when i've tested it and finished every coment, i update the files here
+
+I'm trying to change: 
+-the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
+-Play- Pause- and Stop- Icons
+-Bootup and Shutdown Logos
+-More Buttons via GPIO
+-remove one Rotary
+-remove rotary Button
+
+
 # Volumio-OledUI
 Whole project is designed for playback of internet radio streaming, nevertheless you can access some other media as well.
 User interface allows you to control volume, queue position, load playlist file or music from Media Library, turn power off/on.
