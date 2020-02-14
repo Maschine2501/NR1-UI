@@ -11,16 +11,26 @@ Inspired by Volumio HandsOn script
 import requests
 import os
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import json
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
+import time
+import socket
+import re
+import subprocess
+from subprocess import Popen, PIPE
+
 
 from time import time, sleep
+from time import gmtime, strftime
 from threading import Thread
 from socketIO_client import SocketIO
 
 # Imports for OLED display
 from luma.core.interface.serial import spi
+from luma.core.render import canvas
 from luma.oled.device import ssd1322
 from PIL import Image
 from PIL import ImageDraw
@@ -36,6 +46,12 @@ VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
 
+mpd_music_dir		= "/var/lib/mpd/music/"
+title_height		= 40
+scroll_unit		= 2
+oled_width		= 256
+oled_height		= 64
+
 STATE_NONE = -1
 STATE_PLAYER = 0
 STATE_PLAYLIST_MENU = 1
@@ -48,13 +64,15 @@ UPDATE_INTERVAL = 0.034
 PIXEL_SHIFT_TIME = 120    #time between picture position shifts in sec.
 
 interface = spi(device=0, port=0)
-oled = ssd1322(interface)
+oled = ssd1322(interface, rotate=2)
 
 oled.WIDTH = 256
 oled.HEIGHT = 64
 oled.state = STATE_NONE
 oled.stateTimeout = 0
 oled.timeOutRunning = False
+oled.IP = ''
+oled.Clock = ''
 oled.activeSong = ''
 oled.activeArtist = 'VOLuMIO'
 oled.playState = 'unknown'
@@ -76,6 +94,40 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
+font_ip	= load_font('PixelOperator.ttf', 15)
+font_time = load_font('PixelOperator.ttf', 15)
+font_date = load_font('PixelOperator.ttf', 25)
+Awesomefont = make_font("fa-solid-900.ttf",  14)
+
+speaker			= "\uf028"
+wifi			= "\uf1eb"
+link			= "\uf0e8"
+clock			= "\uf017"
+
+mpd_host		= 'localhost'
+mpd_port		= 6600
+mpd_bufsize		= 8192
+
+
+
+def getWanIP():
+    #can be any routable address,
+    fakeDest = ("223.5.5.5", 53)
+    wanIP = ""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(fakeDest)
+        wanIP = s.getsockname()[0]
+        s.close()
+    except Exception, e:
+        pass
+    return wanIP
+
+def GetLANIP():
+   cmd = "ip addr show eth0 | grep inet  | grep -v inet6 | awk '{print $2}' | cut -d '/' -f 1"
+   p = Popen(cmd, shell=True, stdout=PIPE)
+   output = p.communicate()[0]
+   return output[:-1]
 
 
 def display_update_service():
@@ -124,7 +176,10 @@ def SetState(status):
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='------ Music Library ------')
-
+    elif oled.state == STATE_Standby:
+	    oled.modal = StandbyScreen(oled.HEIGHT, oled.WIDTH, oled.Clock, oled.IP, font, hugefontaw)
+	
+	
 def LoadPlaylist(playlistname):
     print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
     oled.playPosition = 0
@@ -133,6 +188,20 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
     #print(data)
+    if 'ip' in data:
+        newIP = data['IP']
+    else:
+        IP = getWanIP()
+    if newIP is None:
+        newIP = ''
+        
+    if 'Clock' in data:
+        newClock = data['Clock']
+    else:
+        newClock = strftime["%H:%M:%S"]
+    if newClock is None:   #volumio can push NoneType
+        newClock = ''
+
     if 'title' in data:
         newSong = data['title']
     else:
@@ -167,7 +236,7 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':
-            oled.modal.UpdatePlayingInfo(newArtist, newSong)
+            oled.modal.DisplayStandby(Clock, IP)
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -226,6 +295,33 @@ def onPushListPlaylist(data):
     global oled
     if len(data) > 0:
         oled.playlistoptions = data
+
+
+
+class StandbyScreen():
+    def __init__(self, height, width, row1, row2, font, fontaw):
+        self.height = height
+        self.width = width
+        self.font = font
+        self.fontaw = fontaw
+        self.standbyText1 = StaticText(self.height, self.width, row1, font, center=True)
+        self.standbyText2 = ScrollText(self.height, self.width, row2, font)
+        self.text1Pos = (3, 6)
+        self.text2Pos = (3, 37)
+        self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
+ 
+    def DisplayStandby(self, row1, row2):
+        self.standbyText1 = StaticText(self.height, self.width, row1, font, center=True)
+        self.standbyText2 = ScrollText(self.height, self.width, row2, font)
+
+    def DrawOn(self, image):
+        if self.playingIcon != self.icon['stop']:
+            self.playingText1.DrawOn(image, self.text1Pos)
+            self.playingText2.DrawOn(image, self.text2Pos)
+        if self.iconcountdown > 0:
+            compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
+            image.paste(compositeimage.convert('RGB'), (0, 0))
+            self.iconcountdown -= 1
 
 class NowPlayingScreen():
     def __init__(self, height, width, row1, row2, font, fontaw):
