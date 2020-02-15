@@ -23,8 +23,7 @@ import subprocess
 from subprocess import Popen, PIPE
 
 
-from time import time, sleep
-from time import gmtime, strftime
+from time import time, sleep, gmtime, strftime
 from threading import Thread
 from socketIO_client import SocketIO
 
@@ -188,19 +187,19 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
     #print(data)
-    if 'ip' in data:
-        newIP = data['IP']
+    if 'wanIP' in data:
+        IP = data['wanIP']
     else:
         IP = getWanIP()
-    if newIP is None:
-        newIP = ''
+    if IP is None:
+        IP = ''
         
     if 'Clock' in data:
-        newClock = data['Clock']
+        Clock = data['Clock']
     else:
-        newClock = strftime["%H:%M:%S"]
-    if newClock is None:   #volumio can push NoneType
-        newClock = ''
+        Clock = strftime["%H:%M:%S"]
+    if Clock is None:   #volumio can push NoneType
+       Clock = ''
 
     if 'title' in data:
         newSong = data['title']
@@ -236,7 +235,7 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':
-            oled.modal.DisplayStandby(Clock, IP)
+                             SetState(STATE_Standby)
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -304,24 +303,19 @@ class StandbyScreen():
         self.width = width
         self.font = font
         self.fontaw = fontaw
-        self.standbyText1 = StaticText(self.height, self.width, row1, font, center=True)
-        self.standbyText2 = ScrollText(self.height, self.width, row2, font)
+        self.StandbyText1 = StaticText(self.height, self.width, row1, font, center=True)
+        self.StandbyText2 = ScrollText(self.height, self.width, row2, font)
         self.text1Pos = (3, 6)
         self.text2Pos = (3, 37)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
  
     def DisplayStandby(self, row1, row2):
-        self.standbyText1 = StaticText(self.height, self.width, row1, font, center=True)
-        self.standbyText2 = ScrollText(self.height, self.width, row2, font)
+        self.StandbyText1 = StaticText(self.height, self.width, row1, font, center=True)
+        self.StandbyText2 = ScrollText(self.height, self.width, row2, font)
 
     def DrawOn(self, image):
-        if self.playingIcon != self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos)
-            self.playingText2.DrawOn(image, self.text2Pos)
-        if self.iconcountdown > 0:
-            compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
-            image.paste(compositeimage.convert('RGB'), (0, 0))
-            self.iconcountdown -= 1
+            self.StandbyText1.DrawOn(image, self.text1Pos)
+            self.StandbyText2.DrawOn(image, self.text2Pos)
 
 class NowPlayingScreen():
     def __init__(self, height, width, row1, row2, font, fontaw):
