@@ -1,9 +1,6 @@
 All Credits to: https://github.com/diehardsk
 
-#actually nothing from the original Code has been changed!
-
-I try to figure out how the code works and coment it on the code.
-When i've tested it and finished every coment, i update the files here
+This is a fork from diehrdsk/Volumio-OledUi
 
 I'm trying to change: 
 * the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
@@ -12,21 +9,12 @@ I'm trying to change:
 * More Buttons via GPIO
 * remove one Rotary
 * remove rotary Button
+* implement a new State : standby,which displays time & ip
 
-
-# Volumio-OledUI
-Whole project is designed for playback of internet radio streaming, nevertheless you can access some other media as well.
-User interface allows you to control volume, queue position, load playlist file or music from Media Library, turn power off/on.
 
 ## hardware
-* Raspberry Pi 2B/3B with Volumio2 image
+* Raspberry Pi 2B/3B/4B with Volumio2 image
 * 3.2" 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
-* Two rotary encoders with pushbutton; 20 cycles per revolution
-* Optional PCM5102 DAC
-
-![Picture](img/connection.png?raw=true)
-
-It's highly recommended to use pull-up resistors and debounce filter caps for rotary encoders.
 
 ## dependencies
 * [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/)
@@ -47,18 +35,10 @@ sudo apt-get update
 sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
 sudo pip install --upgrade setuptools pip wheel
 sudo pip install --upgrade socketIO-client-2 luma.oled
-git clone https://github.com/diehardsk/Volumio-OledUI.git
+git clone https://github.com/Maschine2501/Volumio-OledUI.git
 chmod +x ~/Volumio-OledUI/oledui.py
 sudo cp ~/Volumio-OledUI/oledui.service /lib/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable oledui.service
 reboot
 ```
-
-### how to check the logs
-```
-sudo journalctl -fu oledui.service
-```
-
-Do not expect everything to work perfectly on your setup. You may run into problems which you need to solve by yourself.
-There's no support hotline. ;-)
