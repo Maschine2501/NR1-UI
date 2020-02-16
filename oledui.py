@@ -285,9 +285,9 @@ class NowPlayingScreen():
             self.playingText1.DrawOn(image, self.text1Pos)
             self.playingText2.DrawOn(image, self.text2Pos)
         if self.playingIcon == self.icon['stop']:
-            self.playingText3.DrawOn(image, self.text3Pos)
-            self.playingText4.DrawOn(image, self.text4Pos)
-	    self.playingText5.DrawOn(image, self.text5Pos)
+            self.standbyText3.DrawOn(image, self.text3Pos)
+            self.standbyText4.DrawOn(image, self.text4Pos)
+	    self.standbyText5.DrawOn(image, self.text5Pos)
            
             
         if self.iconcountdown > 0:
