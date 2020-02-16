@@ -2,12 +2,6 @@
 
 from __future__ import unicode_literals
 
-"""
-Volumio User Interface: OLED 256x64 + 2x rotary encoder with pushbutton
-DiehardSK 2019
-Inspired by Volumio HandsOn script
-"""
-
 import requests
 import os
 import sys
@@ -78,8 +72,8 @@ emit_track = False
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT + 4))  #enlarged for pixelshift
 oled.clear()
 
-font = load_font('Roboto-Regular.ttf', 24)
-font2 = load_font('PixelOperator.ttf', 15)
+font = load_font('digi.ttf', 24)
+font2 = load_font('digi.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
 fontClock = load_font('digi.ttf', 50)
 fontDate = load_font('digi.ttf', 14)  
@@ -264,10 +258,10 @@ class NowPlayingScreen():
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (3, 6)
-        self.text2Pos = (3, 37)
-	self.text3Pos = (0, 0)
-	self.text4Pos = (2, 48)
+        self.text1Pos = (40, 0)
+        self.text2Pos = (40, 32)
+	self.text3Pos = (40, 0)
+	self.text4Pos = (42, 48)
 	self.text5Pos = (192, 48)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
@@ -312,13 +306,13 @@ class VolumeScreen():
         self.font = font
         self.font2 = font2
         self.volumeLabel = None
-        self.labelPos = (10, 5)
+        self.labelPos = (40, 5)
         self.volumeNumber = None
-        self.numberPos = (10, 25)
+        self.numberPos = (40, 25)
         self.barHeight = 22
         self.barWidth = 140
         self.volumeBar = Bar(self.height, self.width, self.barHeight, self.barWidth)
-        self.barPos = (85, 27)
+        self.barPos = (105, 27)
         self.volume = 0
         self.DisplayVolume(volume)
 
@@ -344,8 +338,8 @@ class MenuScreen():
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (1, 3)
-        self.menuYPos = 3 + 16 * self.hasLabel
+        self.labelPos = (42, 0)
+        self.menuYPos = 42 + 16 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
         self.menuList = menuList
