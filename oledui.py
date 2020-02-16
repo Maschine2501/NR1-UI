@@ -254,13 +254,13 @@ class NowPlayingScreen():
         self.font = font
         self.fontaw = fontaw
         self.fontClock = fontClock
-	self.fontClock = fontDate
-	self.fontClock = fontIP
+	self.fontDate = fontDate
+	self.fontIP = fontIP
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
 	self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
 	self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.playingText4 = StaticText(self.height, self.width, row5, fontDate)
+	self.playingText5 = StaticText(self.height, self.width, row5, fontDate)
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
