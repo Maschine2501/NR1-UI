@@ -79,7 +79,7 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-
+fontClock = load_font('digi.ttf', 32)  
 
 def display_update_service():
     pixshift = [2, 2]
@@ -117,7 +117,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, font, hugefontaw)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, font, hugefontaw, fontClock)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -172,7 +172,7 @@ def onPushState(data):
         if oled.state == STATE_PLAYER and newStatus != 'stop':
             oled.modal.UpdatePlayingInfo(newArtist, newSong)
         if oled.state == STATE_PLAYER and newStatus == 'stop':
-            oled.modal.UpdatePlayingInfo(oled.IP, oled.time)
+            oled.modal.UpdatePlayingInfo(oled.time, oled.IP)
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -234,31 +234,38 @@ def onPushListPlaylist(data):
         oled.playlistoptions = data
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, font, fontaw):
+    def __init__(self, height, width, row1, row2, row3, row4, font, fontaw, fontClock):
         self.height = height
         self.width = width
         self.font = font
         self.fontaw = fontaw
+        self.fontClock = fontClock
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
-        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
+	self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
+	self.playingText4 = ScrollText(self.height, self.width, row4, font)
+	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (3, 6)
         self.text2Pos = (3, 37)
+	self.text3Pos = (3, 0)
+	self.text4Pos = (3, 36)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
-    def UpdatePlayingInfo(self, row1, row2):
+    def UpdatePlayingInfo(self, row1, row2, row3, row4):
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
+        self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
+        self.playingText4 = ScrollText(self.height, self.width, row4, font)
 
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
             self.playingText1.DrawOn(image, self.text1Pos)
             self.playingText2.DrawOn(image, self.text2Pos)
         if self.playingIcon == self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos)
-            self.playingText2.DrawOn(image, self.text2Pos)
+            self.playingText3.DrawOn(image, self.text3Pos)
+            self.playingText4.DrawOn(image, self.text4Pos)
            
             
         if self.iconcountdown > 0:
