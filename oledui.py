@@ -250,9 +250,9 @@ class NowPlayingScreen():
         self.fontClock = fontClock
 	self.fontDate = fontDate
 	self.fontIP = fontIP
-        self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
+        self.playingText1 = StaticText(self.height, self.width, row1, font)    #center=True
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
-	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
+	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)  #center=True
 	self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)
 	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
