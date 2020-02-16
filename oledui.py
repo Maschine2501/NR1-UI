@@ -29,7 +29,7 @@ from socketIO_client import SocketIO
 
 # Imports for OLED display
 from luma.core.interface.serial import spi
-#from luma.core.render import canvas   <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
+from luma.core.render import canvas
 from luma.oled.device import ssd1322
 from PIL import Image
 from PIL import ImageDraw
@@ -63,15 +63,15 @@ UPDATE_INTERVAL = 0.034
 PIXEL_SHIFT_TIME = 120    #time between picture position shifts in sec.
 
 interface = spi(device=0, port=0)
-oled = ssd1322(interface, rotate=2)  #rotate=0 -> normal /  rotate=2 -> 180° screenrotation
+oled = ssd1322(interface, rotate=2)
 
 oled.WIDTH = 256
 oled.HEIGHT = 64
 oled.state = STATE_NONE
 oled.stateTimeout = 0
 oled.timeOutRunning = False
-oled.IP = ''          #<- Placeholder for IP-Data-String 
-oled.Clock = ''       #<- Placeholder for Realtime Data-String
+oled.IP = ''
+oled.Clock = ''
 oled.activeSong = ''
 oled.activeArtist = 'VOLuMIO'
 oled.playState = 'unknown'
@@ -93,19 +93,19 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-#font_ip	= load_font('PixelOperator.ttf', 15)   <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#font_time = load_font('PixelOperator.ttf', 15)    <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#font_date = load_font('PixelOperator.ttf', 25)    <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#Awesomefont = make_font("fa-solid-900.ttf",  14)  <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
+font_ip	= load_font('PixelOperator.ttf', 15)
+font_time = load_font('PixelOperator.ttf', 15)
+font_date = load_font('PixelOperator.ttf', 25)
+Awesomefont = make_font("fa-solid-900.ttf",  14)
 
-#speaker			= "\uf028"     <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#wifi			= "\uf1eb"         <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#link			= "\uf0e8"         <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#clock			= "\uf017"         <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
+speaker			= "\uf028"
+wifi			= "\uf1eb"
+link			= "\uf0e8"
+clock			= "\uf017"
 
-#mpd_host		= 'localhost'      <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#mpd_port		= 6600             <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
-#mpd_bufsize		= 8192         <- Not used at the moment (relation to moode_oled_1.54_spi_audiophonics.py
+mpd_host		= 'localhost'
+mpd_port		= 6600
+mpd_bufsize		= 8192
 
 
 
@@ -175,7 +175,7 @@ def SetState(status):
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='------ Music Library ------')
-    elif oled.state == STATE_STANDBY:    #definition for Standbyscreen informations
+    elif oled.state == STATE_Standby:
 	    oled.modal = StandbyScreen(oled.HEIGHT, oled.WIDTH, oled.Clock, oled.IP, font, hugefontaw)
 	
 	
@@ -190,7 +190,7 @@ def onPushState(data):
     if 'wanIP' in data:
         IP = data['wanIP']
     else:
-        IP = getWanIP ''
+        IP = getWanIP()
     if IP is None:
         IP = ''
         
@@ -235,12 +235,7 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':
-                   oled.modal.UpdatePlayingInfo(newArtist, newSong)
-
-    if oled.state == STATE_PLAYER and newStatus = 'stop':
-                   oled.modal.DisplayStandby(Clock, IP)
-                   SetState(STATE_STANDBY)
-
+                             SetState(STATE_Standby)
 
     if newStatus != oled.playState:
         oled.playState = newStatus
