@@ -81,7 +81,9 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-fontClock = load_font('digi.ttf', 32)  
+fontClock = load_font('digi.ttf', 44)
+fontDate = load_font('digi.ttf', 14)  
+fontIP = load_font('digi.ttf', 14)  
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
@@ -129,7 +131,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, font, hugefontaw, fontClock)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, font, hugefontaw, fontClock, fontDate, fontIP)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -184,7 +186,7 @@ def onPushState(data):
         if oled.state == STATE_PLAYER and newStatus != 'stop':
             oled.modal.UpdatePlayingInfo(newArtist, newSong)
         if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
-            oled.modal.UpdatePlayingInfo(oled.time, oled.IP)     #here is defined which "data" should be displayed in the class
+            oled.modal.UpdatePlayingInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -246,30 +248,35 @@ def onPushListPlaylist(data):
         oled.playlistoptions = data
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, font, fontaw, fontClock): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, font, fontaw, fontClock, fontDate, fontIP): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
         self.fontaw = fontaw
         self.fontClock = fontClock
+	self.fontClock = fontDate
+	self.fontClock = fontIP
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
 	self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
-	self.playingText4 = ScrollText(self.height, self.width, row4, font)
+	self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
+	self.playingText4 = StaticText(self.height, self.width, row5, fontDate)
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (3, 6)
         self.text2Pos = (3, 37)
-	self.text3Pos = (3, 0)
-	self.text4Pos = (3, 36)
+	self.text3Pos = (0, 0)
+	self.text4Pos = (130, 48)
+	self.text5Pos = (2, 48)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdatePlayingInfo(self, row1, row2, row3, row4):
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
         self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
-        self.playingText4 = ScrollText(self.height, self.width, row4, font)
+        self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
+	self.playingText4 = StaticText(self.height, self.width, row5, fontDate)
 
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
@@ -278,6 +285,7 @@ class NowPlayingScreen():
         if self.playingIcon == self.icon['stop']:
             self.playingText3.DrawOn(image, self.text3Pos)
             self.playingText4.DrawOn(image, self.text4Pos)
+	    self.playingText5.DrawOn(image, self.text5Pos)
            
             
         if self.iconcountdown > 0:
