@@ -81,7 +81,7 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-fontClock = load_font('digi.ttf', 44)
+fontClock = load_font('digi.ttf', 50)
 fontDate = load_font('digi.ttf', 14)  
 fontIP = load_font('digi.ttf', 14)  
 #above are the "imports" for the fonts. 
@@ -267,8 +267,8 @@ class NowPlayingScreen():
         self.text1Pos = (3, 6)
         self.text2Pos = (3, 37)
 	self.text3Pos = (0, 0)
-	self.text4Pos = (130, 48)
-	self.text5Pos = (2, 48)
+	self.text4Pos = (2, 48)
+	self.text5Pos = (192, 48)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdatePlayingInfo(self, row1, row2, row3, row4):
@@ -276,7 +276,7 @@ class NowPlayingScreen():
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
         self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
         self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.playingText4 = StaticText(self.height, self.width, row5, fontDate)
+	self.playingText5 = StaticText(self.height, self.width, row5, fontDate)
 
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
