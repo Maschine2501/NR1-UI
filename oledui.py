@@ -11,25 +11,17 @@ Inspired by Volumio HandsOn script
 import requests
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import json
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
-import time
-import socket
-import re
-import subprocess
-from subprocess import Popen, PIPE
 
-
-from time import time, sleep, gmtime, strftime
+from time import time, sleep
 from threading import Thread
 from socketIO_client import SocketIO
+from datetime import datetime
 
 # Imports for OLED display
 from luma.core.interface.serial import spi
-from luma.core.render import canvas
 from luma.oled.device import ssd1322
 from PIL import Image
 from PIL import ImageDraw
@@ -44,12 +36,6 @@ volumio_port = 3000
 VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
-
-mpd_music_dir		= "/var/lib/mpd/music/"
-title_height		= 40
-scroll_unit		= 2
-oled_width		= 256
-oled_height		= 64
 
 STATE_NONE = -1
 STATE_PLAYER = 0
@@ -70,8 +56,6 @@ oled.HEIGHT = 64
 oled.state = STATE_NONE
 oled.stateTimeout = 0
 oled.timeOutRunning = False
-oled.IP = ''
-oled.Clock = ''
 oled.activeSong = ''
 oled.activeArtist = 'VOLuMIO'
 oled.playState = 'unknown'
@@ -83,7 +67,9 @@ oled.libraryFull = []
 oled.libraryNames = []
 oled.volumeControlDisabled = False
 oled.volume = 100
-
+now = datetime.now() # current date and time
+oled.time = now.strftime("%H:%M:%S")
+oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0]
 emit_volume = False
 emit_track = False
 
@@ -93,40 +79,6 @@ oled.clear()
 font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-font_ip	= load_font('PixelOperator.ttf', 15)
-font_time = load_font('PixelOperator.ttf', 15)
-font_date = load_font('PixelOperator.ttf', 25)
-Awesomefont = make_font("fa-solid-900.ttf",  14)
-
-speaker			= "\uf028"
-wifi			= "\uf1eb"
-link			= "\uf0e8"
-clock			= "\uf017"
-
-mpd_host		= 'localhost'
-mpd_port		= 6600
-mpd_bufsize		= 8192
-
-
-
-def getWanIP():
-    #can be any routable address,
-    fakeDest = ("223.5.5.5", 53)
-    wanIP = ""
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(fakeDest)
-        wanIP = s.getsockname()[0]
-        s.close()
-    except Exception, e:
-        pass
-    return wanIP
-
-def GetLANIP():
-   cmd = "ip addr show eth0 | grep inet  | grep -v inet6 | awk '{print $2}' | cut -d '/' -f 1"
-   p = Popen(cmd, shell=True, stdout=PIPE)
-   output = p.communicate()[0]
-   return output[:-1]
 
 
 def display_update_service():
@@ -175,10 +127,7 @@ def SetState(status):
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='------ Music Library ------')
-    elif oled.state == STATE_Standby:
-	    oled.modal = StandbyScreen(oled.HEIGHT, oled.WIDTH, oled.Clock, oled.IP, font, hugefontaw)
-	
-	
+
 def LoadPlaylist(playlistname):
     print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
     oled.playPosition = 0
@@ -187,20 +136,6 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
     #print(data)
-    if 'wanIP' in data:
-        IP = data['wanIP']
-    else:
-        IP = getWanIP()
-    if IP is None:
-        IP = ''
-        
-    if 'Clock' in data:
-        Clock = data['Clock']
-    else:
-        Clock = strftime["%H:%M:%S"]
-    if Clock is None:   #volumio can push NoneType
-       Clock = ''
-
     if 'title' in data:
         newSong = data['title']
     else:
@@ -235,7 +170,9 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':
-                             SetState(STATE_Standby)
+            oled.modal.UpdatePlayingInfo(newArtist, newSong)
+        if oled.state == STATE_PLAYER and newStatus == 'stop':
+            oled.modal.UpdatePlayingInfo(oled.IP, oled.time)
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -245,6 +182,7 @@ def onPushState(data):
             else:
                 iconTime = 80
             oled.modal.SetPlayingIcon(oled.playState, iconTime)
+    
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
@@ -295,28 +233,6 @@ def onPushListPlaylist(data):
     if len(data) > 0:
         oled.playlistoptions = data
 
-
-
-class StandbyScreen():
-    def __init__(self, height, width, row1, row2, font, fontaw):
-        self.height = height
-        self.width = width
-        self.font = font
-        self.fontaw = fontaw
-        self.StandbyText1 = StaticText(self.height, self.width, row1, font, center=True)
-        self.StandbyText2 = ScrollText(self.height, self.width, row2, font)
-        self.text1Pos = (3, 6)
-        self.text2Pos = (3, 37)
-        self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
- 
-    def DisplayStandby(self, row1, row2):
-        self.StandbyText1 = StaticText(self.height, self.width, row1, font, center=True)
-        self.StandbyText2 = ScrollText(self.height, self.width, row2, font)
-
-    def DrawOn(self, image):
-            self.StandbyText1.DrawOn(image, self.text1Pos)
-            self.StandbyText2.DrawOn(image, self.text2Pos)
-
 class NowPlayingScreen():
     def __init__(self, height, width, row1, row2, font, fontaw):
         self.height = height
@@ -340,6 +256,11 @@ class NowPlayingScreen():
         if self.playingIcon != self.icon['stop']:
             self.playingText1.DrawOn(image, self.text1Pos)
             self.playingText2.DrawOn(image, self.text2Pos)
+        if self.playingIcon == self.icon['stop']:
+            self.playingText1.DrawOn(image, self.text1Pos)
+            self.playingText2.DrawOn(image, self.text2Pos)
+           
+            
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
             image.paste(compositeimage.convert('RGB'), (0, 0))
