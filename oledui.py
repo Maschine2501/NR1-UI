@@ -49,7 +49,8 @@ UPDATE_INTERVAL = 0.034
 PIXEL_SHIFT_TIME = 120    #time between picture position shifts in sec.
 
 interface = spi(device=0, port=0)
-oled = ssd1322(interface, rotate=2)
+oled = ssd1322(interface, rotate=2) 
+#without rotate display is 0 degrees, with rotate=2 its 180 degrees
 
 oled.WIDTH = 256
 oled.HEIGHT = 64
@@ -68,8 +69,9 @@ oled.libraryNames = []
 oled.volumeControlDisabled = False
 oled.volume = 100
 now = datetime.now() # current date and time
-oled.time = now.strftime("%H:%M:%S")
-oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0]
+oled.time = now.strftime("%H:%M:%S") #resolves time as HH:MM:SS eg. 14:33:15
+oled.date = now.strftime("%d/%m/%y") #resolves time as dd.mm.yyyy eg. 17.04.2020
+oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
 
@@ -80,6 +82,9 @@ font = load_font('Roboto-Regular.ttf', 24)
 font2 = load_font('PixelOperator.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
 fontClock = load_font('digi.ttf', 32)  
+#above are the "imports" for the fonts. 
+#After the name of the font comes a number, this defines the Size (height) of the letters. 
+#Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 def display_update_service():
     pixshift = [2, 2]
@@ -114,6 +119,13 @@ def display_update_service():
         oled.display(cimg)
         sleep(UPDATE_INTERVAL)
 
+#Example to SetState:
+#oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, font, hugefontaw, fontClock)
+#here you have to define which variables you want to use in "class" (following below)
+#simply define which "data" (eg. oled.IP...) you want to display followed by the fonts you want to use
+#Hint: the "data" is equal to row1, row2... etc. in the classes, first "data" is row1 and so on...
+#oled.activeArtist = row1 / oled.activeSong = row2 ....
+	
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
@@ -171,8 +183,8 @@ def onPushState(data):
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':
             oled.modal.UpdatePlayingInfo(newArtist, newSong)
-        if oled.state == STATE_PLAYER and newStatus == 'stop':
-            oled.modal.UpdatePlayingInfo(oled.time, oled.IP)
+        if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
+            oled.modal.UpdatePlayingInfo(oled.time, oled.IP)     #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -234,7 +246,7 @@ def onPushListPlaylist(data):
         oled.playlistoptions = data
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, font, fontaw, fontClock):
+    def __init__(self, height, width, row1, row2, row3, row4, font, fontaw, fontClock): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
