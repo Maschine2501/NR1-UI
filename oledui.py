@@ -186,7 +186,7 @@ def onPushState(data):
         if oled.state == STATE_PLAYER and newStatus != 'stop':
             oled.modal.UpdatePlayingInfo(newArtist, newSong)
         if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
-            oled.modal.UpdatePlayingInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
+            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -258,9 +258,9 @@ class NowPlayingScreen():
 	self.fontIP = fontIP
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
-	self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
-	self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.playingText5 = StaticText(self.height, self.width, row5, fontDate)
+	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
+	self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)
+	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
@@ -271,13 +271,15 @@ class NowPlayingScreen():
 	self.text5Pos = (192, 48)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
-    def UpdatePlayingInfo(self, row1, row2, row3, row4):
+    def UpdatePlayingInfo(self, row1, row2):
         self.playingText1 = StaticText(self.height, self.width, row1, font, center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font)
-        self.playingText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
-        self.playingText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.playingText5 = StaticText(self.height, self.width, row5, fontDate)
-
+	
+    def UpdateStandbyInfo(self, row3, row4, row5):
+        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock, center=True)
+        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)
+	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)	
+	
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
             self.playingText1.DrawOn(image, self.text1Pos)
