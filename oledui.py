@@ -258,9 +258,9 @@ class NowPlayingScreen():
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (40, 0)
-        self.text2Pos = (40, 32)
-	self.text3Pos = (40, 0)
+        self.text1Pos = (40, 8)
+        self.text2Pos = (40, 40)
+	self.text3Pos = (42, 0)
 	self.text4Pos = (42, 48)
 	self.text5Pos = (192, 48)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
