@@ -25,11 +25,22 @@ I'm trying to change:
 
 ### installation steps
 ```
+sudo apt-get update
+ 
+sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+ 
+sudo pip install --upgrade setuptools pip wheel
+ 
+sudo pip install --upgrade socketIO-client-2 luma.oled
+ 
 git clone https://github.com/Maschine2501/Volumio-OledUI.git
+ 
+chmod +x ~/Volumio-OledUI/oledui.py
+ 
+sudo cp ~/Volumio-OledUI/oledui.service /lib/systemd/system/
+ 
+sudo systemctl daemon-reload
+ 
+sudo systemctl enable oledui.service
 
-chmod +x Volumio-OledUI/install.sh
-
-cd Volumio-OledUI
-
-sudo ./install.sh
 ```
