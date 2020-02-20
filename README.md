@@ -25,11 +25,11 @@ I'm trying to change:
 
 ### installation steps
 ```
-git clone https://github.com/Maschine2501/BraunNR1-OledUI
+git clone https://github.com/Maschine2501/Volumio-OledUI.git
 
-chmod +x BraunNR1-OledUI/install.sh
+chmod +x Volumio-OledUI/install.sh
 
-cd BraunNR1-OledUI
+cd Volumio-OledUI
 
 sudo ./install.sh
 ```
