@@ -8,14 +8,14 @@ sudo sh -c "echo 'hdmi_drive=1' >> /boot/config.txt"
 sudo sh -c "echo 'dtparam=spi=on' >> /boot/config.txt"
 
 #2nd comans will install Braun-OledUI
-sudo apt-get update
-sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
-sudo pip install --upgrade setuptools pip wheel
-sudo pip install --upgrade socketIO-client-2 luma.oled
-chmod +x ./oledui.py
-sudo cp ./oledui.service /lib/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable oledui.service
+apt-get update
+apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+pip install --upgrade setuptools pip wheel
+pip install --upgrade socketIO-client-2 luma.oled
+chmod +x BraunNR1-OledUI/oledui.py
+cp BraunNR1-OledUI/oledui.service /lib/systemd/system/
+systemctl daemon-reload
+systemctl enable oledui.service
 
 echo " "
 echo " "
