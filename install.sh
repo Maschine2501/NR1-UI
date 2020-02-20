@@ -12,8 +12,8 @@ apt-get update
 apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
 pip install --upgrade setuptools pip wheel
 pip install --upgrade socketIO-client-2 luma.oled
-chmod +x BraunNR1-OledUI/oledui.py
-cp BraunNR1-OledUI/oledui.service /lib/systemd/system/
+chmod +x ~/BraunNR1-OledUI/oledui.py
+cp ~/BraunNR1-OledUI/oledui.service /lib/systemd/system/
 systemctl daemon-reload
 systemctl enable oledui.service
 
