@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #first commands enable touchscreen output - Touchscreen plugin needs to be enabled manualy by webinterface
-sudo sh -c "echo 'hdmi_group=2' >> /boot/config.txt"
-sudo sh -c "echo 'hdmi_mode=87' >> /boot/config.txt"
-sudo sh -c "echo 'hdmi_cvt 1024 600 60 6 0 0 0' >> /boot/config.txt"
-sudo sh -c "echo 'hdmi_drive=1' >> /boot/config.txt"
-sudo sh -c "echo 'dtparam=spi=on' >> /boot/config.txt"
+sh -c "echo 'hdmi_group=2' >> /boot/config.txt"
+sh -c "echo 'hdmi_mode=87' >> /boot/config.txt"
+sh -c "echo 'hdmi_cvt 1024 600 60 6 0 0 0' >> /boot/config.txt"
+sh -c "echo 'hdmi_drive=1' >> /boot/config.txt"
+sh -c "echo 'dtparam=spi=on' >> /boot/config.txt"
 
 #2nd comans will install Braun-OledUI
 apt-get update
