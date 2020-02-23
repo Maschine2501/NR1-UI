@@ -545,3 +545,4 @@ while True:
     if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
    	oled.time = strftime("%H:%M:%S")
    	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
+    sleep(0.1)
