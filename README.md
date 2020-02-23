@@ -1,32 +1,18 @@
 Inspired by: https://github.com/diehardsk/Volumio-OledUI
 This is a fork from diehrdsk/Volumio-OledUi
 
-#### Volumio-OledUI MK2
+# Volumio-OledUI MK2
 
-### To-Do: 
+## To-Do: 
 * Tune "Now-Playing" Screen (other fonts, position)
 * Play- Pause- and Stop- Icons
 * Bootup and Shutdown Logos
 * More Buttons via GPIO
 * remove one Rotary 
 
-### Allready Done:
+## Allready Done:
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
-
-
-## hardware
-* Raspberry Pi 2B/3B/4B with Volumio2 image
-* 3.2" 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
-* 4 Buttons (connected with "pull-down" Resistors: 1k to GPIO, 10K to Gnd)
-* 1 Rotary Encoder with Push-Button icluded
-
-## dependencies
-* [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/)
-* [socketIO-client-2](https://pypi.python.org/pypi/socketIO-client-2)
-* PIL
-* [luma.oled](https://luma-oled.readthedocs.io/)
-
 
 ### installation steps
 ```
@@ -50,7 +36,21 @@ sudo systemctl enable oledui.service
 
 ```
 
-### Hints
+## Hints
+
 ```
--when Volumio is configured to remember the last Playlist and the last Playback was from a local drive (eg. USB) Artist and Trackinfo sty corrupt until another Playback was selected.
+-when Volumio is configured to remember the last Playlist after reboot, some strange sh** happens:
+If the last Playback was from a local drive (eg. USB), Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 ```
+
+### hardware
+* Raspberry Pi 2B/3B/4B with Volumio2 image
+* 3.2" 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
+* 4 Buttons (connected with "pull-down" Resistors: 1k to GPIO, 10K to Gnd)
+* 1 Rotary Encoder with Push-Button icluded
+
+### dependencies
+* [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/)
+* [socketIO-client-2](https://pypi.python.org/pypi/socketIO-client-2)
+* PIL
+* [luma.oled](https://luma-oled.readthedocs.io/)
