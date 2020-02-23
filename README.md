@@ -2,19 +2,23 @@ All Credits to: https://github.com/diehardsk
 
 This is a fork from diehrdsk/Volumio-OledUi
 
-I'm trying to change: 
-* the "Now-Playing" Screen (other fonts, add File-Info and Playtime)
+### To-Do: 
+* Tune "Now-Playing" Screen (other fonts, position)
 * Play- Pause- and Stop- Icons
 * Bootup and Shutdown Logos
 * More Buttons via GPIO
-* remove one Rotary
-* remove rotary Button
-* implement a new State : standby,which displays time & ip
+* remove one Rotary 
+
+### Allready Done:
+*Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
+*Automatic stop when playback is paused (value could be defined / declared)
 
 
 ## hardware
 * Raspberry Pi 2B/3B/4B with Volumio2 image
 * 3.2" 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
+* 4 Buttons (connected with "pull-down" Resistors: 1k to GPIO, 10K to Gnd)
+* 1 Rotary Encoder with Push-Button icluded
 
 ## dependencies
 * [RPi.GPIO](https://sourceforge.net/p/raspberry-gpio-python/wiki/Home/)
