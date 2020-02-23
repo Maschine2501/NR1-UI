@@ -44,3 +44,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable oledui.service
 
 ```
+
+### Hints
+```
+-when Volumio is configured to remember the last Playlist and the last Playback was from a local drive (eg. USB) Artist and Trackinfo sty corrupt until another Playback was selected.
+```
