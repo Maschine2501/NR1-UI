@@ -39,12 +39,15 @@ reboot
 
 ## Hints
 
-
 -when Volumio is configured to remember the last Playlist after reboot, some strange sh** happens:
 If the last Playback was from a local drive (eg. USB), 
 Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 (Will investigate it sometime later...)
 
+## Wiring
+
+... needs to be done
+(shematics will come later)
 
 ### hardware
 * Raspberry Pi 2B/3B/4B with Volumio2 image
