@@ -10,6 +10,8 @@ This is a fork from diehrdsk/Volumio-OledUi
 * More Buttons via GPIO
 * remove one Rotary 
 
+* ? Use "CAVA" to display a bargraph spectrum ?
+
 ## Allready Done:
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
