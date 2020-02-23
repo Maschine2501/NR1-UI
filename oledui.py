@@ -5,11 +5,13 @@ from __future__ import unicode_literals
 import requests
 import os
 import sys
+import time
 import json
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
 from time import time, sleep
+from time import localtime, strftime
 from threading import Thread
 from socketIO_client import SocketIO
 from datetime import datetime
@@ -68,6 +70,7 @@ oled.date = now.strftime("%d/%m/%y") #resolves time as dd.mm.yyyy eg. 17.04.2020
 oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
+newStatus = 0
 
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT + 4))  #enlarged for pixelshift
 oled.clear()
@@ -144,6 +147,9 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
     #print(data)
+
+    global newStatus
+	
     if 'title' in data:
         newSong = data['title']
     else:
@@ -536,3 +542,6 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
+    if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
+   	oled.time = strftime("%H:%M:%S")
+   	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
