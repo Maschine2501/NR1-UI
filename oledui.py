@@ -70,10 +70,6 @@ oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #
 emit_volume = False
 emit_track = False
 newStatus = 0
-#pauseStart = 0
-#pause = 0
-#wechselTime = 0
-
 
 
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT + 4))  #enlarged for pixelshift
