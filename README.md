@@ -1,6 +1,7 @@
-All Credits to: https://github.com/diehardsk
-
+Inspired by: https://github.com/diehardsk/Volumio-OledUI
 This is a fork from diehrdsk/Volumio-OledUi
+
+#### Volumio-OledUI MK2
 
 ### To-Do: 
 * Tune "Now-Playing" Screen (other fonts, position)
@@ -10,8 +11,8 @@ This is a fork from diehrdsk/Volumio-OledUi
 * remove one Rotary 
 
 ### Allready Done:
-*Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
-*Automatic stop when playback is paused (value could be defined / declared)
+* Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
+* Automatic stop when playback is paused (value could be defined / declared)
 
 
 ## hardware
