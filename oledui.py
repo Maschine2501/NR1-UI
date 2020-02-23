@@ -10,8 +10,7 @@ import json
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
-from time import time, sleep
-from time import localtime, strftime
+from time import*
 from threading import Thread
 from socketIO_client import SocketIO
 from datetime import datetime
@@ -533,9 +532,7 @@ else:
     
 if oled.playState != 'play':
     volumioIO.emit('play', {'value':oled.playPosition})
-
-#if pauseStart-Pause == 0:
-#   pauseStart = wechselTime = time()
+varcanc = True
 while True:
     if emit_volume:
         emit_volume = False
@@ -549,13 +546,13 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
-#   pause = time() - wechselTime
     if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
    	oled.time = strftime("%H:%M:%S")
    	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
-#    elif oled.state == STATE_PLAYER and newStatus == 'pause' and (pauseStart-pause >= 5):
-#         newStatus = 'stop'
-#    if oled.state == STATE_PLAYER and newStatus != 'pause':
-#        pauseStart = wechselTime = time()
-
+    if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
+       secvar = int(round(time()))
+       varcanc = False
+    elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
+	 varcanc = True
+         volumioIO.emit('stop')
 sleep(0.1)
