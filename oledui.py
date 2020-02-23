@@ -546,9 +546,11 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
-    if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
+    #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
+    if oled.state == STATE_PLAYER and newStatus == 'stop':  
    	oled.time = strftime("%H:%M:%S")
    	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
+    #if playback is paused, here is defined when the Player goes back to "Standby"/Stop	
     if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
        secvar = int(round(time()))
        varcanc = False
