@@ -95,17 +95,18 @@ def display_update_service():
     while UPDATE_INTERVAL > 0:
         dt = time() - prevTime
         prevTime = time()
-        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
-            lastshift = prevTime
-            if pixshift[0] == 4 and pixshift[1] < 4:
-                pixshift[1] += 1
-            elif pixshift[1] == 0 and pixshift[0] < 4:
-                pixshift[0] += 1
-            elif pixshift[0] == 0 and pixshift[1] > 0:
-                pixshift[1] -= 1
-            else:
-                pixshift[0] -= 1
-        # auto return to home display screen (from volume display / queue list..)
+#        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
+#            lastshift = prevTime
+#            if pixshift[0] == 4 and pixshift[1] < 4:
+#                pixshift[1] += 1
+#            elif pixshift[1] == 0 and pixshift[0] < 4:
+#                pixshift[0] += 1
+#            elif pixshift[0] == 0 and pixshift[1] > 0:
+#                pixshift[1] -= 1
+#            else:
+#                pixshift[0] -= 1
+ 
+	# auto return to home display screen (from volume display / queue list..)
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
             oled.stateTimeout -= dt
