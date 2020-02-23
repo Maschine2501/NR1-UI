@@ -71,6 +71,11 @@ oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #
 emit_volume = False
 emit_track = False
 newStatus = 0
+#pauseStart = 0
+#pause = 0
+#wechselTime = 0
+
+
 
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT + 4))  #enlarged for pixelshift
 oled.clear()
@@ -529,6 +534,8 @@ else:
 if oled.playState != 'play':
     volumioIO.emit('play', {'value':oled.playPosition})
 
+#if pauseStart-Pause == 0:
+#   pauseStart = wechselTime = time()
 while True:
     if emit_volume:
         emit_volume = False
@@ -542,7 +549,13 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
+#   pause = time() - wechselTime
     if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
    	oled.time = strftime("%H:%M:%S")
    	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
-    sleep(0.1)
+#    elif oled.state == STATE_PLAYER and newStatus == 'pause' and (pauseStart-pause >= 5):
+#         newStatus = 'stop'
+#    if oled.state == STATE_PLAYER and newStatus != 'pause':
+#        pauseStart = wechselTime = time()
+
+sleep(0.1)
