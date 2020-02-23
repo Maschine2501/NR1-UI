@@ -78,9 +78,9 @@ oled.clear()
 font = load_font('digi.ttf', 24)
 font2 = load_font('digi.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-fontClock = load_font('DSG.ttf', 40)
-fontDate = load_font('digi.ttf', 14)  
-fontIP = load_font('digi.ttf', 14)  
+fontClock = load_font('DSG.ttf', 42)
+fontDate = load_font('digi.ttf', 16)  
+fontIP = load_font('digi.ttf', 16)  
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
@@ -267,9 +267,9 @@ class NowPlayingScreen():
         self.iconcountdown = 0
         self.text1Pos = (40, 8)
         self.text2Pos = (40, 40)
-	self.text3Pos = (42, 0)
-	self.text4Pos = (42, 48)
-	self.text5Pos = (192, 48)
+	self.text3Pos = (42, 2)
+	self.text4Pos = (46, 54)
+	self.text5Pos = (178, 54)
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdatePlayingInfo(self, row1, row2):
