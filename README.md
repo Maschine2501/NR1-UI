@@ -14,7 +14,7 @@ This is a fork from diehrdsk/Volumio-OledUi
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
 
-### installation steps
+## installation steps
 ```
 sudo apt-get update
  
@@ -38,10 +38,12 @@ sudo systemctl enable oledui.service
 
 ## Hints
 
-```
+
 -when Volumio is configured to remember the last Playlist after reboot, some strange sh** happens:
-If the last Playback was from a local drive (eg. USB), Artist and Trackinfo stay corrupt until another Playback-Source was selected.
-```
+If the last Playback was from a local drive (eg. USB), 
+Artist and Trackinfo stay corrupt until another Playback-Source was selected.
+(Will investigate it sometime later...)
+
 
 ### hardware
 * Raspberry Pi 2B/3B/4B with Volumio2 image
