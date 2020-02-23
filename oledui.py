@@ -257,38 +257,38 @@ class NowPlayingScreen():
         self.fontClock = fontClock
 	self.fontDate = fontDate
 	self.fontIP = fontIP
-        self.playingText1 = StaticText(self.height, self.width, row1, font)    #center=True
-        self.playingText2 = ScrollText(self.height, self.width, row2, font)
-	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)  #center=True
-	self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)
+        self.playingText1 = StaticText(self.height, self.width, row1, font)       #center=True /ARTIST
+        self.playingText2 = ScrollText(self.height, self.width, row2, font)       #Songtitle
+	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)  #center=True /Clock
+	self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)     #IP
+	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)   #Date
 	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (40, 8)
-        self.text2Pos = (40, 40)
-	self.text3Pos = (42, 4)
-	self.text4Pos = (46, 54)
-	self.text5Pos = (184, 54)
+        self.text1Pos = (40, 8)   #Artist
+        self.text2Pos = (40, 40)  #Song
+	self.text3Pos = (42, 4)   #Clock
+	self.text4Pos = (46, 54)  #IP
+	self.text5Pos = (184, 54) #Date
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdatePlayingInfo(self, row1, row2):
-        self.playingText1 = StaticText(self.height, self.width, row1, font) # center=True)
-        self.playingText2 = ScrollText(self.height, self.width, row2, font)
+        self.playingText1 = StaticText(self.height, self.width, row1, font) #center=True) #Artist
+        self.playingText2 = ScrollText(self.height, self.width, row2, font) #Song
 	
     def UpdateStandbyInfo(self, row3, row4, row5):
-        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) # center=True)
-        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)
-	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)	
+        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) # center=True) #Clock
+        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)    #IP
+	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)	 #Date
 	
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos)
-            self.playingText2.DrawOn(image, self.text2Pos)
+            self.playingText1.DrawOn(image, self.text1Pos) #Artist
+            self.playingText2.DrawOn(image, self.text2Pos) #Song
         if self.playingIcon == self.icon['stop']:
-            self.standbyText3.DrawOn(image, self.text3Pos)
-            self.standbyText4.DrawOn(image, self.text4Pos)
-	    self.standbyText5.DrawOn(image, self.text5Pos)
+            self.standbyText3.DrawOn(image, self.text3Pos) #Clock
+            self.standbyText4.DrawOn(image, self.text4Pos) #IP
+	    self.standbyText5.DrawOn(image, self.text5Pos) #Date
            
             
         if self.iconcountdown > 0:
