@@ -5,11 +5,12 @@ from __future__ import unicode_literals
 import requests
 import os
 import sys
+import time
 import json
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
-from time import time, sleep
+from time import*
 from threading import Thread
 from socketIO_client import SocketIO
 from datetime import datetime
@@ -68,16 +69,20 @@ oled.date = now.strftime("%d/%m/%y") #resolves time as dd.mm.yyyy eg. 17.04.2020
 oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
+newStatus = 0 #makes newStatus usable outside of onPushState
+oled.activeFormat = '' #makes oled.activeFormat usable in onPushState
+oled.activeSamplerate = '' #makes oled.activeSamplerate usable in onPushState
+oled.activeBitdepth = '' #makes oled.activeBitdepth usable in onPushState
 
-image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT + 4))  #enlarged for pixelshift
+image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
 font = load_font('digi.ttf', 24)
 font2 = load_font('digi.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
-fontClock = load_font('digi.ttf', 50)
+fontClock = load_font('DSG.ttf', 41)
 fontDate = load_font('digi.ttf', 14)  
-fontIP = load_font('digi.ttf', 14)  
+fontIP = load_font('digi.ttf', 14)   
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
@@ -88,16 +93,17 @@ def display_update_service():
     while UPDATE_INTERVAL > 0:
         dt = time() - prevTime
         prevTime = time()
-        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
-            lastshift = prevTime
-            if pixshift[0] == 4 and pixshift[1] < 4:
-                pixshift[1] += 1
-            elif pixshift[1] == 0 and pixshift[0] < 4:
-                pixshift[0] += 1
-            elif pixshift[0] == 0 and pixshift[1] > 0:
-                pixshift[1] -= 1
-            else:
-                pixshift[0] -= 1
+#Lines below define the Pixelshift
+#        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
+#            lastshift = prevTime
+#            if pixshift[0] == 4 and pixshift[1] < 4:
+#                pixshift[1] += 1
+#            elif pixshift[1] == 0 and pixshift[0] < 4:
+#                pixshift[0] += 1
+#            elif pixshift[0] == 0 and pixshift[1] > 0:
+#                pixshift[1] -= 1
+#            else:
+#                pixshift[0] -= 1
         # auto return to home display screen (from volume display / queue list..)
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
@@ -125,7 +131,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, font, hugefontaw, fontClock, fontDate, fontIP)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, hugefontaw, fontClock, fontDate, fontIP)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -143,7 +149,17 @@ def LoadPlaylist(playlistname):
     SetState(STATE_PLAYER)
 
 def onPushState(data):
-    #print(data)
+	
+	print(data) #for log, if enabled you see the values for 'data'
+	print('1st step OPS Format:' + newFormat)  #for log, if enabled you see the values for 'data'
+	print() #for log, if enabled you see the values for 'data'
+	print() #for log, if enabled you see the values for 'data'
+	
+	global newStatus #global definition for newStatus, used at the end-loop to update standby
+	global newFormat
+	global newSamplerate
+	global newBitdepth
+
     if 'title' in data:
         newSong = data['title']
     else:
