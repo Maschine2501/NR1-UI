@@ -92,6 +92,16 @@ sudo rm -r Volumio-OledUI
 ### after the steps above, follow Step 2 from "installation steps"
 ```
 
+## Check the logs
+
+#### for the stable build
+
+sudo journalctl -fu oledui.service
+
+#### for the nightly build:
+
+sudo journalctl -fu oledui-nightly.service
+
 ## Hints
 
 -when Volumio is configured to remember the last Playlist after reboot, some strange sh** happens:
