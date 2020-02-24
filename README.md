@@ -18,6 +18,10 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 ## installation steps (stable release)
 ```
+If not done yet, set local system time zone:
+
+sudo dpkg-reconfigure tzdata
+
 Step 1:
 
 sudo apt-get update
@@ -61,6 +65,10 @@ newBitdepth = eg. '16 bit'     (row8)
 - print is labled (from start -> End) A -> AA -> AAA -> Row6
 ```
 Step 1:
+
+If not done yet, set local system time zone:
+
+sudo dpkg-reconfigure tzdata
 
 sudo apt-get update
  
