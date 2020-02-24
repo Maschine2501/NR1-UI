@@ -91,6 +91,7 @@ def display_update_service():
     while UPDATE_INTERVAL > 0:
         dt = time() - prevTime
         prevTime = time()
+#Lines below define the Pixelshift
 #        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
 #            lastshift = prevTime
 #            if pixshift[0] == 4 and pixshift[1] < 4:
