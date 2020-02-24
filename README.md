@@ -16,16 +16,22 @@ This is a fork from diehrdsk/Volumio-OledUi
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
 
-## installation steps
+## installation steps (stable release)
 ```
-sudo apt-get update
+Step 1:
+
+* sudo apt-get update
  
-sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+* sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
  
-sudo pip install --upgrade setuptools pip wheel
+* sudo pip install --upgrade setuptools pip wheel
  
-sudo pip install --upgrade socketIO-client-2 luma.oled
- 
+* sudo pip install --upgrade socketIO-client-2 luma.oled
+
+### The steps above need to be done once, not every time you want to update.
+
+Step 2:
+
 git clone https://github.com/Maschine2501/Volumio-OledUI.git
  
 chmod +x ~/Volumio-OledUI/oledui.py
@@ -37,6 +43,53 @@ sudo systemctl daemon-reload
 sudo systemctl enable oledui.service
 
 reboot
+```
+
+## installation steps (nightly build)
+## (Some changes, but not everything working properly)
+```
+Step 1:
+
+* sudo apt-get update
+ 
+* sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+ 
+* sudo pip install --upgrade setuptools pip wheel
+ 
+* sudo pip install --upgrade socketIO-client-2 luma.oled
+ 
+### The steps above need to be done once, not every time you want to update.
+
+Step 2:
+
+git clone https://github.com/Maschine2501/Volumio-OledUI.git
+ 
+chmod +x ~/Volumio-OledUI/oledui-nightly.py
+ 
+sudo cp ~/Volumio-OledUI/oledui-nightly.service /lib/systemd/system/
+ 
+sudo systemctl daemon-reload
+ 
+sudo systemctl enable oledui-nightly.service
+
+reboot
+```
+
+## installation steps (Update)
+```
+### for stable:
+
+sudo systemctl disable oledui.service
+
+sudo rm -r Volumio-OledUI
+
+### for nightly:
+
+sudo systemctl disable oledui-nightly.service
+
+sudo rm -r Volumio-OledUI
+
+### after the steps above, follow Step 2 from "installation steps"
 ```
 
 ## Hints
