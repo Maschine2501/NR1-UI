@@ -20,15 +20,15 @@ This is a fork from diehrdsk/Volumio-OledUi
 ```
 Step 1:
 
-* sudo apt-get update
+sudo apt-get update
  
-* sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
  
-* sudo pip install --upgrade setuptools pip wheel
+sudo pip install --upgrade setuptools pip wheel
  
-* sudo pip install --upgrade socketIO-client-2 luma.oled
+sudo pip install --upgrade socketIO-client-2 luma.oled
 
-### The steps above need to be done once, not every time you want to update.
+### Step 1 needs to be done once, not every time you want to update.
 
 Step 2:
 
@@ -50,15 +50,15 @@ reboot
 ```
 Step 1:
 
-* sudo apt-get update
+sudo apt-get update
  
-* sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
+sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio
  
-* sudo pip install --upgrade setuptools pip wheel
+sudo pip install --upgrade setuptools pip wheel
  
-* sudo pip install --upgrade socketIO-client-2 luma.oled
+sudo pip install --upgrade socketIO-client-2 luma.oled
  
-### The steps above need to be done once, not every time you want to update.
+### Step 1 need to be done once, not every time you want to update.
 
 Step 2:
 
