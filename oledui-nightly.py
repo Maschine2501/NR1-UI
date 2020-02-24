@@ -575,13 +575,7 @@ sleep(0.1)
 
 
 def timeupdate()
- start_time = datetime.datetime.now()
- 
- while (status):
-    if (datetime.datetime.now() - start_time).seconds == 1:
-       start_time = datetime.datetime.now()
-       print(start_time)
-       ('pushState', onPushState)
+    start_time = datetime.datetime.now()
 
 try:
     with open('oledconfig.json', 'r') as f:   #load last playing track number
