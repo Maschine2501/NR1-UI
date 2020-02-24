@@ -213,7 +213,7 @@ def onPushState(data):
 	
 
     print(newSong.encode('ascii', 'ignore'))
-    if (newSong != oled.activeSong):    # new song
+    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):    # new song
         oled.activeSong = newSong
         oled.activeArtist = newArtist
 	oled.activeFormat = newFormat
@@ -594,8 +594,8 @@ else:
 if oled.playState != 'play':
     volumioIO.emit('play', {'value':oled.playPosition})
 
-varcanc = true #trigger for pause -> stop timer
-
+varcanc = True #helper for pause -> stop timeout counter
+InfoTag = 0    #helper for missing Artist/Song when changing sources
 while True:
     if emit_volume:
         emit_volume = False
@@ -609,15 +609,22 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
+#this is the loop to get artist/song when changing sources (loops three times)
+    if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
+        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong)
+        InfoTag += 1
+        sleep(1.5)
 #    onPushState(data)
 #    if oled.state == STATE_PLAYER and newStatus == 'play' and (newFormat == 'flac' or 'wav' or 'mp3' or 'm4a') and newSamplerate == '' and newBitdepth == '':
 #        newSamplerate = data['samplerate']
 #        newBitdepth = data['bitdepth']
 #        oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)
-    if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the loop to update the "Standby-Screen"
+#this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
+    if oled.state == STATE_PLAYER and newStatus == 'stop':
+	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
         oled.time = strftime("%H:%M:%S")
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
-#here begins the timer for pause -> stop	
+ #if playback is paused, here is defined when the Player goes back to "Standby"/Stop		
     if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
        secvar = int(round(time()))
        varcanc = False
