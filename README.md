@@ -5,6 +5,8 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WyBcdSjRcxg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/WyBcdSjRcxg/0.jpg)](http://www.youtube.com/watch?v=WyBcdSjRcxg "Video-Sample")
+
 ## To-Do: 
 * Tune "Now-Playing" Screen (other fonts, position)
 * Play- Pause- and Stop- Icons
