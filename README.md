@@ -138,7 +138,9 @@ Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 ... needs to be done
 (more shematics will come later)
 
-![Alt text](/img/connection.png?raw=true "Title")
+![Alt text](/img/connection.png?raw=true "wiring")
+
+![Alt text](/img/button.png?raw=true "button mapping")
 
 ### hardware
 * Raspberry Pi 2B/3B/4B with Volumio2 image
