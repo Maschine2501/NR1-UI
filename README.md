@@ -19,6 +19,7 @@ Demo Video from early Build:
 ## Allready Done:
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
+* display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
 
 ## installation steps (stable release)
 ```
