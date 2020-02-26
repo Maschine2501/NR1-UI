@@ -153,9 +153,6 @@ def onPushState(data):
     #print(data) #for log, if enabled you see the values for 'data'
 	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
-    #global newFormat
-    #global newSamplerate
-    #global newBitdepth
 
     if 'title' in data:
         newSong = data['title']
@@ -213,26 +210,12 @@ def onPushState(data):
     oled.activeSamplerate = newSamplerate
     oled.activeBitdepth = newBitdepth
 
-    print('A: ' + newFormat)  #for log, if enabled you see the values for newFormat     
-    print('B: ' + newSamplerate)  #for log, if enabled you see the values for newSamplerate
-    print('C: ' + newBitdepth)   #for log, if enabled you see the values for newBitdepth
-	
-
     print(newSong.encode('ascii', 'ignore'))
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):    # new song
         oled.activeSong = newSong
         oled.activeArtist = newArtist
-	#oled.activeFormat = newFormat
-        #oled.activeSamplerate = newSamplerate
-        #oled.activeBitdepth = newBitdepth
-	print('AA: ' + newFormat)  #for log, if enabled you see the values for newFormat     
-        print('BB: ' + newSamplerate)  #for log, if enabled you see the values for newSamplerate
-        print('CC: ' + newBitdepth)   #for log, if enabled you see the values for newBitdepth
 	if oled.state == STATE_PLAYER and newStatus != 'stop':
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)
-            print('AAA: ' + newFormat)  #for log, if enabled you see the values for newFormat     
-            print('BBB: ' + newSamplerate)  #for log, if enabled you see the values for newSamplerate
-            print('CCC: ' + newBitdepth)   #for log, if enabled you see the values for newBitdepth
 	if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
 
@@ -294,6 +277,9 @@ def onPushListPlaylist(data):
     global oled
     if len(data) > 0:
         oled.playlistoptions = data
+
+#if you wan't to add more textposition: double check if using STATIC or SCROLL text.
+#this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
 class NowPlayingScreen():
     def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontaw, fontClock, fontDate, fontIP): #this line references to oled.modal = NowPlayingScreen
         self.height = height
@@ -617,12 +603,6 @@ while True:
         oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
         InfoTag += 1
         sleep(1.5)
-#    onPushState(data)
-   # if oled.state == STATE_PLAYER and newStatus == 'play' and (newFormat == 'flac' or 'wav' or 'mp3' or 'm4a') and newSamplerate == '' and newBitdepth == '':
-       # if oled.state == STATE_PLAYER and newStatus == 'play' and newFormat != ' ' and newSamplerate != ' ' and newBitdepth != ' ':
-#    if (oled.state == STATE_PLAYER) and (newStatus == 'play') and (oled.activeFormat != ' ') and (oled.activeSamplerate != ' ') and (oled.activeBitdepth != ' '):
-#	print('hier ist die schleife Bit/format/sample')
-#	oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
 #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
     if oled.state == STATE_PLAYER and newStatus == 'stop':
 	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
