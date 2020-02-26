@@ -56,17 +56,15 @@ reboot
 ## installation steps (nightly build)
 (Some changes, but not everything working properly)
 
-### 24.02.2020:
-- added newFormat, newSamplerate and newBitdepth
-- actual goal is: show File-Format (Flac, Mp3...), Samplerate and Bitdepth on NowPlayingScreen
-newFormat = eg. 'flac'         (row6)
-newSamplerate = eg. '44.1 khz' (row7)
-newBitdepth = eg. '16 bit'     (row8)
-#### bug:
-- only 'newFormat' is displayed.
-- newSamplerate and newBitdepth get lost on the way from "onPushState" to "UpdatePlayingInfo"
-- therefore: set some 'print()' actions in the code.
-- print is labled (from start -> End) A -> AA -> AAA -> Row6
+### 26.02.2020
+
+- added newFormat, newSamplerate and newBitdepth -> working!
+
+### bug:
+
+-Textpositions not final
+-buttons not implemented yet
+
 ```
 Step 1:
 
