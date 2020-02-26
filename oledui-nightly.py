@@ -150,12 +150,12 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
 	
-	print(data) #for log, if enabled you see the values for 'data'
+    #print(data) #for log, if enabled you see the values for 'data'
 	
-	global newStatus #global definition for newStatus, used at the end-loop to update standby
-	global newFormat
-	global newSamplerate
-	global newBitdepth
+    global newStatus #global definition for newStatus, used at the end-loop to update standby
+    #global newFormat
+    #global newSamplerate
+    #global newBitdepth
 
     if 'title' in data:
         newSong = data['title']
@@ -177,20 +177,22 @@ def onPushState(data):
         newFormat = ''
     if newFormat is None:
         newFormat = ''
+    if newFormat == True:
+	newFormat = 'WebRadio'
 
     if 'samplerate' in data:
         newSamplerate = data['samplerate']
     else:
-        newSamplerate = ''
+        newSamplerate = ' '
     if newSamplerate is None:
-        newSamplerate = ''
+        newSamplerate = ' '
 
     if 'bitdepth' in data:
         newBitdepth = data['bitdepth']
     else:
-        newBitdepth = ''
+        newBitdepth = ' '
     if newBitdepth is None:
-        newBitdepth = ''
+        newBitdepth = ' '
         
     if 'position' in data:                      # current position in queue
         oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
@@ -207,6 +209,10 @@ def onPushState(data):
     if 'disableVolumeControl' in data:
         oled.volumeControlDisabled = data['disableVolumeControl']
     
+    oled.activeFormat = newFormat
+    oled.activeSamplerate = newSamplerate
+    oled.activeBitdepth = newBitdepth
+
     print('A: ' + newFormat)  #for log, if enabled you see the values for newFormat     
     print('B: ' + newSamplerate)  #for log, if enabled you see the values for newSamplerate
     print('C: ' + newBitdepth)   #for log, if enabled you see the values for newBitdepth
@@ -216,9 +222,9 @@ def onPushState(data):
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):    # new song
         oled.activeSong = newSong
         oled.activeArtist = newArtist
-	oled.activeFormat = newFormat
-        oled.activeSamplerate = newSamplerate
-        oled.activeBitdepth = newBitdepth
+	#oled.activeFormat = newFormat
+        #oled.activeSamplerate = newSamplerate
+        #oled.activeBitdepth = newBitdepth
 	print('AA: ' + newFormat)  #for log, if enabled you see the values for newFormat     
         print('BB: ' + newSamplerate)  #for log, if enabled you see the values for newSamplerate
         print('CC: ' + newBitdepth)   #for log, if enabled you see the values for newBitdepth
@@ -300,8 +306,8 @@ class NowPlayingScreen():
         self.playingText1 = StaticText(self.height, self.width, row1, font)        #Artist /center=True
         self.playingText2 = ScrollText(self.height, self.width, row2, font)        #Title
         self.playingText3 = StaticText(self.height, self.width, row6, fontIP)      #format / flac,MP3...
-        self.playingText4 = ScrollText(self.height, self.width, row7, fontIP)      #samplerate / 44100
-        self.playingText5 = ScrollText(self.height, self.width, row8, fontIP)      #bitdepth /16 Bit
+        self.playingText4 = StaticText(self.height, self.width, row7, fontIP)      #samplerate / 44100
+        self.playingText5 = StaticText(self.height, self.width, row8, fontIP)      #bitdepth /16 Bit
         self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)   #Clock /center=True
         self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)	   #IP
         self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)    #Date
@@ -313,9 +319,9 @@ class NowPlayingScreen():
         self.text3Pos = (42, 4)     #clock
         self.text4Pos = (46, 54)    #IP
         self.text5Pos = (184, 54)   #Date
-        self.text6Pos = (192, 48)   #format
+        self.text6Pos = (210, 48)   #format
         self.text7Pos = (42, 48)    #samplerate
-        self.text8Pos = (128, 48)   #bitdepth
+        self.text8Pos = (95, 48)   #bitdepth
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdatePlayingInfo(self, row1, row2, row6, row7, row8):
@@ -325,8 +331,8 @@ class NowPlayingScreen():
         self.playingText1 = StaticText(self.height, self.width, row1, font) #Artist/ center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, font) #Title
         self.playingText3 = StaticText(self.height, self.width, row6, fontIP) #format
-        self.playingText4 = ScrollText(self.height, self.width, row7, fontIP) #samplerate
-        self.playingText5 = ScrollText(self.height, self.width, row8, fontIP) #bitdepth
+        self.playingText4 = StaticText(self.height, self.width, row7, fontIP) #samplerate
+        self.playingText5 = StaticText(self.height, self.width, row8, fontIP) #bitdepth
 
     def UpdateStandbyInfo(self, row3, row4, row5):
         self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
@@ -338,6 +344,9 @@ class NowPlayingScreen():
         if self.playingIcon != self.icon['stop']:
             self.playingText1.DrawOn(image, self.text1Pos)
             self.playingText2.DrawOn(image, self.text2Pos)
+            self.playingText3.DrawOn(image, self.text6Pos) #Format
+            self.playingText4.DrawOn(image, self.text7Pos) #Samplerate
+            self.playingText5.DrawOn(image, self.text8Pos) #Bitdepth
         if self.playingIcon == self.icon['stop']:
             self.standbyText3.DrawOn(image, self.text3Pos)
             self.standbyText4.DrawOn(image, self.text4Pos)
@@ -574,8 +583,8 @@ volumioIO.emit('getQueue')
 sleep(0.1)
 
 
-def timeupdate()
-    start_time = datetime.datetime.now()
+#def timeupdate()
+#    start_time = datetime.datetime.now()
 
 try:
     with open('oledconfig.json', 'r') as f:   #load last playing track number
@@ -605,14 +614,15 @@ while True:
     sleep(0.1)
 #this is the loop to get artist/song when changing sources (loops three times)
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
-        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong)
+        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
         InfoTag += 1
         sleep(1.5)
 #    onPushState(data)
-#    if oled.state == STATE_PLAYER and newStatus == 'play' and (newFormat == 'flac' or 'wav' or 'mp3' or 'm4a') and newSamplerate == '' and newBitdepth == '':
-#        newSamplerate = data['samplerate']
-#        newBitdepth = data['bitdepth']
-#        oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)
+   # if oled.state == STATE_PLAYER and newStatus == 'play' and (newFormat == 'flac' or 'wav' or 'mp3' or 'm4a') and newSamplerate == '' and newBitdepth == '':
+       # if oled.state == STATE_PLAYER and newStatus == 'play' and newFormat != ' ' and newSamplerate != ' ' and newBitdepth != ' ':
+#    if (oled.state == STATE_PLAYER) and (newStatus == 'play') and (oled.activeFormat != ' ') and (oled.activeSamplerate != ' ') and (oled.activeBitdepth != ' '):
+#	print('hier ist die schleife Bit/format/sample')
+#	oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
 #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
     if oled.state == STATE_PLAYER and newStatus == 'stop':
 	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
