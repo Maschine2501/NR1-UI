@@ -300,53 +300,53 @@ class NowPlayingScreen():
         self.fontDate = fontDate
         self.fontIP = fontIP
         self.playingText1 = StaticText(self.height, self.width, row1, font)        #Artist /center=True
-        self.playingText2 = ScrollText(self.height, self.width, row2, font3)        #Title
-        self.playingText3 = StaticText(self.height, self.width, row6, font4)      #format / flac,MP3...
-        self.playingText4 = StaticText(self.height, self.width, row7, font4)      #samplerate / 44100
-        self.playingText5 = StaticText(self.height, self.width, row8, font4)      #bitdepth /16 Bit
-        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)   #Clock /center=True
-        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)	   #IP
-        self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)    #Date
+        self.playingText2 = ScrollText(self.height, self.width, row2, font3)       #Title
+        self.playingText3 = StaticText(self.height, self.width, row6, font4)       #format / flac,MP3...
+        self.playingText4 = StaticText(self.height, self.width, row7, font4)       #samplerate / 44100
+        self.playingText5 = StaticText(self.height, self.width, row8, font4)       #bitdepth /16 Bit
+        self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)   #Clock /center=True
+        self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	   #IP
+        self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)    #Date
         self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (40, 2)     #Artist
+        self.text1Pos = (40, 2)     #Artist /
         self.text2Pos = (40, 30)    #Title
         self.text3Pos = (42, 4)     #clock
         self.text4Pos = (46, 54)    #IP
         self.text5Pos = (184, 54)   #Date
         self.text6Pos = (210, 50)   #format
         self.text7Pos = (42, 50)    #samplerate
-        self.text8Pos = (95, 50)   #bitdepth
+        self.text8Pos = (95, 50)    #bitdepth
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 	#"def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 	#Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
 
     def UpdatePlayingInfo(self, row1, row2, row6, row7, row8):
-        self.playingText1 = StaticText(self.height, self.width, row1, font) #Artist/ center=True)
+        self.playingText1 = StaticText(self.height, self.width, row1, font)      #Artist/ center=True)
         self.playingText2 = ScrollText(self.height, self.width, row2, fontTitle) #Title
-        self.playingText3 = StaticText(self.height, self.width, row6, fontInfo) #format
-        self.playingText4 = StaticText(self.height, self.width, row7, fontInfo) #samplerate
-        self.playingText5 = StaticText(self.height, self.width, row8, fontInfo) #bitdepth
+        self.playingText3 = StaticText(self.height, self.width, row6, fontInfo)  #format
+        self.playingText4 = StaticText(self.height, self.width, row7, fontInfo)  #samplerate
+        self.playingText5 = StaticText(self.height, self.width, row8, fontInfo)  #bitdepth
 
     def UpdateStandbyInfo(self, row3, row4, row5):
-        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
-        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)    #IP
-        self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)  #Date
+        self.standbyText1 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
+        self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)    #IP
+        self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)  #Date
 	#"def UpdateStandbyInfo" and "def UpdatePlayingInfo" collects the informations.
 	
 	#"def DrawON(..." takes informations from above and creates a "picture" which then is transfered to your display	
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos)
-            self.playingText2.DrawOn(image, self.text2Pos)
+            self.playingText1.DrawOn(image, self.text1Pos) #Artist
+            self.playingText2.DrawOn(image, self.text2Pos) #Title
             self.playingText3.DrawOn(image, self.text6Pos) #Format
             self.playingText4.DrawOn(image, self.text7Pos) #Samplerate
             self.playingText5.DrawOn(image, self.text8Pos) #Bitdepth
         if self.playingIcon == self.icon['stop']:
-            self.standbyText3.DrawOn(image, self.text3Pos)
-            self.standbyText4.DrawOn(image, self.text4Pos)
-	    self.standbyText5.DrawOn(image, self.text5Pos)
+            self.standbyText1.DrawOn(image, self.text3Pos) #Clock
+            self.standbyText2.DrawOn(image, self.text4Pos) #IP
+	    self.standbyText3.DrawOn(image, self.text5Pos) #Date
            
             
         if self.iconcountdown > 0:
