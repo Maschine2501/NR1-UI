@@ -529,6 +529,15 @@ def RightKnob_PushEvent(hold_time):
         oled.stateTimeout = 20.0
         volumioIO.emit('browseLibrary',{'uri':'music-library'})
 
+#Down below is the defenition for the physical buttons.
+#Sample: RightKnob_Push = PushButton(27, max_time=1) -> GPIO 27 is used
+#Which Button is conected to which GPIO? (regarding to wiring diagram Maschine2501/Volumio-OledUI)
+# Button A: GPIO 4
+# Button B: GPIO 17
+# Button C: GPIO 5
+# Button D: GPIO 6
+# Button right-Rotary: GPIO 27
+
 LeftKnob_Push = PushButton(3, max_time=3)
 LeftKnob_Push.setCallback(LeftKnob_PushEvent)
 LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
