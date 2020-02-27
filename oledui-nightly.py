@@ -314,7 +314,7 @@ class NowPlayingScreen():
         self.text2Pos = (42, 27)     #Title
         self.text3Pos = (42, 4)      #clock
         self.text4Pos = (46, 54)     #IP
-        self.text5Pos = (184, 54)    #Date
+        self.text5Pos = (182, 54)    #Date
         self.text6Pos = (42, 52)     #format
         self.text7Pos = (156, 52)    #samplerate
         self.text8Pos = (214, 52)    #bitdepth
