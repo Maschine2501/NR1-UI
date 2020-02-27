@@ -13,7 +13,7 @@ Demo Video from early Build:
 * Bootup and Shutdown Logos
 * More Buttons via GPIO
 * remove one Rotary 
-
+* Scroll Text stops before shown completly -> needs to be solved
 * ? Use "CAVA" to display a bargraph spectrum ?
 
 ## Allready Done:
