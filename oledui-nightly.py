@@ -317,7 +317,7 @@ class NowPlayingScreen():
         self.text5Pos = (182, 54)    #Date
         self.text6Pos = (42, 52)     #format
         self.text7Pos = (156, 52)    #samplerate
-        self.text8Pos = (214, 52)    #bitdepth
+        self.text8Pos = (217, 52)    #bitdepth
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 	#"def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 	#Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
@@ -351,7 +351,7 @@ class NowPlayingScreen():
             
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
-            image.paste(compositeimage.convert('RGB'), (0, 0)) #Position for play,pause,stop icon (incl crop of Screen before -.-)
+            image.paste(compositeimage.convert('RGB'), (0, 0))
             self.iconcountdown -= 1
             
     def SetPlayingIcon(self, state, time=0):
@@ -360,7 +360,7 @@ class NowPlayingScreen():
         self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
         drawalfa = ImageDraw.Draw(self.alfaimage)
         iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)
-        left = (self.width - iconwidth) / 2
+        left = (self.width - iconwidth + 42) / 2 #here is defined where the play/pause/stop icons are displayed. 
         drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96))
         self.iconcountdown = time
 
