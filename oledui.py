@@ -65,14 +65,16 @@ oled.volumeControlDisabled = False
 oled.volume = 100
 now = datetime.now() # current date and time
 oled.time = now.strftime("%H:%M:%S") #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = now.strftime("%d/%m/%Y") #resolves time as dd.mm.yyyy eg. 17.04.2020
+oled.date = now.strftime("%d/%m/%Y") #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
-newStatus = 0
+newStatus = 0 #makes newStatus usable outside of onPushState
+oled.activeFormat = '' #makes oled.activeFormat usable in onPushState
+oled.activeSamplerate = '' #makes oled.activeSamplerate usable in onPushState
+oled.activeBitdepth = '' #makes oled.activeBitdepth usable in onPushState
 
-
-image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift use: (oled.WIDTH + 4, oled.HEIGHT + 4))
+image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
 font = load_font('digi.ttf', 24)
@@ -80,7 +82,7 @@ font2 = load_font('digi.ttf', 15)
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)
 fontClock = load_font('DSG.ttf', 41)
 fontDate = load_font('digi.ttf', 14)  
-fontIP = load_font('digi.ttf', 14)  
+fontIP = load_font('digi.ttf', 14)   
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
@@ -102,8 +104,7 @@ def display_update_service():
 #                pixshift[1] -= 1
 #            else:
 #                pixshift[0] -= 1
- 
-	# auto return to home display screen (from volume display / queue list..)
+        # auto return to home display screen (from volume display / queue list..)
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
             oled.stateTimeout -= dt
@@ -130,7 +131,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, font, hugefontaw, fontClock, fontDate, fontIP)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, hugefontaw, fontClock, fontDate, fontIP)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -148,10 +149,11 @@ def LoadPlaylist(playlistname):
     SetState(STATE_PLAYER)
 
 def onPushState(data):
-    #print(data)
-
-    global newStatus
 	
+    #print(data) #for log, if enabled you see the values for 'data'
+	
+    global newStatus #global definition for newStatus, used at the end-loop to update standby
+
     if 'title' in data:
         newSong = data['title']
     else:
@@ -165,6 +167,29 @@ def onPushState(data):
         newArtist = ''
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
+	
+    if 'stream' in data:
+        newFormat = data['stream']
+    else:
+        newFormat = ''
+    if newFormat is None:
+        newFormat = ''
+    if newFormat == True:
+	newFormat = 'WebRadio'
+
+    if 'samplerate' in data:
+        newSamplerate = data['samplerate']
+    else:
+        newSamplerate = ' '
+    if newSamplerate is None:
+        newSamplerate = ' '
+
+    if 'bitdepth' in data:
+        newBitdepth = data['bitdepth']
+    else:
+        newBitdepth = ' '
+    if newBitdepth is None:
+        newBitdepth = ' '
         
     if 'position' in data:                      # current position in queue
         oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
@@ -180,14 +205,18 @@ def onPushState(data):
     
     if 'disableVolumeControl' in data:
         oled.volumeControlDisabled = data['disableVolumeControl']
+    
+    oled.activeFormat = newFormat
+    oled.activeSamplerate = newSamplerate
+    oled.activeBitdepth = newBitdepth
 
     print(newSong.encode('ascii', 'ignore'))
-    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):  # new song
+    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):    # new song
         oled.activeSong = newSong
         oled.activeArtist = newArtist
-        if oled.state == STATE_PLAYER and newStatus != 'stop':
-            oled.modal.UpdatePlayingInfo(newArtist, newSong)
-        if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
+	if oled.state == STATE_PLAYER and newStatus != 'stop':
+            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)
+	if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
@@ -249,47 +278,62 @@ def onPushListPlaylist(data):
     if len(data) > 0:
         oled.playlistoptions = data
 
+#if you wan't to add more textposition: double check if using STATIC or SCROLL text.
+#this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, font, fontaw, fontClock, fontDate, fontIP): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontaw, fontClock, fontDate, fontIP): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
         self.fontaw = fontaw
         self.fontClock = fontClock
-	self.fontDate = fontDate
-	self.fontIP = fontIP
-        self.playingText1 = StaticText(self.height, self.width, row1, font)       #center=True /ARTIST
-        self.playingText2 = ScrollText(self.height, self.width, row2, font)       #Songtitle
-	self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)  #center=True /Clock
-	self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)     #IP
-	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)   #Date
-	self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
+        self.fontDate = fontDate
+        self.fontIP = fontIP
+        self.playingText1 = StaticText(self.height, self.width, row1, font)        #Artist /center=True
+        self.playingText2 = ScrollText(self.height, self.width, row2, font)        #Title
+        self.playingText3 = StaticText(self.height, self.width, row6, fontIP)      #format / flac,MP3...
+        self.playingText4 = StaticText(self.height, self.width, row7, fontIP)      #samplerate / 44100
+        self.playingText5 = StaticText(self.height, self.width, row8, fontIP)      #bitdepth /16 Bit
+        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock)   #Clock /center=True
+        self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)	   #IP
+        self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)    #Date
+        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (40, 8)   #Artist
-        self.text2Pos = (40, 40)  #Song
-	self.text3Pos = (42, 4)   #Clock
-	self.text4Pos = (46, 54)  #IP
-	self.text5Pos = (184, 54) #Date
+        self.text1Pos = (40, 2)     #Artist
+        self.text2Pos = (40, 28)    #Title
+        self.text3Pos = (42, 4)     #clock
+        self.text4Pos = (46, 54)    #IP
+        self.text5Pos = (184, 54)   #Date
+        self.text6Pos = (210, 48)   #format
+        self.text7Pos = (42, 48)    #samplerate
+        self.text8Pos = (95, 48)   #bitdepth
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
-    def UpdatePlayingInfo(self, row1, row2):
-        self.playingText1 = StaticText(self.height, self.width, row1, font) #center=True) #Artist
-        self.playingText2 = ScrollText(self.height, self.width, row2, font) #Song
-	
+    def UpdatePlayingInfo(self, row1, row2, row6, row7, row8):
+        self.playingText1 = StaticText(self.height, self.width, row1, font) #Artist/ center=True)
+        self.playingText2 = ScrollText(self.height, self.width, row2, font) #Title
+        self.playingText3 = StaticText(self.height, self.width, row6, fontIP) #format
+        self.playingText4 = StaticText(self.height, self.width, row7, fontIP) #samplerate
+        self.playingText5 = StaticText(self.height, self.width, row8, fontIP) #bitdepth
+
     def UpdateStandbyInfo(self, row3, row4, row5):
-        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) # center=True) #Clock
+        self.standbyText3 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
         self.standbyText4 = StaticText(self.height, self.width, row4, fontIP)    #IP
-	self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)	 #Date
+        self.standbyText5 = StaticText(self.height, self.width, row5, fontDate)  #Date
+
 	
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos) #Artist
-            self.playingText2.DrawOn(image, self.text2Pos) #Song
+            self.playingText1.DrawOn(image, self.text1Pos)
+            self.playingText2.DrawOn(image, self.text2Pos)
+            self.playingText3.DrawOn(image, self.text6Pos) #Format
+            self.playingText4.DrawOn(image, self.text7Pos) #Samplerate
+            self.playingText5.DrawOn(image, self.text8Pos) #Bitdepth
         if self.playingIcon == self.icon['stop']:
-            self.standbyText3.DrawOn(image, self.text3Pos) #Clock
-            self.standbyText4.DrawOn(image, self.text4Pos) #IP
-	    self.standbyText5.DrawOn(image, self.text5Pos) #Date
+            self.standbyText3.DrawOn(image, self.text3Pos)
+            self.standbyText4.DrawOn(image, self.text4Pos)
+	    self.standbyText5.DrawOn(image, self.text5Pos)
            
             
         if self.iconcountdown > 0:
@@ -482,6 +526,15 @@ def RightKnob_PushEvent(hold_time):
         oled.stateTimeout = 20.0
         volumioIO.emit('browseLibrary',{'uri':'music-library'})
 
+#Down below is the defenition for the physical buttons.
+#Sample: RightKnob_Push = PushButton(27, max_time=1) -> GPIO 27 is used
+#Which Button is conected to which GPIO? (regarding to wiring diagram Maschine2501/Volumio-OledUI)
+# Button A: GPIO 4
+# Button B: GPIO 17
+# Button C: GPIO 5
+# Button D: GPIO 6
+# Button right-Rotary: GPIO 27
+
 LeftKnob_Push = PushButton(3, max_time=3)
 LeftKnob_Push.setCallback(LeftKnob_PushEvent)
 LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
@@ -520,6 +573,11 @@ volumioIO.emit('getState')
 volumioIO.emit('getQueue')
 #volumioIO.emit('getBrowseSources')
 sleep(0.1)
+
+
+#def timeupdate()
+#    start_time = datetime.datetime.now()
+
 try:
     with open('oledconfig.json', 'r') as f:   #load last playing track number
         config = json.load(f)
@@ -530,6 +588,7 @@ else:
     
 if oled.playState != 'play':
     volumioIO.emit('play', {'value':oled.playPosition})
+
 varcanc = True #helper for pause -> stop timeout counter
 InfoTag = 0    #helper for missing Artist/Song when changing sources
 while True:
@@ -547,19 +606,19 @@ while True:
     sleep(0.1)
 #this is the loop to get artist/song when changing sources (loops three times)
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
-        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong)
+        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
         InfoTag += 1
         sleep(1.5)
-    #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
-    if oled.state == STATE_PLAYER and newStatus == 'stop':  
-   	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
-	oled.time = strftime("%H:%M:%S")
-   	oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
-    #if playback is paused, here is defined when the Player goes back to "Standby"/Stop	
+#this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
+    if oled.state == STATE_PLAYER and newStatus == 'stop':
+	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
+        oled.time = strftime("%H:%M:%S")
+        oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
+ #if playback is paused, here is defined when the Player goes back to "Standby"/Stop		
     if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
        secvar = int(round(time()))
        varcanc = False
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
-	 varcanc = True
+         varcanc = True
          volumioIO.emit('stop')
 sleep(0.1)
