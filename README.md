@@ -156,3 +156,8 @@ Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 * [socketIO-client-2](https://pypi.python.org/pypi/socketIO-client-2)
 * PIL
 * [luma.oled](https://luma-oled.readthedocs.io/)
+
+### sources
+#### fonts:
+https://www.keshikan.net/fonts-e.html
+https://fonts.google.com/specimen/Oxanium
