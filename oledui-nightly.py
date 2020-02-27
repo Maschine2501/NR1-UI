@@ -525,7 +525,7 @@ def RightKnob_PushEvent(hold_time):
 # Button D: GPIO 6
 # Button right-Rotary: GPIO 27
 
-ButtonA_Push = PushButton(4, max_time=1)
+ButtonA_Push = PushButton(4, max_time=4)
 ButtonA_Push.setCallback(ButtonA_PushEvent)
 #ButtonB_Push = PushButton(17, max_time=1)
 #ButtonB_Push.setCallback(ButtonB_PushEvent)
