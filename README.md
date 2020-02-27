@@ -162,4 +162,4 @@ Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 
 https://www.keshikan.net/fonts-e.html
 
-https://fonts.google.com/specimen/Oxanium
+https://github.com/sevmeyer/oxanium
