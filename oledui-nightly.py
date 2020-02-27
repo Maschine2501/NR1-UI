@@ -465,11 +465,11 @@ def ButtonA_PushEvent(hold_time):
     elif oled.state == STATE_PLAYER and oled.StandbyFlag == 1:
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
-        try:
-            with open('oledconfig.json', 'w') as f:   #save current track number
-            json.dump({"track": oled.playPosition}, f)
-        except IOError:
-            print ('Cannot save config file to current working directory')
+#        try:
+#            with open('oledconfig.json', 'w') as f:   #save current track number
+#            json.dump({"track": oled.playPosition}, f)
+#        except IOError:
+#            print ('Cannot save config file to current working directory')
         sleep(1.5)
         oled.cleanup()            # put display into low power mode
         volumioIO.emit('shutdown')
@@ -527,12 +527,12 @@ def RightKnob_PushEvent(hold_time):
 
 ButtonA_Push = PushButton(4, max_time=1)
 ButtonA_Push.setCallback(ButtonA_PushEvent)
-ButtonB_Push = PushButton(17, max_time=1)
-ButtonB_Push.setCallback(ButtonB_PushEvent)
-ButtonC_Push = PushButton(5, max_time=1)
-ButtonC_Push.setCallback(ButtonC_PushEvent)
-ButtonD_Push = PushButton(6, max_time=1)
-ButtonD_Push.setCallback(ButtonD_PushEvent)
+#ButtonB_Push = PushButton(17, max_time=1)
+#ButtonB_Push.setCallback(ButtonB_PushEvent)
+#ButtonC_Push = PushButton(5, max_time=1)
+#ButtonC_Push.setCallback(ButtonC_PushEvent)
+#ButtonD_Push = PushButton(6, max_time=1)
+#ButtonD_Push.setCallback(ButtonD_PushEvent)
 
 RightKnob_Push = PushButton(27, max_time=1)
 RightKnob_Push.setCallback(RightKnob_PushEvent)
