@@ -452,49 +452,49 @@ class MenuScreen():
             self.menuText[0].DrawOn(image, (15, self.menuYPos))
 
 
-def LeftKnob_RotaryEvent(dir):
-    global emit_volume
-    if not oled.volumeControlDisabled and oled.state != STATE_PLAYLIST_MENU:
-        if dir == RotaryEncoder.LEFT:
-            oled.volume -= VOLUME_DT
-            oled.volume = max(oled.volume, 0)
-        elif dir == RotaryEncoder.RIGHT:
-            oled.volume += VOLUME_DT
-            oled.volume = min(oled.volume, 100)
-        oled.stateTimeout = 2.0
-        if oled.state != STATE_VOLUME:
-            SetState(STATE_VOLUME)
-        else:
-            oled.modal.DisplayVolume(oled.volume)
-        emit_volume = True
-
-def LeftKnob_PushEvent(hold_time):
-    global UPDATE_INTERVAL
-    if hold_time < 3:
-        print ('LeftKnob_PushEvent SHORT')
-        if oled.state == STATE_PLAYER:
-            if oled.playState == 'play':
-                volumioIO.emit('stop')
-            else:
-                volumioIO.emit('play')
-        if oled.state == STATE_PLAYLIST_MENU:
-            SetState(STATE_PLAYER)
-        if oled.state == STATE_LIBRARY_MENU:
-            LibraryReturn()
-    else:
-        print ('LeftKnob_PushEvent LONG -> trying to shutdown')
-        UPDATE_INTERVAL = 10 #stop updating screen
-        sleep(0.1)
-        show_logo("shutdown.ppm", oled)
-        try:
-            with open('oledconfig.json', 'w') as f:   #save current track number
-                json.dump({"track": oled.playPosition}, f)
-        except IOError:
-            print ('Cannot save config file to current working directory')
-        sleep(1.5)
-        oled.cleanup()            # put display into low power mode
-        volumioIO.emit('shutdown')
-        sleep(60)
+#def LeftKnob_RotaryEvent(dir):
+#    global emit_volume
+#    if not oled.volumeControlDisabled and oled.state != STATE_PLAYLIST_MENU:
+#        if dir == RotaryEncoder.LEFT:
+#            oled.volume -= VOLUME_DT
+#            oled.volume = max(oled.volume, 0)
+#        elif dir == RotaryEncoder.RIGHT:
+#            oled.volume += VOLUME_DT
+#            oled.volume = min(oled.volume, 100)
+#        oled.stateTimeout = 2.0
+#        if oled.state != STATE_VOLUME:
+#            SetState(STATE_VOLUME)
+#        else:
+#            oled.modal.DisplayVolume(oled.volume)
+#        emit_volume = True
+#
+#def LeftKnob_PushEvent(hold_time):
+#    global UPDATE_INTERVAL
+#    if hold_time < 3:
+#        print ('LeftKnob_PushEvent SHORT')
+#        if oled.state == STATE_PLAYER:
+#            if oled.playState == 'play':
+#                volumioIO.emit('stop')
+#            else:
+#                volumioIO.emit('play')
+#        if oled.state == STATE_PLAYLIST_MENU:
+#            SetState(STATE_PLAYER)
+#        if oled.state == STATE_LIBRARY_MENU:
+#            LibraryReturn()
+#    else:
+#        print ('LeftKnob_PushEvent LONG -> trying to shutdown')
+#        UPDATE_INTERVAL = 10 #stop updating screen
+#        sleep(0.1)
+#        show_logo("shutdown.ppm", oled)
+#        try:
+#            with open('oledconfig.json', 'w') as f:   #save current track number
+#                json.dump({"track": oled.playPosition}, f)
+#        except IOError:
+#            print ('Cannot save config file to current working directory')
+#        sleep(1.5)
+#        oled.cleanup()            # put display into low power mode
+#        volumioIO.emit('shutdown')
+#        sleep(60)
 
 def RightKnob_RotaryEvent(dir):
     global emit_track
@@ -548,10 +548,19 @@ def RightKnob_PushEvent(hold_time):
 # Button D: GPIO 6
 # Button right-Rotary: GPIO 27
 
-LeftKnob_Push = PushButton(3, max_time=3)
-LeftKnob_Push.setCallback(LeftKnob_PushEvent)
-LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
-LeftKnob_Rotation.setCallback(LeftKnob_RotaryEvent)
+#LeftKnob_Push = PushButton(3, max_time=3)
+#LeftKnob_Push.setCallback(LeftKnob_PushEvent)
+#LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
+#LeftKnob_Rotation.setCallback(LeftKnob_RotaryEvent)
+
+ButtonA_Push = PushButton(4, max_time=1)
+ButtonA_Push.setCallback(ButtonA_PushEvent)
+ButtonB_Push = PushButton(17, max_time=1)
+ButtonB_Push.setCallback(ButtonB_PushEvent)
+ButtonC_Push = PushButton(5, max_time=1)
+ButtonC_Push.setCallback(ButtonC_PushEvent)
+ButtonD_Push = PushButton(6, max_time=1)
+ButtonD_Push.setCallback(ButtonD_PushEvent)
 
 RightKnob_Push = PushButton(27, max_time=1)
 RightKnob_Push.setCallback(RightKnob_PushEvent)
