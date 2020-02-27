@@ -73,7 +73,7 @@ newStatus = 0 #makes newStatus usable outside of onPushState
 oled.activeFormat = '' #makes oled.activeFormat usable in onPushState
 oled.activeSamplerate = '' #makes oled.activeSamplerate usable in onPushState
 oled.activeBitdepth = '' #makes oled.activeBitdepth usable in onPushState
-oled.StandbyFlag = 1
+oled.StandbyFlag = '1'
 
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
@@ -224,10 +224,10 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
 	if oled.state == STATE_PLAYER and newStatus != 'stop':
-	    oled.StandbyFlag = 0
+	    oled.StandbyFlag = '0'
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)
 	if oled.state == STATE_PLAYER and newStatus == 'stop':   #this is the "Standby-Screen"
-	    oled.StandbyFlag = 1
+	    oled.StandbyFlag = '1'
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)     #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
@@ -457,12 +457,12 @@ class MenuScreen():
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
-        if oled.state == STATE_PLAYER and oled.StandbyFlag == 0:
+        if oled.state == STATE_PLAYER and oled.StandbyFlag == '0':
             if oled.playState == 'play':
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
-    elif oled.state == STATE_PLAYER and oled.StandbyFlag == 1:
+    elif oled.state == STATE_PLAYER and oled.StandbyFlag == '1':
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
 #        try:
