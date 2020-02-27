@@ -65,7 +65,7 @@ oled.volumeControlDisabled = False
 oled.volume = 100
 now = datetime.now() # current date and time
 oled.time = now.strftime("%H:%M:%S") #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = now.strftime("%d/%m/%Y") #resolves time as dd.mm.YYYY eg. 17.04.2020
+oled.date = now.strftime("%d.  %m.  %Y") #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
@@ -77,14 +77,14 @@ oled.activeBitdepth = '' #makes oled.activeBitdepth usable in onPushState
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
-font = load_font('Oxanium-Bold.ttf', 28) #used for Artist
-font3 = load_font('Oxanium-Regular.ttf', 24) #used for Song
+font = load_font('Oxanium-Bold.ttf', 26) #used for Artist
+font3 = load_font('Oxanium-Regular.ttf', 22) #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14) #used for Format/Smplerate/Bitdepth
 font2 = load_font('Oxanium-Medium.ttf', 15) #used for all menus
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4) #used for play/pause/stop icons
 fontClock = load_font('DSG.ttf', 41) #used for clock
-fontDate = load_font('DSEG7Classic-Regular.ttf', 14) #used for Date 
-fontIP = load_font('DSEG7Classic-Regular.ttf', 14) #used for IP  
+fontDate = load_font('DSEG7Classic-Regular.ttf', 10) #used for Date 
+fontIP = load_font('DSEG7Classic-Regular.ttf', 10) #used for IP  
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
@@ -293,13 +293,13 @@ class NowPlayingScreen():
         self.height = height
         self.width = width
         self.font = font
-	self.fontTitle = font3
-	self.fontInfo = font4
+	self.font3 = font3
+	self.font4 = font4
         self.fontaw = fontaw
         self.fontClock = fontClock
         self.fontDate = fontDate
         self.fontIP = fontIP
-        self.playingText1 = StaticText(self.height, self.width, row1, font)        #Artist /center=True
+        self.playingText1 = ScrollText(self.height, self.width, row1, font)        #Artist /center=True
         self.playingText2 = ScrollText(self.height, self.width, row2, font3)       #Title
         self.playingText3 = StaticText(self.height, self.width, row6, font4)       #format / flac,MP3...
         self.playingText4 = StaticText(self.height, self.width, row7, font4)       #samplerate / 44100
@@ -310,24 +310,24 @@ class NowPlayingScreen():
         self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (40, 2)     #Artist /
-        self.text2Pos = (40, 30)    #Title
-        self.text3Pos = (42, 4)     #clock
-        self.text4Pos = (46, 54)    #IP
-        self.text5Pos = (184, 54)   #Date
-        self.text6Pos = (210, 50)   #format
-        self.text7Pos = (42, 50)    #samplerate
-        self.text8Pos = (95, 50)    #bitdepth
+        self.text1Pos = (42, 2)      #Artist /
+        self.text2Pos = (42, 27)     #Title
+        self.text3Pos = (42, 4)      #clock
+        self.text4Pos = (46, 54)     #IP
+        self.text5Pos = (184, 54)    #Date
+        self.text6Pos = (42, 52)     #format
+        self.text7Pos = (156, 52)    #samplerate
+        self.text8Pos = (214, 52)    #bitdepth
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 	#"def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 	#Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
 
     def UpdatePlayingInfo(self, row1, row2, row6, row7, row8):
-        self.playingText1 = StaticText(self.height, self.width, row1, font)      #Artist/ center=True)
-        self.playingText2 = ScrollText(self.height, self.width, row2, fontTitle) #Title
-        self.playingText3 = StaticText(self.height, self.width, row6, fontInfo)  #format
-        self.playingText4 = StaticText(self.height, self.width, row7, fontInfo)  #samplerate
-        self.playingText5 = StaticText(self.height, self.width, row8, fontInfo)  #bitdepth
+        self.playingText1 = ScrollText(self.height, self.width, row1, font)   #Artist/ center=True)
+        self.playingText2 = ScrollText(self.height, self.width, row2, font3)  #Title
+        self.playingText3 = StaticText(self.height, self.width, row6, font4)  #format
+        self.playingText4 = StaticText(self.height, self.width, row7, font4)  #samplerate
+        self.playingText5 = StaticText(self.height, self.width, row8, font4)  #bitdepth
 
     def UpdateStandbyInfo(self, row3, row4, row5):
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
