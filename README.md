@@ -61,6 +61,10 @@ reboot
 
 - added newFormat, newSamplerate and newBitdepth -> working!
 
+### 27.02.2020
+
+- added Imformations about GPIO usage of the physical buttons (line ~539)
+
 ### bug:
 
 -Textpositions not final
