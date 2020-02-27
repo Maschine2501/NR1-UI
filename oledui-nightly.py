@@ -351,7 +351,7 @@ class NowPlayingScreen():
             
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
-            image.paste(compositeimage.convert('RGB'), (0, 0))
+            image.paste(compositeimage.convert('RGB'), (0, 0)) #Position for play,pause,stop icon (incl crop of Screen before -.-)
             self.iconcountdown -= 1
             
     def SetPlayingIcon(self, state, time=0):
