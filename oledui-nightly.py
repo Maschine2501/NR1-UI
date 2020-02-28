@@ -340,8 +340,8 @@ class NowPlayingScreen():
         self.height = height
         self.width = width
         self.font = font
-	    self.font3 = font3
-	    self.font4 = font4
+	self.font3 = font3
+	self.font4 = font4
         self.fontaw = fontaw
         self.fontClock = fontClock
         self.fontDate = fontDate
