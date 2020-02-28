@@ -136,14 +136,7 @@ If the last Playback was from a local drive (eg. USB),
 Artist and Trackinfo stay corrupt until another Playback-Source was selected.
 (Will investigate it sometime later...)
 
-## Wiring
-
-... needs to be done
-(more shematics will come later)
-
-![Alt text](/img/connection.png?raw=true "wiring")
-
-![Alt text](/img/button.png?raw=true "button mapping")
+## [Wiring](https://github.com/Maschine2501/Volumio-OledUI/wiki/Wiring)
 
 ### hardware
 * Raspberry Pi 2B/3B/4B with Volumio2 image
