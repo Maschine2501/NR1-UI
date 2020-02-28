@@ -266,7 +266,7 @@ def onPushState(data):
         oled.activeArtist = newArtist
 	if oled.state == STATE_PLAYER and newStatus != 'stop':                                                        #this is the "NowPlayingScreen"
 	    oled.StandbyFlag = '0'
-        oled.mediaInfoTag = '0'
+            oled.mediaInfoTag = '0'
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
 	if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.mediaInfoTag == '0':                                                        #this is the "Standby-Screen"
 	    oled.StandbyFlag = '1'
