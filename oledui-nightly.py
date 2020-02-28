@@ -102,7 +102,7 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 def display_update_service():
-    pixshift = [2, 2]
+#    pixshift = [2, 2]
     lastshift = prevTime = time()
     while UPDATE_INTERVAL > 0:
         dt = time() - prevTime
@@ -276,7 +276,7 @@ def onPushState(data):
 	    oled.StandbyFlag = '1'
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
     if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.mediaInfoTag == '1':                           #this is the "Media-Info-Screen"
-	        oled.modal.UpdateLibraryInfo(oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
+	        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
         oled.playState = newStatus
