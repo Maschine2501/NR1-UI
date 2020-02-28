@@ -422,7 +422,7 @@ class NowPlayingScreen():
         if self.playingIcon == self.icon['stop']:
             self.standbyText1.DrawOn(image, self.text3Pos) #Clock
             self.standbyText2.DrawOn(image, self.text4Pos) #IP
-	        self.standbyText3.DrawOn(image, self.text5Pos) #Date
+	    self.standbyText3.DrawOn(image, self.text5Pos) #Date
         if self.MediaInfoTag == '1':
             self.LibraryInfoText1.DrawOn(image, self.text13Pos) #Text for Artists
             self.LibraryInfoText2.DrawOn(image, self.text9Pos)  #Number of Artists
