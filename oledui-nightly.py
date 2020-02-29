@@ -274,7 +274,7 @@ def onPushState(data):
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
 	if oled.state == STATE_PLAYER and newStatus == 'stop':                                                        #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
-    if oled.state == STATE_LIBRARY_INFO:                           #this is the "Media-Info-Screen"
+    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
 	        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
 
     if newStatus != oled.playState:
