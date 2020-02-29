@@ -8,6 +8,7 @@ import sys
 import time
 import json
 import pycurl
+import pprint
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
@@ -239,15 +240,6 @@ def onPushState(data):
     oled.activeFormat = newFormat
     oled.activeSamplerate = newSamplerate
     oled.activeBitdepth = newBitdepth
-#    oled.activeArtists = newArtists 
-#    oled.activeAlbums = newAlbums
-#    oled.activeSongs = newSongs
-#    oled.activePlaytime = newPlaytimes
-    print('activeArtists: ' + oled.activeArtists)
-    print('activeAlbums: ' + oled.activeAlbums)
-    print('activeSongs: ' + oled.activeSongs)
-    print('activePlaytime: ' + oled.activePlaytime)
-
 
     print(newSong.encode('ascii', 'ignore'))
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                          # new song and artist
@@ -257,9 +249,7 @@ def onPushState(data):
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
 	if oled.state == STATE_PLAYER and newStatus == 'stop':                                                        #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
-    elif oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
-          oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
-
+    
     if newStatus != oled.playState:
         oled.playState = newStatus
         if oled.state == STATE_PLAYER:
@@ -270,45 +260,41 @@ def onPushState(data):
             oled.modal.SetPlayingIcon(oled.playState, iconTime)
 
 def onPushCollectionStats(data):
-
-    print('collectionstats DATA: ' + data) 	
-    global newArtists 
-    global newAlbums
-    global newSongs
-    global newPlaytime
+    data = json.loads(data)
             
-    if 'artists' in data:               #used for Media-Library-Infoscreen
-        newArtists = data['artists']
+    if "artists" in data:               #used for Media-Library-Infoscreen
+        newArtists = data["artists"]
     else:
         newArtists = ''
     if newArtists is None:
         newArtists = ''
 
     if 'albums' in data:                #used for Media-Library-Infoscreen
-        newAlbums = data['albums']
+        newAlbums = data["albums"]
     else:
         newAlbums = ''
     if newAlbums is None:
         newAlbums = ''
 
     if 'songs' in data:                 #used for Media-Library-Infoscreen
-        newSongs = data['songs']
+        newSongs = data["songs"]
     else:
         newSongs = ''
     if newSongs is None:
         newSongs = ''
 
     if 'playtime' in data:               #used for Media-Library-Infoscreen
-        newPlaytimes = data['playtime']
+        newPlaytime = data["playtime"]
     else:
-        newPlaytimes = ''
-    if newPlaytimes is None:
-        newPlaytimes = ''
+        newPlaytime = ''
+    if newPlaytime is None:
+        newPlaytime = ''
 
-    oled.activeArtists = newArtists 
-    oled.activeAlbums = newAlbums
-    oled.activeSongs = newSongs
-    oled.activePlaytime = newPlaytimes
+    oled.activeArtists = str(newArtists) 
+    oled.activeAlbums = str(newAlbums)
+    oled.activeSongs = str(newSongs)
+    oled.activePlaytime = str(newPlaytime)
+   
     if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info': #this is the "Media-Info-Screen"
         oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
 
@@ -459,14 +445,14 @@ class MediaLibrarayInfo():
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
-        self.text9Pos = (120, 4)        #Number of Artists
-        self.text10Pos = (120, 18)      #Number of Albums
-        self.text11Pos = (120, 32)      #Number of Songs
-        self.text12Pos = (120, 46)      #Summary of duration
-        self.text13Pos = (42, 4)      #Text for Artists
-        self.text14Pos = (42, 18)     #Text for Albums
-        self.text15Pos = (42, 32)     #Text for Songs
-        self.text16Pos = (42, 46)     #Text for duration
+        self.text1Pos = (140, 4)        #Number of Artists
+        self.text2Pos = (140, 18)      #Number of Albums
+        self.text3Pos = (140, 32)      #Number of Songs
+        self.text4Pos = (140, 46)      #Summary of duration
+        self.text5Pos = (42, 4)      #Text for Artists
+        self.text6Pos = (42, 18)     #Text for Albums
+        self.text7Pos = (42, 32)     #Text for Songs
+        self.text8Pos = (42, 46)     #Text for duration
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8):
@@ -481,14 +467,14 @@ class MediaLibrarayInfo():
 
     def DrawOn(self, image):
         if self.mediaIcon == self.icon['info']:
-            self.LibraryInfoText1.DrawOn(image, self.text13Pos) #Text for Artists
-            self.LibraryInfoText2.DrawOn(image, self.text9Pos)  #Number of Artists
-            self.LibraryInfoText3.DrawOn(image, self.text14Pos) #Text for Albums
-            self.LibraryInfoText4.DrawOn(image, self.text10Pos) #Number of Albums
-            self.LibraryInfoText5.DrawOn(image, self.text15Pos) #Text for Songs
-            self.LibraryInfoText6.DrawOn(image, self.text11Pos) #Number of Songs
-            self.LibraryInfoText7.DrawOn(image, self.text16Pos) #Text for duration
-            self.LibraryInfoText8.DrawOn(image, self.text12Pos) #Number of duration
+            self.LibraryInfoText1.DrawOn(image, self.text5Pos) #Text for Artists
+            self.LibraryInfoText2.DrawOn(image, self.text1Pos)  #Number of Artists
+            self.LibraryInfoText3.DrawOn(image, self.text6Pos) #Text for Albums
+            self.LibraryInfoText4.DrawOn(image, self.text2Pos) #Number of Albums
+            self.LibraryInfoText5.DrawOn(image, self.text7Pos) #Text for Songs
+            self.LibraryInfoText6.DrawOn(image, self.text3Pos) #Number of Songs
+            self.LibraryInfoText7.DrawOn(image, self.text8Pos) #Text for duration
+            self.LibraryInfoText8.DrawOn(image, self.text4Pos) #Number of duration
                     
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
@@ -617,16 +603,14 @@ def ButtonD_PushEvent(hold_time):
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             SetState(STATE_LIBRARY_INFO)
-#            volumioIO.emit('collectionstats')
+	        oled.playState = 'info'
             crl.setopt(crl.URL, 'localhost:3000/api/v1/collectionstats')
             crl.setopt(crl.WRITEDATA, b_obj)
             crl.perform()
             crl.close()
             get_body = b_obj.getvalue()
-            onPushCollectionStats(get_body.decode('utf8'))
+            onPushCollectionStats(get_body)
             sleep(0.5)
-            oled.playState = 'info'
-#	        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla) 
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
