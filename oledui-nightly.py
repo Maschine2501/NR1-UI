@@ -586,9 +586,9 @@ def ButtonA_PushEvent(hold_time):
 def ButtonD_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
-        if oled.state == STATE_PLAYER and oled.playstate != 'stop':
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
-        elif oled.state == STATE_PLAYER and oled.playstate == 'stop':
+        elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             oled.state = STATE_LIBRARY_INFO
             volumioIO.emit('collectionstats')
             sleep(0.5)
@@ -605,7 +605,7 @@ def ButtonD_PushEvent(hold_time):
 #        elif oled.state == STATE_QUEUE_MENU:
 #             volumioIO.emit(play&N=2) #This plays the third file in queue
 #We need to investigate how we will handle this
-    elif oled.state == STATE_PLAYER and oled.playstate != 'stop':
+    elif oled.state == STATE_PLAYER and oled.playState != 'stop':
         if oled.randomTag == False:
             volumioIO.emit('random&value=true')
             oled.randomTag = True
