@@ -589,7 +589,7 @@ def ButtonD_PushEvent(hold_time):
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-            oled.state = STATE_LIBRARY_INFO
+            SetState(STATE_LIBRARY_INFO)
             volumioIO.emit('collectionstats')
             sleep(0.5)
             oled.playState = 'info'
@@ -600,7 +600,7 @@ def ButtonD_PushEvent(hold_time):
             oled.stateTimeout = 20.0
             EnterLibraryItem(oled.modal.SelectedOption())
         elif oled.state == STATE_LIBRARY_INFO:
-            oled.state = STATE_PLAYER
+            SetState(STATE_PLAYER)
             oled.playState = 'stop'
 #        elif oled.state == STATE_QUEUE_MENU:
 #             volumioIO.emit(play&N=2) #This plays the third file in queue
