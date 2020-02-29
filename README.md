@@ -13,7 +13,7 @@ I want to use the display in a case of an old hifi-tuner, the cutout in the fron
 
 ### But you want it on the whole Display?
 
-Simply change the value's from "42" to "0"... that's it! (Tutorials/Guides will follow...)
+Simply change the value's from "42" to "0" (self.text1Pos = (42, 2))... that's it! (Tutorials/Guides will follow...)
 
 ## To-Do: 
 * Tune the whole UI (fonts, positions... etc. / will be done when everything else is running properly)
