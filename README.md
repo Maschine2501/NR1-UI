@@ -8,19 +8,21 @@ Demo Video from early Build:
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/xB8cvn7IXr8/0.jpg)](http://www.youtube.com/watch?v=xB8cvn7IXr8 "Video-Sample")
 
 ## To-Do: 
-* Tune "Now-Playing" Screen (other fonts, position)
-* Play- Pause- and Stop- Icons
-* Bootup and Shutdown Logos
-* More Buttons via GPIO
-* MediaInformationScreen (volumio.local/api/v1/collectionstats)
-* ? Use "CAVA" to display a bargraph spectrum ?
+* Tune the whole UI (fonts, positions... etc. / will be done when everything else is running properly)
+* change Play- Pause- and Stop- Icons
+* Bootup and Shutdown Logos (needs to be improved)
+
+* Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
 
 ## Allready Done:
+
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
 * display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
 * Scroll Text stops before shown completly -> text was defined as scrollText, which makes "black"-boxes arround the text
 * one rotary removed
+* 4 more Buttons via GPIO (needs some fine tuning)
+* MediaInformationScreen (volumio.local/api/v1/collectionstats)
 
 ## [installation steps (stable release)](https://github.com/Maschine2501/Volumio-OledUI/wiki/Installation-steps-(stable-release))
 
