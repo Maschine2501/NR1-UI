@@ -369,6 +369,7 @@ class NowPlayingScreen():
         self.text6Pos = (42, 52)       #format
         self.text7Pos = (156, 52)      #samplerate
         self.text8Pos = (217, 52)      #bitdepth
+	self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
 # "def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 #Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
