@@ -570,12 +570,12 @@ class MenuScreen():
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
-        if oled.state == STATE_PLAYER and oled.StandbyFlag == '0':
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
             if oled.playState == 'play':
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
-    elif oled.state == STATE_PLAYER and oled.StandbyFlag == '1':
+    elif oled.state == STATE_PLAYER and oled.playState == 'stop':
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
         sleep(5)
