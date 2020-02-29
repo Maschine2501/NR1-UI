@@ -50,7 +50,7 @@ oled = ssd1322(interface, rotate=2)
 
 oled.WIDTH = 256
 oled.HEIGHT = 64
-oled.state = STATE_NONE
+oled.state = 'stop'
 oled.stateTimeout = 0
 oled.timeOutRunning = False
 oled.activeSong = ''
@@ -170,7 +170,7 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
 	
-    #print(data) #for log, if enabled you see the values for 'data'
+    print(data) #for log, if enabled you see the values for 'data'
 	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
 
@@ -213,8 +213,64 @@ def onPushState(data):
     else:
         newBitdepth = ' '
     if newBitdepth is None:
-        newBitdepth = ' '
+        newBitdepth = ' '  
         
+    if 'position' in data:                      # current position in queue
+        oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
+        
+    if 'status' in data:
+        newStatus = data['status']
+        
+    if oled.state != STATE_VOLUME:            #get volume on startup and remote control
+        try:                                  #it is either number or unicode text
+            oled.volume = int(data['volume'])
+        except (KeyError, ValueError):
+            pass
+    
+    if 'disableVolumeControl' in data:
+        oled.volumeControlDisabled = data['disableVolumeControl']
+    
+    oled.activeFormat = newFormat
+    oled.activeSamplerate = newSamplerate
+    oled.activeBitdepth = newBitdepth
+#    oled.activeArtists = newArtists 
+#    oled.activeAlbums = newAlbums
+#    oled.activeSongs = newSongs
+#    oled.activePlaytime = newPlaytimes
+    print('activeArtists: ' + oled.activeArtists)
+    print('activeAlbums: ' + oled.activeAlbums)
+    print('activeSongs: ' + oled.activeSongs)
+    print('activePlaytime: ' + oled.activePlaytime)
+
+
+    print(newSong.encode('ascii', 'ignore'))
+    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                          # new song and artist
+        oled.activeSong = newSong
+        oled.activeArtist = newArtist
+	if oled.state == STATE_PLAYER and newStatus != 'stop':                                                        #this is the "NowPlayingScreen"
+            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
+	if oled.state == STATE_PLAYER and newStatus == 'stop':                                                        #this is the "Standby-Screen"
+            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
+    elif oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
+          oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
+
+    if newStatus != oled.playState:
+        oled.playState = newStatus
+        if oled.state == STATE_PLAYER:
+            if oled.playState == 'play':
+                iconTime = 35
+            else:
+                iconTime = 80
+            oled.modal.SetPlayingIcon(oled.playState, iconTime)
+
+def onPushCollectionStats(data):
+
+    print('collectionstats DATA: ' + data) 	
+    global newArtists 
+    global newAlbums
+    global newSongs
+    global newPlaytime
+            
     if 'artists' in data:               #used for Media-Library-Infoscreen
         newArtists = data['artists']
     else:
@@ -243,49 +299,10 @@ def onPushState(data):
     if newPlaytimes is None:
         newPlaytimes = ''
 
-    if 'position' in data:                      # current position in queue
-        oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
-        
-    if 'status' in data:
-        newStatus = data['status']
-        
-    if oled.state != STATE_VOLUME:            #get volume on startup and remote control
-        try:                                  #it is either number or unicode text
-            oled.volume = int(data['volume'])
-        except (KeyError, ValueError):
-            pass
-    
-    if 'disableVolumeControl' in data:
-        oled.volumeControlDisabled = data['disableVolumeControl']
-    
-    oled.activeFormat = newFormat
-    oled.activeSamplerate = newSamplerate
-    oled.activeBitdepth = newBitdepth
     oled.activeArtists = newArtists 
     oled.activeAlbums = newAlbums
     oled.activeSongs = newSongs
-    oled.activePlaytime = newPlaytimes
-
-    print(newSong.encode('ascii', 'ignore'))
-    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                          # new song and artist
-        oled.activeSong = newSong
-        oled.activeArtist = newArtist
-	if oled.state == STATE_PLAYER and newStatus != 'stop':                                                        #this is the "NowPlayingScreen"
-            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
-	if oled.state == STATE_PLAYER and newStatus == 'stop':                                                        #this is the "Standby-Screen"
-            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
-    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
-	        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)                                  #here is defined which "data" should be displayed in the class
-
-    if newStatus != oled.playState:
-        oled.playState = newStatus
-        if oled.state == STATE_PLAYER:
-            if oled.playState == 'play':
-                iconTime = 35
-            else:
-                iconTime = 80
-            oled.modal.SetPlayingIcon(oled.playState, iconTime)
-    
+    oled.activePlaytime = newPlaytimes    
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
@@ -409,7 +426,7 @@ class NowPlayingScreen():
             
     def SetPlayingIcon(self, state, time=0):
         if state in self.icon:
-            self.playingIcon = self.icon[state]
+		self.playingIcon = self.icon[state]
         self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
         drawalfa = ImageDraw.Draw(self.alfaimage)
         iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)
@@ -602,9 +619,12 @@ def ButtonD_PushEvent(hold_time):
         elif oled.state == STATE_LIBRARY_INFO:
             SetState(STATE_PLAYER)
             oled.playState = 'stop'
+            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
+
 #        elif oled.state == STATE_QUEUE_MENU:
 #             volumioIO.emit(play&N=2) #This plays the third file in queue
 #We need to investigate how we will handle this
+
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
         if oled.randomTag == False:
             volumioIO.emit('random&value=true')
@@ -694,6 +714,7 @@ receive_thread.daemon = True
 receive_thread.start()
 
 volumioIO.on('pushState', onPushState)
+volumioIO.on('pushcollectionstats', onPushCollectionStats)
 volumioIO.on('pushListPlaylist', onPushListPlaylist)
 volumioIO.on('pushQueue', onPushQueue)
 volumioIO.on('pushBrowseSources', onPushBrowseSources)
@@ -703,6 +724,7 @@ volumioIO.on('pushBrowseLibrary', onLibraryBrowse)
 volumioIO.emit('listPlaylist')
 volumioIO.emit('getState')
 volumioIO.emit('getQueue')
+volumioIO.emit('collectionstats')
 #volumioIO.emit('getBrowseSources')
 sleep(0.1)
 
