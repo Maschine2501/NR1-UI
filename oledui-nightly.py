@@ -90,6 +90,7 @@ oled.Alb = 'Alben :'
 oled.Son = 'Songs :'
 oled.Pla = 'Playtime :'
 oled.randomTag = False
+oled.repeatTag = False
 
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT +4))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
@@ -240,6 +241,15 @@ def onPushState(data):
     oled.activeFormat = newFormat
     oled.activeSamplerate = newSamplerate
     oled.activeBitdepth = newBitdepth
+#    oled.activeArtists = newArtists 
+#    oled.activeAlbums = newAlbums
+#    oled.activeSongs = newSongs
+#    oled.activePlaytime = newPlaytimes
+#    print('activeArtists: ' + oled.activeArtists)
+#    print('activeAlbums: ' + oled.activeAlbums)
+#    print('activeSongs: ' + oled.activeSongs)
+#    print('activePlaytime: ' + oled.activePlaytime)
+
 
     print(newSong.encode('ascii', 'ignore'))
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                          # new song and artist
@@ -261,6 +271,11 @@ def onPushState(data):
 
 def onPushCollectionStats(data):
     data = json.loads(data)
+#    print('collectionstats DATA: ' + data) 	
+#    global newArtists 
+#    global newAlbums
+#    global newSongs
+#    global newPlaytime
             
     if "artists" in data:               #used for Media-Library-Infoscreen
         newArtists = data["artists"]
@@ -294,8 +309,12 @@ def onPushCollectionStats(data):
     oled.activeAlbums = str(newAlbums)
     oled.activeSongs = str(newSongs)
     oled.activePlaytime = str(newPlaytime)
-   
+    print(oled.playState)
     if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info': #this is the "Media-Info-Screen"
+	print(oled.activeArtists)
+	print(oled.activeAlbums)
+	print(oled.activeSongs)
+	print(oled.activePlaytime)
         oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
 
 def onPushQueue(data):
@@ -586,6 +605,11 @@ def ButtonA_PushEvent(hold_time):
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
+        elif oled.state == STATE_PLAYER and oled.playState == 'stop':
+            volumioIO.emit('listPlaylist')
+            oled.stateTimeout = 20.0
+            SetState(STATE_PLAYLIST_MENU)
+            LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
     elif oled.state == STATE_PLAYER and oled.playState == 'stop':
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
@@ -593,6 +617,28 @@ def ButtonA_PushEvent(hold_time):
         oled.cleanup()            # put display into low power mode
         volumioIO.emit('shutdown')
         sleep(60)
+
+def ButtonB_PushEvent(hold_time):
+    global UPDATE_INTERVAL
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
+            volumioIO.emit('stop')
+        elif oled.state = STATE_PLAYER and oled.playState == 'stop':
+            volumioIO.emit('listPlaylist')
+            oled.stateTimeout = 20.0
+            SetState(STATE_PLAYLIST_MENU)
+
+def ButtonC_PushEvent(hold_time):
+    global UPDATE_INTERVAL
+    if hold_time < 3:
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
+            volumioIO.emit('prev')
+    elif oled.state == STATE_PLAYER and oled.playState != 'stop':
+        if oled.repeatTag == False:
+            volumioIO.emit('setRepeat', {"value":"true"})
+            oled.repeatTag = True
+        elif oled.randomTag == True:
+            volumioIO.emit('setRepeat', {"value":"false"})
+            oled.repeatTag = False
 
 def ButtonD_PushEvent(hold_time):
     global UPDATE_INTERVAL
@@ -603,14 +649,14 @@ def ButtonD_PushEvent(hold_time):
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             SetState(STATE_LIBRARY_INFO)
-	        oled.playState = 'info'
+	    oled.playState = 'info'
             crl.setopt(crl.URL, 'localhost:3000/api/v1/collectionstats')
             crl.setopt(crl.WRITEDATA, b_obj)
             crl.perform()
             crl.close()
             get_body = b_obj.getvalue()
             onPushCollectionStats(get_body)
-            sleep(0.5)
+            sleep(0.5) 
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
@@ -621,16 +667,12 @@ def ButtonD_PushEvent(hold_time):
             oled.playState = 'stop'
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
 
-#        elif oled.state == STATE_QUEUE_MENU:
-#             volumioIO.emit(play&N=2) #This plays the third file in queue
-#We need to investigate how we will handle this
-
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
         if oled.randomTag == False:
-            volumioIO.emit('random&value=true')
+	    volumioIO.emit('setRandom', {"value":"true"})
             oled.randomTag = True
         elif oled.randomTag == True:
-            volumioIO.emit('random&value=false')
+            volumioIO.emit('setRandom', {"value":"false"})
             oled.randomTag = False
 
 def RightKnob_RotaryEvent(dir):
@@ -685,10 +727,10 @@ def RightKnob_PushEvent(hold_time):
 
 ButtonA_Push = PushButton(4, max_time=3)
 ButtonA_Push.setCallback(ButtonA_PushEvent)
-#ButtonB_Push = PushButton(17, max_time=1)
-#ButtonB_Push.setCallback(ButtonB_PushEvent)
-#ButtonC_Push = PushButton(5, max_time=1)
-#ButtonC_Push.setCallback(ButtonC_PushEvent)
+ButtonB_Push = PushButton(17, max_time=1)
+ButtonB_Push.setCallback(ButtonB_PushEvent)
+ButtonC_Push = PushButton(5, max_time=3)
+ButtonC_Push.setCallback(ButtonC_PushEvent)
 ButtonD_Push = PushButton(6, max_time=3)
 ButtonD_Push.setCallback(ButtonD_PushEvent)
 
