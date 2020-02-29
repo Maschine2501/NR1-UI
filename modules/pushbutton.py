@@ -9,11 +9,11 @@ class PushButton:
         self.minimum_time = min_time
         self.maximum_time = max(max_time, min_time)
 
-        GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     def setCallback(self, callback_function):
         self.callbackFunction = callback_function
-        GPIO.add_event_detect(self.pin, GPIO.FALLING, callback=self.callback)
+        GPIO.add_event_detect(self.pin, GPIO.BOTH, callback=self.callback)
 
     def callback(self, channel):
         measured_time = self.minimum_time/2
