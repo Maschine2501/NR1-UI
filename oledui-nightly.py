@@ -620,6 +620,7 @@ def ButtonA_PushEvent(hold_time):
 
 def ButtonB_PushEvent(hold_time):
     global UPDATE_INTERVAL
+    if hold_time > 0:
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('stop')
         elif oled.state = STATE_PLAYER and oled.playState == 'stop':
