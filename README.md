@@ -5,7 +5,7 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 Demo Video from early Build:
 
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/WyBcdSjRcxg/0.jpg)](http://www.youtube.com/watch?v=WyBcdSjRcxg "Video-Sample")
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/xB8cvn7IXr8/0.jpg)](http://www.youtube.com/watch?v=xB8cvn7IXr8 "Video-Sample")
 
 ## To-Do: 
 * Tune "Now-Playing" Screen (other fonts, position)
