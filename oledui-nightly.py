@@ -302,7 +302,10 @@ def onPushCollectionStats(data):
     oled.activeArtists = newArtists 
     oled.activeAlbums = newAlbums
     oled.activeSongs = newSongs
-    oled.activePlaytime = newPlaytimes    
+    oled.activePlaytime = newPlaytimes
+ 
+    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
+        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
