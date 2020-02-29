@@ -39,11 +39,11 @@ sudo journalctl -fu oledui-nightly.service
 
 ## [Hints](https://github.com/Maschine2501/Volumio-OledUI/wiki/hints---tricks---nice-to-know)
 
-## [wiring](https://github.com/Maschine2501/Volumio-OledUI/wiki/Wiring)
+## [wiring / button-layout / truthtable](https://github.com/Maschine2501/Volumio-OledUI/wiki/Wiring---Button-Truthtable)
 
 ### [hardware](https://github.com/Maschine2501/Volumio-OledUI/wiki/Hardware)
 
 ### [dependencies](https://github.com/Maschine2501/Volumio-OledUI/wiki/Dependencies)
 
-### [Sources](https://github.com/Maschine2501/Volumio-OledUI/wiki/Sources)
+### [Sources & font-info](https://github.com/Maschine2501/Volumio-OledUI/wiki/Sources---font-information)
 
