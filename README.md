@@ -7,6 +7,14 @@ Demo Video from early Build:
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/xB8cvn7IXr8/0.jpg)](http://www.youtube.com/watch?v=xB8cvn7IXr8 "Video-Sample")
 
+## Why is the first part of the display empty?
+
+I want to use the display in a case of an old hifi-tuner, the cutout in the front of the device is smaller as the display.
+
+### But you want it on the whole Display?
+
+Simply change the value's from "42" to "0"... that's it! (Tutorials/Guides will follow...)
+
 ## To-Do: 
 * Tune the whole UI (fonts, positions... etc. / will be done when everything else is running properly)
 * change Play- Pause- and Stop- Icons
