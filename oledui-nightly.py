@@ -7,13 +7,16 @@ import os
 import sys
 import time
 import json
+import pycurl
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
+
 
 from time import*
 from threading import Thread
 from socketIO_client import SocketIO
 from datetime import datetime
+from io import BytesIO 
 
 # Imports for OLED display
 from luma.core.interface.serial import spi
@@ -31,6 +34,9 @@ volumio_port = 3000
 VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
+
+b_obj = BytesIO() 
+crl = pycurl.Curl() 
 
 STATE_NONE = -1
 STATE_PLAYER = 0
@@ -303,8 +309,7 @@ def onPushCollectionStats(data):
     oled.activeAlbums = newAlbums
     oled.activeSongs = newSongs
     oled.activePlaytime = newPlaytimes
- 
-    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                           #this is the "Media-Info-Screen"
+    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info': #this is the "Media-Info-Screen"
         oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
 
 def onPushQueue(data):
@@ -605,12 +610,20 @@ def ButtonA_PushEvent(hold_time):
 
 def ButtonD_PushEvent(hold_time):
     global UPDATE_INTERVAL
+    b_obj = BytesIO()
+    crl = pycurl.Curl()
     if hold_time < 3:
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             SetState(STATE_LIBRARY_INFO)
-            volumioIO.emit('collectionstats')
+#            volumioIO.emit('collectionstats')
+            crl.setopt(crl.URL, 'localhost:3000/api/v1/collectionstats')
+            crl.setopt(crl.WRITEDATA, b_obj)
+            crl.perform()
+            crl.close()
+            get_body = b_obj.getvalue()
+            onPushCollectionStats(get_body.decode('utf8'))
             sleep(0.5)
             oled.playState = 'info'
 #	        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla) 
@@ -717,7 +730,7 @@ receive_thread.daemon = True
 receive_thread.start()
 
 volumioIO.on('pushState', onPushState)
-volumioIO.on('pushcollectionstats', onPushCollectionStats)
+#volumioIO.on('pushcollectionstats', onPushCollectionStats)
 volumioIO.on('pushListPlaylist', onPushListPlaylist)
 volumioIO.on('pushQueue', onPushQueue)
 volumioIO.on('pushBrowseSources', onPushBrowseSources)
@@ -727,7 +740,9 @@ volumioIO.on('pushBrowseLibrary', onLibraryBrowse)
 volumioIO.emit('listPlaylist')
 volumioIO.emit('getState')
 volumioIO.emit('getQueue')
-volumioIO.emit('collectionstats')
+#volumioIO.emit('collectionstats')
+
+
 #volumioIO.emit('getBrowseSources')
 sleep(0.1)
 
