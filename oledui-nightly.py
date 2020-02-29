@@ -599,7 +599,7 @@ def ButtonD_PushEvent(hold_time):
         elif oled.state == STATE_LIBRARY_MENU:
             oled.stateTimeout = 20.0
             EnterLibraryItem(oled.modal.SelectedOption())
-        elif oled.state == State_Library_Info:
+        elif oled.state == STATE_LIBRARY_INFO:
             oled.state = STATE_PLAYER
             oled.playState = 'stop'
 #        elif oled.state == STATE_QUEUE_MENU:
