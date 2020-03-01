@@ -92,13 +92,13 @@ oled.Pla = 'Playtime :'                                                         
 oled.randomTag = False                                                           #helper to detect if "Random/shuffle" is set
 oled.repeatTag = False                                                           #helper to detect if "repeat" is set
 
-image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT +4))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
+image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
 font = load_font('Oxanium-Bold.ttf', 26)                       #used for Artist
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
-font2 = load_font('Oxanium-Light.ttf', 10)                     #used for all menus
+font2 = load_font('Oxanium-Light.ttf', 12)                    #used for all menus
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
@@ -115,16 +115,16 @@ def display_update_service():
         dt = time() - prevTime
         prevTime = time()
 #Lines below define the Pixelshift
-        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
-            lastshift = prevTime
-            if pixshift[0] == 4 and pixshift[1] < 4:
-                pixshift[1] += 1
-            elif pixshift[1] == 0 and pixshift[0] < 4:
-                pixshift[0] += 1
-            elif pixshift[0] == 0 and pixshift[1] > 0:
-                pixshift[1] -= 1
-            else:
-                pixshift[0] -= 1
+#        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
+#            lastshift = prevTime
+#            if pixshift[0] == 4 and pixshift[1] < 4:
+#                pixshift[1] += 1
+#            elif pixshift[1] == 0 and pixshift[0] < 4:
+#                pixshift[0] += 1
+#            elif pixshift[0] == 0 and pixshift[1] > 0:
+#                pixshift[1] -= 1
+#            else:
+#                pixshift[0] -= 1
        # auto return to home display screen (from volume display / queue list..)
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
@@ -158,11 +158,11 @@ def SetState(status):
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
     elif oled.state == STATE_PLAYLIST_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.playlistoptions, rows=3, label='____/ PlaylistAuswahl \____')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.playlistoptions, rows=3, label='_/ PlaylistAuswahl \______________________________')
     elif oled.state == STATE_QUEUE_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
     elif oled.state == STATE_LIBRARY_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='____/ Musikbibliothek \____')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='_/ Musikbibliothek \________________________________')
     elif oled.state == STATE_LIBRARY_INFO:
         oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, hugefontaw, font4)
 
@@ -526,13 +526,13 @@ class MenuScreen():
         self.width = width
         self.font2 = font2
         self.selectedOption = selected
-        self.menuLabel = StaticText(self.height, self.width, label, self.font2, center=True)
+        self.menuLabel = StaticText(self.height, self.width, label, self.font2)
         if label == '':
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (42, 0)
-        self.menuYPos = 42 + 16 * self.hasLabel
+        self.labelPos = (42, 2)
+        self.menuYPos = 2 + 12 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
         self.menuList = menuList
@@ -575,9 +575,9 @@ class MenuScreen():
         if self.hasLabel:
             self.menuLabel.DrawOn(image, self.labelPos)
         for row in range(self.onscreenoptions):
-            self.menuText[row].DrawOn(image, (5, self.menuYPos + row*16))
+            self.menuText[row].DrawOn(image, (42, self.menuYPos + row*16))       #Here is the position of the list entrys from left set (42)
         if self.totaloptions == 0:
-            self.menuText[0].DrawOn(image, (15, self.menuYPos))
+            self.menuText[0].DrawOn(image, (42, self.menuYPos))
 	
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
@@ -668,10 +668,9 @@ def ButtonD_PushEvent(hold_time):
             onPushCollectionStats(get_body)
             sleep(0.5) 
         elif oled.state == STATE_LIBRARY_INFO:
-            sleep(0.2)
-	    SetState(STATE_PLAYER)
-	    sleep(0.2)
+            SetState(STATE_PLAYER)
 	    oled.playState = 'stop'
+            sleep(0.5)
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
