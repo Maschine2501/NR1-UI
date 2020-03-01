@@ -583,7 +583,7 @@ def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
 #shortpress functions below
-        print(ButtonA short press event)
+        print('ButtonA short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             if oled.playState == 'play':
                 volumioIO.emit('pause')
@@ -599,6 +599,7 @@ def ButtonA_PushEvent(hold_time):
             oled.modal.PrevOption()
 #longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState == 'stop':
+	print('ButtonA long press event')
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
         sleep(5)
@@ -610,7 +611,7 @@ def ButtonB_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 2:
 #shortpress functions below
-        print(ButtonB short press event)
+        print('ButtonB short press event')
 	    if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('stop')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -628,7 +629,7 @@ def ButtonC_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
 #shortpress functions below
-        print(ButtonC short press event)
+        print('ButtonC short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -639,7 +640,7 @@ def ButtonC_PushEvent(hold_time):
             SetState(STATE_QUEUE_MENU)
 #Longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
-        print(ButtonC long press event)
+        print('ButtonC long press event')
         if oled.repeatTag == False:
             volumioIO.emit('setRepeat', {"value":"true"})
             oled.repeatTag = True
@@ -653,7 +654,7 @@ def ButtonD_PushEvent(hold_time):
     crl = pycurl.Curl()
     if hold_time < 3:
 #shortpress functions below
-        print(ButtonD short press event)
+        print('ButtonD short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -679,7 +680,7 @@ def ButtonD_PushEvent(hold_time):
             emit_track = True         # return to player mode
 #Longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
-        print(ButtonD long press event)
+        print('ButtonD long press event')
         if oled.randomTag == False:
 	        volumioIO.emit('setRandom', {"value":"true"})
             oled.randomTag = True
