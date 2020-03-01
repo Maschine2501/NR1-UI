@@ -12,7 +12,6 @@ import pprint
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
-
 from time import*
 from threading import Thread
 from socketIO_client import SocketIO
@@ -36,6 +35,7 @@ VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
 
+#imports for REST API (MediaInfoScreen)
 b_obj = BytesIO() 
 crl = pycurl.Curl() 
 
@@ -71,26 +71,26 @@ oled.libraryFull = []
 oled.libraryNames = []
 oled.volumeControlDisabled = False
 oled.volume = 100
-now = datetime.now()                                                           #current date and time
-oled.time = now.strftime("%H:%M:%S")                                           #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = now.strftime("%d.  %m.  %Y")                                       #resolves time as dd.mm.YYYY eg. 17.04.2020
-oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0] #resolves IP from Ethernet Adapator
+now = datetime.now()                                                             #current date and time
+oled.time = now.strftime("%H:%M:%S")                                             #resolves time as HH:MM:SS eg. 14:33:15
+oled.date = now.strftime("%d.  %m.  %Y")                                         #resolves time as dd.mm.YYYY eg. 17.04.2020
+oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0]   #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
-newStatus = 0               #makes newStatus usable outside of onPushState
-oled.activeFormat = ''      #makes oled.activeFormat usable in onPushState
-oled.activeSamplerate = ''  #makes oled.activeSamplerate usable in onPushState
-oled.activeBitdepth = ''    #makes oled.activeBitdepth usable in onPushState
-oled.activeArtists = ''
-oled.activeAlbums = ''
-oled.activeSongs = ''
-oled.activePlaytime = ''
-oled.Art = 'Interpreten :'
-oled.Alb = 'Alben :'
-oled.Son = 'Songs :'
-oled.Pla = 'Playtime :'
-oled.randomTag = False
-oled.repeatTag = False
+newStatus = 0              							 #makes newStatus usable outside of onPushState
+oled.activeFormat = ''      							 #makes oled.activeFormat globaly usable
+oled.activeSamplerate = ''  							 #makes oled.activeSamplerate globaly usable
+oled.activeBitdepth = ''                                                         #makes oled.activeBitdepth globaly usable
+oled.activeArtists = ''                                                          #makes oled.activeArtists globaly usable
+oled.activeAlbums = ''                                                           #makes oled.activeAlbums globaly usable
+oled.activeSongs = ''                                                      	 #makes oled.activeSongs globaly usable
+oled.activePlaytime = ''                                                         #makes oled.activePlaytime globaly usable
+oled.Art = 'Interpreten :'                                                       #sets the Artists-text for the MediaLibrarayInfo
+oled.Alb = 'Alben :'                                                             #sets the Albums-text for the MediaLibrarayInfo
+oled.Son = 'Songs :'                                                             #sets the Songs-text for the MediaLibrarayInfo
+oled.Pla = 'Playtime :'                                                          #sets the Playtime-text for the MediaLibrarayInfo
+oled.randomTag = False                                                           #helper to detect if "Random/shuffle" is set
+oled.repeatTag = False                                                           #helper to detect if "repeat" is set
 
 image = Image.new('RGB', (oled.WIDTH + 4, oled.HEIGHT +4))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
@@ -229,8 +229,8 @@ def onPushState(data):
     if 'status' in data:
         newStatus = data['status']
         
-    if oled.state != STATE_VOLUME:            #get volume on startup and remote control
-        try:                                  #it is either number or unicode text
+    if oled.state != STATE_VOLUME:              #get volume on startup and remote control
+        try:                                    #it is either number or unicode text
             oled.volume = int(data['volume'])
         except (KeyError, ValueError):
             pass
@@ -241,24 +241,15 @@ def onPushState(data):
     oled.activeFormat = newFormat
     oled.activeSamplerate = newSamplerate
     oled.activeBitdepth = newBitdepth
-#    oled.activeArtists = newArtists 
-#    oled.activeAlbums = newAlbums
-#    oled.activeSongs = newSongs
-#    oled.activePlaytime = newPlaytimes
-#    print('activeArtists: ' + oled.activeArtists)
-#    print('activeAlbums: ' + oled.activeAlbums)
-#    print('activeSongs: ' + oled.activeSongs)
-#    print('activePlaytime: ' + oled.activePlaytime)
-
 
     print(newSong.encode('ascii', 'ignore'))
-    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                          # new song and artist
+    if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
         oled.activeSong = newSong
         oled.activeArtist = newArtist
-	if oled.state == STATE_PLAYER and newStatus != 'stop':                                                        #this is the "NowPlayingScreen"
-            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)               #here is defined which "data" should be displayed in the class
-	if oled.state == STATE_PLAYER and newStatus == 'stop':                                                        #this is the "Standby-Screen"
-            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                           #here is defined which "data" should be displayed in the class
+	if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
+            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)     #here is defined which "data" should be displayed in the class
+	if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
+            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                 #here is defined which "data" should be displayed in the class
     
     if newStatus != oled.playState:
         oled.playState = newStatus
@@ -270,12 +261,7 @@ def onPushState(data):
             oled.modal.SetPlayingIcon(oled.playState, iconTime)
 
 def onPushCollectionStats(data):
-    data = json.loads(data)
-#    print('collectionstats DATA: ' + data) 	
-#    global newArtists 
-#    global newAlbums
-#    global newSongs
-#    global newPlaytime
+    data = json.loads(data)             #data import from REST-API (is set when ButtonD short-pressed in Standby)
             
     if "artists" in data:               #used for Media-Library-Infoscreen
         newArtists = data["artists"]
@@ -309,13 +295,9 @@ def onPushCollectionStats(data):
     oled.activeAlbums = str(newAlbums)
     oled.activeSongs = str(newSongs)
     oled.activePlaytime = str(newPlaytime)
-    print(oled.playState)
-    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info': #this is the "Media-Info-Screen"
-	print(oled.activeArtists)
-	print(oled.activeAlbums)
-	print(oled.activeSongs)
-	print(oled.activePlaytime)
-        oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
+	
+    if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                                   #this is the "Media-Library-Info-Screen"
+	oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla)  
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
@@ -454,7 +436,7 @@ class MediaLibrarayInfo():
         self.font4 = font4
         self.fontaw = fontaw
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   #Text for Artists
-        self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)    #Number of Artists
+        self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)   #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)   #Text for Albums
         self.LibraryInfoText4 = StaticText(self.height, self.width, row2, font4)   #Number of Albums
         self.LibraryInfoText5 = StaticText(self.height, self.width, row7, font4)   #Text for Songs
@@ -464,14 +446,14 @@ class MediaLibrarayInfo():
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
-        self.text1Pos = (140, 4)        #Number of Artists
-        self.text2Pos = (140, 18)      #Number of Albums
-        self.text3Pos = (140, 32)      #Number of Songs
-        self.text4Pos = (140, 46)      #Summary of duration
-        self.text5Pos = (42, 4)      #Text for Artists
-        self.text6Pos = (42, 18)     #Text for Albums
-        self.text7Pos = (42, 32)     #Text for Songs
-        self.text8Pos = (42, 46)     #Text for duration
+        self.text1Pos = (140, 4)        					   #Number of Artists
+        self.text2Pos = (140, 18)      						   #Number of Albums
+        self.text3Pos = (140, 32)      						   #Number of Songs
+        self.text4Pos = (140, 46)      						   #Summary of duration
+        self.text5Pos = (42, 4)      						   #Text for Artists
+        self.text6Pos = (42, 18)     						   #Text for Albums
+        self.text7Pos = (42, 32)     						   #Text for Songs
+        self.text8Pos = (42, 46)     						   #Text for duration
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8):
@@ -614,7 +596,7 @@ def ButtonA_PushEvent(hold_time):
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
         sleep(5)
-        oled.cleanup()            # put display into low power mode
+        oled.cleanup()                                              # put display into low power mode
         volumioIO.emit('shutdown')
         sleep(60)
 
@@ -769,10 +751,8 @@ volumioIO.emit('getState')
 volumioIO.emit('getQueue')
 #volumioIO.emit('collectionstats')
 
-
 #volumioIO.emit('getBrowseSources')
 sleep(0.1)
-
 
 #def timeupdate()
 #    start_time = datetime.datetime.now()
