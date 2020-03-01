@@ -158,11 +158,11 @@ def SetState(status):
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
     elif oled.state == STATE_PLAYLIST_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.playlistoptions, rows=3, label='------ Select Playlist ------')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.playlistoptions, rows=3, label='____/ PlaylistAuswahl \____')
     elif oled.state == STATE_QUEUE_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
     elif oled.state == STATE_LIBRARY_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='------ Music Library ------')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='____/ Musikbibliothek \____')
     elif oled.state == STATE_LIBRARY_INFO:
         oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, hugefontaw, font4)
 
@@ -582,16 +582,22 @@ class MenuScreen():
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
+#shortpress functions below
+        print(ButtonA short press event)
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             if oled.playState == 'play':
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-            volumioIO.emit('listPlaylist')
-            oled.stateTimeout = 20.0
-            SetState(STATE_PLAYLIST_MENU)
-            LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
+              oled.stateTimeout = 20.0
+              volumioIO.emit('browseLibrary',{'uri':'music-library'})
+        elif oled.state == STATE_LIBRARY_INFO:
+              oled.stateTimeout = 20.0
+              volumioIO.emit('browseLibrary',{'uri':'music-library'})
+        elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
+            oled.modal.PrevOption()
+#longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState == 'stop':
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
@@ -603,19 +609,37 @@ def ButtonA_PushEvent(hold_time):
 def ButtonB_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 2:
-	if oled.state == STATE_PLAYER and oled.playState != 'stop':
-           volumioIO.emit('stop')
-        else:
-           volumioIO.emit('listPlaylist')
-           oled.stateTimeout = 20.0
-           SetState(STATE_PLAYLIST_MENU)
+#shortpress functions below
+        print(ButtonB short press event)
+	    if oled.state == STATE_PLAYER and oled.playState != 'stop':
+            volumioIO.emit('stop')
+        elif oled.state == STATE_PLAYER and oled.playState == 'stop':
+            volumioIO.emit('listPlaylist')
+            oled.stateTimeout = 20.0
+            SetState(STATE_PLAYLIST_MENU)
+        elif oled.state == STATE_LIBRARY_INFO:
+            volumioIO.emit('listPlaylist')
+            oled.stateTimeout = 20.0
+            SetState(STATE_PLAYLIST_MENU)
+        elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
+            oled.modal.NextOption()
 
 def ButtonC_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3:
+#shortpress functions below
+        print(ButtonC short press event)
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
+        elif oled.state == STATE_PLAYER and oled.playState == 'stop':
+            oled.stateTimeout = 10.0
+            SetState(STATE_QUEUE_MENU)
+        elif oled.state == STATE_LIBRARY_INFO:
+            oled.stateTimeout = 10.0
+            SetState(STATE_QUEUE_MENU)
+#Longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
+        print(ButtonC long press event)
         if oled.repeatTag == False:
             volumioIO.emit('setRepeat', {"value":"true"})
             oled.repeatTag = True
@@ -628,11 +652,13 @@ def ButtonD_PushEvent(hold_time):
     b_obj = BytesIO()
     crl = pycurl.Curl()
     if hold_time < 3:
+#shortpress functions below
+        print(ButtonD short press event)
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             SetState(STATE_LIBRARY_INFO)
-	    oled.playState = 'info'
+	        oled.playState = 'info'
             crl.setopt(crl.URL, 'localhost:3000/api/v1/collectionstats')
             crl.setopt(crl.WRITEDATA, b_obj)
             crl.perform()
@@ -640,19 +666,22 @@ def ButtonD_PushEvent(hold_time):
             get_body = b_obj.getvalue()
             onPushCollectionStats(get_body)
             sleep(0.5) 
+        elif oled.state == STATE_LIBRARY_INFO:
+            SetState(STATE_PLAYER)
+            oled.playState = 'stop'
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
             oled.stateTimeout = 20.0
             EnterLibraryItem(oled.modal.SelectedOption())
-        elif oled.state == STATE_LIBRARY_INFO:
-            SetState(STATE_PLAYER)
-            oled.playState = 'stop'
-#            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
-
+        elif oled.state == STATE_QUEUE_MENU:
+            oled.playPosition = oled.modal.SelectedOption()
+            emit_track = True         # return to player mode
+#Longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
+        print(ButtonD long press event)
         if oled.randomTag == False:
-	    volumioIO.emit('setRandom', {"value":"true"})
+	        volumioIO.emit('setRandom', {"value":"true"})
             oled.randomTag = True
         elif oled.randomTag == True:
             volumioIO.emit('setRandom', {"value":"false"})
@@ -666,38 +695,57 @@ def RightKnob_RotaryEvent(dir):
             oled.modal.PrevOption()
         elif dir == RotaryEncoder.RIGHT:
             oled.modal.NextOption()
-
-    else:
-        oled.stateTimeout = 6.0
-        if oled.state != STATE_QUEUE_MENU:
-            SetState(STATE_QUEUE_MENU)
+    elif oled.state == STATE_QUEUE_MENU:
+        oled.stateTimeout = 10.0        
         if dir == RotaryEncoder.LEFT:
             oled.modal.PrevOption()
         elif dir == RotaryEncoder.RIGHT:
-            oled.modal.NextOption()
+            oled.modal.NextOption()        
         oled.playPosition = oled.modal.SelectedOption()
         emit_track = True
+    elif oled.state == STATE_PLAYER and oled.playState != 'stop':
+        oled.stateTimeout = 10.0
+        SetState(STATE_QUEUE_MENU)
+    elif oled.state == STATE_PLAYER and oled.playState == 'stop':
+        oled.stateTimeout = 20.0
+        volumioIO.emit('browseLibrary',{'uri':'music-library'})
+    elif oled.state == STATE_LIBRARY_INFO:
+        oled.stateTimeout = 20.0
+        volumioIO.emit('browseLibrary',{'uri':'music-library'})        
 
 def RightKnob_PushEvent(hold_time):
     if hold_time < 1:
+#shortpress fuctions below
         print ('RightKnob_PushEvent SHORT')
-        if oled.state == STATE_QUEUE_MENU:
-            oled.stateTimeout = 0          # return to player mode
-        elif oled.state != STATE_PLAYLIST_MENU and oled.state != STATE_LIBRARY_MENU:
-            volumioIO.emit('listPlaylist')
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
+            if oled.playState == 'play':
+                volumioIO.emit('pause')
+            else:
+                volumioIO.emit('play')
+        elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             oled.stateTimeout = 20.0
-            SetState(STATE_PLAYLIST_MENU)
-            print ('Entering playlist menu')
-        else:
-            if oled.state == STATE_PLAYLIST_MENU:
-                LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
-            if oled.state == STATE_LIBRARY_MENU:
-                oled.stateTimeout = 20.0
-                EnterLibraryItem(oled.modal.SelectedOption())
+            volumioIO.emit('browseLibrary',{'uri':'music-library'})
+        elif oled.state == STATE_LIBRARY_INFO:
+            oled.stateTimeout = 20.0
+            volumioIO.emit('browseLibrary',{'uri':'music-library'})   
+        elif oled.state == STATE_PLAYLIST_MENU:
+            LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
+        elif oled.state == STATE_LIBRARY_MENU:
+            oled.stateTimeout = 20.0
+            EnterLibraryItem(oled.modal.SelectedOption())
+        elif oled.state == STATE_QUEUE_MENU:
+            oled.playPosition = oled.modal.SelectedOption()
+            emit_track = True         # return to player mode
+#longpress functions below
     else:
-        print ('RightKnob_PushEvent LONG -> Music library browse')
-        oled.stateTimeout = 20.0
-        volumioIO.emit('browseLibrary',{'uri':'music-library'})
+        print ('RightKnob_PushEvent')
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':        
+            oled.stateTimeout = 20.0
+            volumioIO.emit('browseLibrary',{'uri':'music-library'})
+        elif oled.state == STATE_LIBRARY_INFO:        
+            oled.stateTimeout = 20.0
+            volumioIO.emit('browseLibrary',{'uri':'music-library'})
+
 
 #Down below is the defenition for the physical buttons.
 #Sample: RightKnob_Push = PushButton(27, max_time=1) -> GPIO 27 is used
