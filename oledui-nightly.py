@@ -69,7 +69,7 @@ oled.playlistoptions = []
 oled.queue = []
 oled.libraryFull = []
 oled.libraryNames = []
-oled.volumeControlDisabled = False
+oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                                                             #current date and time
 oled.time = now.strftime("%H:%M:%S")                                             #resolves time as HH:MM:SS eg. 14:33:15
@@ -96,9 +96,9 @@ image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDT
 oled.clear()
 
 font = load_font('Oxanium-Bold.ttf', 26)                       #used for Artist
+font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all menus
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
-font2 = load_font('Oxanium-Light.ttf', 12)                    #used for all menus
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
@@ -114,17 +114,6 @@ def display_update_service():
     while UPDATE_INTERVAL > 0:
         dt = time() - prevTime
         prevTime = time()
-#Lines below define the Pixelshift
-#        if prevTime-lastshift > PIXEL_SHIFT_TIME: #it's time for pixel shift
-#            lastshift = prevTime
-#            if pixshift[0] == 4 and pixshift[1] < 4:
-#                pixshift[1] += 1
-#            elif pixshift[1] == 0 and pixshift[0] < 4:
-#                pixshift[0] += 1
-#            elif pixshift[0] == 0 and pixshift[1] > 0:
-#                pixshift[1] -= 1
-#            else:
-#                pixshift[0] -= 1
        # auto return to home display screen (from volume display / queue list..)
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
@@ -531,7 +520,7 @@ class MenuScreen():
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (42, 2)
+        self.labelPos = (42, 2)                      #here is the position of the menu title
         self.menuYPos = 2 + 12 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
@@ -577,7 +566,7 @@ class MenuScreen():
         for row in range(self.onscreenoptions):
             self.menuText[row].DrawOn(image, (42, self.menuYPos + row*16))       #Here is the position of the list entrys from left set (42)
         if self.totaloptions == 0:
-            self.menuText[0].DrawOn(image, (42, self.menuYPos))
+            self.menuText[0].DrawOn(image, (42, self.menuYPos))                  #Here is the position of the list entrys from left set (42)
 	
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
@@ -590,10 +579,10 @@ def ButtonA_PushEvent(hold_time):
             else:
                 volumioIO.emit('play')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-              oled.stateTimeout = 20.0
+              oled.stateTimeout = 10.0
               volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_LIBRARY_INFO:
-              oled.stateTimeout = 20.0
+              oled.stateTimeout = 10.0
               volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
               oled.modal.PrevOption()
@@ -616,11 +605,11 @@ def ButtonB_PushEvent(hold_time):
             volumioIO.emit('stop')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
               volumioIO.emit('listPlaylist')
-              oled.stateTimeout = 20.0
+              oled.stateTimeout = 10.0
               SetState(STATE_PLAYLIST_MENU)
         elif oled.state == STATE_LIBRARY_INFO:
               volumioIO.emit('listPlaylist')
-              oled.stateTimeout = 20.0
+              oled.stateTimeout = 10.0
               SetState(STATE_PLAYLIST_MENU)
         elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
               oled.modal.NextOption()
@@ -633,10 +622,10 @@ def ButtonC_PushEvent(hold_time):
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-              oled.stateTimeout = 10.0
+              oled.stateTimeout = 6.0
               SetState(STATE_QUEUE_MENU)
         elif oled.state == STATE_LIBRARY_INFO:
-              oled.stateTimeout = 10.0
+              oled.stateTimeout = 6.0
               SetState(STATE_QUEUE_MENU)
 #Longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
@@ -674,7 +663,7 @@ def ButtonD_PushEvent(hold_time):
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             EnterLibraryItem(oled.modal.SelectedOption())
         elif oled.state == STATE_QUEUE_MENU:
             oled.playPosition = oled.modal.SelectedOption()
@@ -692,13 +681,13 @@ def ButtonD_PushEvent(hold_time):
 def RightKnob_RotaryEvent(dir):
     global emit_track
     if oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_LIBRARY_MENU:
-        oled.stateTimeout = 20.0
+        oled.stateTimeout = 10.0
         if dir == RotaryEncoder.LEFT:
             oled.modal.PrevOption()
         elif dir == RotaryEncoder.RIGHT:
             oled.modal.NextOption()
     elif oled.state == STATE_QUEUE_MENU:
-        oled.stateTimeout = 10.0        
+        oled.stateTimeout = 6.0        
         if dir == RotaryEncoder.LEFT:
             oled.modal.PrevOption()
         elif dir == RotaryEncoder.RIGHT:
@@ -709,10 +698,10 @@ def RightKnob_RotaryEvent(dir):
         oled.stateTimeout = 10.0
         SetState(STATE_QUEUE_MENU)
     elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-        oled.stateTimeout = 20.0
+        oled.stateTimeout = 10.0
         volumioIO.emit('browseLibrary',{'uri':'music-library'})
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.stateTimeout = 20.0
+        oled.stateTimeout = 10.0
         volumioIO.emit('browseLibrary',{'uri':'music-library'})        
 
 def RightKnob_PushEvent(hold_time):
@@ -725,15 +714,15 @@ def RightKnob_PushEvent(hold_time):
             else:
                 volumioIO.emit('play')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_LIBRARY_INFO:
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             volumioIO.emit('browseLibrary',{'uri':'music-library'})   
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             EnterLibraryItem(oled.modal.SelectedOption())
         elif oled.state == STATE_QUEUE_MENU:
             oled.playPosition = oled.modal.SelectedOption()
@@ -742,10 +731,10 @@ def RightKnob_PushEvent(hold_time):
     else:
         print ('RightKnob_PushEvent')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':        
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_LIBRARY_INFO:        
-            oled.stateTimeout = 20.0
+            oled.stateTimeout = 10.0
             volumioIO.emit('browseLibrary',{'uri':'music-library'})
 
 
