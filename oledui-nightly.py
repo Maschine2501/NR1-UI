@@ -648,7 +648,7 @@ def ButtonD_PushEvent(hold_time):
         elif oled.state == STATE_LIBRARY_INFO:
             SetState(STATE_PLAYER)
             oled.playState = 'stop'
-            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
+#            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
 
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
         if oled.randomTag == False:
