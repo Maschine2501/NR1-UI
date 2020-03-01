@@ -44,7 +44,7 @@ class StaticText(Screen):
         self.textlabel = textlabel
         self.textwidth, self.textheight = self.draw.textsize(textlabel, font=font)
         self.center = center
-        self.image = Image.new('RGB', (self.textwidth+2, self.textheight+2), bgcolor)
+        self.image = Image.new('RGB', (self.textwidth+2, self.textheight+2), bgcolor)   #Need to investigate what are the result of +2 is
         self.draw = ImageDraw.Draw(self.image)
         #self.draw.fontmode = "1"  #no antialiasing
         self.draw.text((0, 0), textlabel, font=font, fill=fill)
@@ -53,7 +53,7 @@ class StaticText(Screen):
         if self.center:
             width, height = image.size
             if self.textwidth < width:
-                position = (int((width-self.textwidth)/2), position[1])
+                position = (int((width-self.textwidth)/2 + 42), position[1])   #+ 42 is only needed when first 42 Pixels are not used
         image.paste(self.image, position)
 
 class ScrollText(Screen):
@@ -65,12 +65,13 @@ class ScrollText(Screen):
         self.offset = -self.startScrollDelay
         self.scrollSpeed = 1
         self.endScrollMargin = 2
+#need to ivestigate what the values "startScrollDelay / endScrollDelay / endscrollmargin" affect     
 
         self.textlabel = textlabel
         self.textwidth, self.textheight = self.draw.textsize(textlabel, font=font)
         self.stopPosition =  self.textwidth - width + self.endScrollMargin
 
-        self.image = Image.new('RGB', (self.textwidth + 4, self.textheight + 4))
+        self.image = Image.new('RGB', (self.textwidth + 4, self.textheight + 4))    #Need to investigate what are the result of +4 is
         self.draw = ImageDraw.Draw(self.image)
         self.draw.text((0, 0), textlabel, font=font, fill="white")
 
@@ -84,7 +85,7 @@ class ScrollText(Screen):
 
         i = 0
         if self.textwidth <= width:                  # center text
-            position = (int((width-self.textwidth)/2), position[1])
+            position = (int((width-self.textwidth)/2 + 42), position[1])   # + 42 is only needed if the first 42 pixel are not used
         elif self.offset <= 0:                       # start position before scrolling
             i = 0
         elif self.offset < self.stopPosition:        # scroll text by offset
