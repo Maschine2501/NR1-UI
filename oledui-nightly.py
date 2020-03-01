@@ -98,7 +98,7 @@ oled.clear()
 font = load_font('Oxanium-Bold.ttf', 26)                       #used for Artist
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
-font2 = load_font('Oxanium-Medium.ttf', 10)                    #used for all menus
+font2 = load_font('Oxanium-Light.ttf', 10)                     #used for all menus
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
