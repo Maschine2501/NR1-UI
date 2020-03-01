@@ -53,7 +53,7 @@ class StaticText(Screen):
         if self.center:
             width, height = image.size
             if self.textwidth < width:
-                position = (int((width-self.textwidth)/2)   #original -> "position = (int((width-self.textwidth)/2 + 42), position[1])  "
+                position = (int((width-self.textwidth)/2), position[1])   #original -> "position = (int((width-self.textwidth)/2 + 42), position[1])  "
         image.paste(self.image, position)
 
 class ScrollText(Screen):
