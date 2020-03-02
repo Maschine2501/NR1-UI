@@ -84,7 +84,7 @@ class ScrollText(Screen):
 
         i = 0
         if self.textwidth <= width:                  # center text
-            position = (int((42), position[1])       #original-> "position = (int((width-self.textwidth)/2), position[1])"
+            position = (int((width-self.textwidth)/2)       #original-> "position = (int((width-self.textwidth)/2), position[1])"
         elif self.offset <= 0:                       # start position before scrolling
             i = 0
         elif self.offset < self.stopPosition:        # scroll text by offset
