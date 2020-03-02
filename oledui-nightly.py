@@ -167,8 +167,9 @@ def LoadPlaylist(playlistname):
 
 def onPushState(data):
 	
-    print(data) #for log, if enabled you see the values for 'data'
-	
+#    print(data) #for log, if enabled you see the values for 'data'
+
+    global OPDsave	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
 
     if 'title' in data:
@@ -658,7 +659,7 @@ def ButtonD_PushEvent(hold_time):
             sleep(0.5) 
         elif oled.state == STATE_LIBRARY_INFO:
             SetState(STATE_PLAYER)
-            volumioIO.emit('stop')
+            onPushState(OPDsave)
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
