@@ -658,8 +658,7 @@ def ButtonD_PushEvent(hold_time):
             sleep(0.5) 
         elif oled.state == STATE_LIBRARY_INFO:
             SetState(STATE_PLAYER)
-	    oled.playState = 'stop'
-            sleep(0.5)
+            volumioIO.emit('stop')
         elif oled.state == STATE_PLAYLIST_MENU:
             LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
         elif oled.state == STATE_LIBRARY_MENU:
