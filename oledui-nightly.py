@@ -100,7 +100,7 @@ font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all men
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
-iconfont = load_font('entypo.ttf', oled.HEIGHT - 16)           #used for play/pause/stop/shuffle/repeat... icons
+iconfont = load_font('entypo.ttf', oled.HEIGHT - 2)           #used for play/pause/stop/shuffle/repeat... icons
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
 fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP  
@@ -143,7 +143,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, hugefontaw, fontClock, fontDate, fontIP, font3, font4, iconfont)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, fontClock, fontDate, fontIP, font3, font4, iconfont)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -345,13 +345,12 @@ def onPushListPlaylist(data):
 #this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontaw, fontClock, fontDate, fontIP, font3, font4, iconfont): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontClock, fontDate, fontIP, font3, font4, iconfont): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
         self.font3 = font3
         self.font4 = font4
-        self.fontaw = fontaw
 	self.iconfont = iconfont
         self.fontClock = fontClock
         self.fontDate = fontDate
@@ -364,7 +363,6 @@ class NowPlayingScreen():
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    #Clock /center=True
         self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    #IP
         self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     #Date
-#        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}            #fontaw icons
 	self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    #entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
@@ -417,13 +415,11 @@ class NowPlayingScreen():
     def SetPlayingIcon(self, state, time=0):
         if state in self.icon:
 		self.playingIcon = self.icon[state]
-        self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
+        self.alfaimage.paste((0, 0, 0, 200), [0, 0, image.size[0], image.size[1]])                 #(0, 0, 0, 200) means Background (nowplayingscreen with artist, song etc.) is darkend. Change 200 to 0 -> Background is completely visible. 255 -> Bachground is not visible. scale = 0-255
         drawalfa = ImageDraw.Draw(self.alfaimage)
-#        iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)  #fontawesome
-	iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)   #entypo
-        left = (self.width - iconwidth + 42) / 2 #here is defined where the play/pause/stop icons are displayed. 
-#        drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96)) #fontawesome
-	drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 96))  #entypo
+	iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)            #entypo
+        left = (self.width - iconwidth + 42) / 2						   #here is defined where the play/pause/stop icons are displayed. 
+	drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 200))  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
