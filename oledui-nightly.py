@@ -99,7 +99,8 @@ font = load_font('Oxanium-Bold.ttf', 26)                       #used for Artist
 font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all menus
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
-hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons
+hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
+iconfont = load_font('entypo.ttf', oled.HEIGHT - 16)           #used for play/pause/stop/shuffle/repeat... icons
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
 fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP  
@@ -142,7 +143,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, hugefontaw, fontClock, fontDate, fontIP, font3, font4)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, hugefontaw, fontClock, fontDate, fontIP, font3, font4, iconfont)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -342,13 +343,14 @@ def onPushListPlaylist(data):
 #this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontaw, fontClock, fontDate, fontIP, font3, font4): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontaw, fontClock, fontDate, fontIP, font3, font4, iconfont): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
         self.font3 = font3
         self.font4 = font4
         self.fontaw = fontaw
+	self.iconfont = iconfont
         self.fontClock = fontClock
         self.fontDate = fontDate
         self.fontIP = fontIP
@@ -360,7 +362,8 @@ class NowPlayingScreen():
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    #Clock /center=True
         self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    #IP
         self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     #Date
-        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}
+        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}            #fontaw icons
+	self.icon = {'play':'\u25B6', 'pause':'\2389', 'stop':'\25A0'}       	    #entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (42, 2)        #Artist /
@@ -414,9 +417,11 @@ class NowPlayingScreen():
 		self.playingIcon = self.icon[state]
         self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
         drawalfa = ImageDraw.Draw(self.alfaimage)
-        iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)
+#        iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)  #fontawesome
+	iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)   #entypo
         left = (self.width - iconwidth + 42) / 2 #here is defined where the play/pause/stop icons are displayed. 
-        drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96))
+#        drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96)) #fontawesome
+	drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 96))  #entypo
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
