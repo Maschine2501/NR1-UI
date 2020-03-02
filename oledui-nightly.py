@@ -362,8 +362,8 @@ class NowPlayingScreen():
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    #Clock /center=True
         self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    #IP
         self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     #Date
-        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}            #fontaw icons
-	self.icon = {'play':'\u25B6', 'pause':'\2389', 'stop':'\25A0'}       	    #entypo icons
+#        self.icon = {'play':'\uf04b', 'pause':'\uf04c', 'stop':'\uf04d'}            #fontaw icons
+	self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    #entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (42, 2)        #Artist /
