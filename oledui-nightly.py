@@ -170,6 +170,8 @@ def onPushState(data):
 	
 #    print(data) #for log, if enabled you see the values for 'data'
 
+    OPDsave = data
+
     global OPDsave	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
 
