@@ -837,7 +837,7 @@ while True:
 
 #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
 
-    if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False :
+    if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False:
     	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
         oled.time = strftime("%H:%M:%S")
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)
