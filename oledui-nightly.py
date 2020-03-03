@@ -77,6 +77,7 @@ oled.date = now.strftime("%d.  %m.  %Y")                                        
 oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0]   #resolves IP from Ethernet Adapator
 emit_volume = False
 emit_track = False
+OPDSave = ''
 newStatus = 0              							 #makes newStatus usable outside of onPushState
 oled.activeFormat = ''      							 #makes oled.activeFormat globaly usable
 oled.activeSamplerate = ''  							 #makes oled.activeSamplerate globaly usable
@@ -188,8 +189,9 @@ def LoadPlaylist(playlistname):
 def onPushState(data):
 	
 #    print(data) #for log, if enabled you see the values for 'data'
-    global OPDsave
+
     OPDsave = data	
+
     global newStatus #global definition for newStatus, used at the end-loop to update standby
 
     if 'title' in data:
@@ -257,7 +259,7 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
 	if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
-            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth)     #here is defined which "data" should be displayed in the class
+            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
 	if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date)                                 #here is defined which "data" should be displayed in the class
     
