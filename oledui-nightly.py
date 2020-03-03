@@ -91,7 +91,24 @@ oled.Son = 'Songs :'                                                            
 oled.Pla = 'Playtime :'                                                          #sets the Playtime-text for the MediaLibrarayInfo
 oled.randomTag = False                                                           #helper to detect if "Random/shuffle" is set
 oled.repeatTag = False                                                           #helper to detect if "repeat" is set
-oled.ShutdownFlag = False                                                           #helper to detect if "shutdown" is running. Prevents artifacts from Standby-Screen during shutdown
+oled.ShutdownFlag = False                                                        #helper to detect if "shutdown" is running. Prevents artifacts from Standby-Screen during shutdown
+oled.libraryInfo = '\u1F4D6'
+oled.libraryReturn = '\u2302'
+oled.playIcon = '\u25B6'
+oled.pauseIcon = '\u2389'
+oled.stopIcon = '\u25A0'
+oled.nextIcon = '\u23ED'
+oled.prevIcon = '\u23EE'
+oled.libraryIcon = '\uE003'
+oled.playlistIcon = '\uE005'
+oled.queueIcon = '\u2630'
+oled.arrowUpIcon = '\E75F'
+oled.arrowDownIcon = '\E75C'
+oled.acceptIcon = '\u2713'
+oled.discardIcon = '\u2715'
+oled.randomIcon = '\u1F500'
+oled.repeatIcon = '\u1F501'
+
 
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
@@ -101,7 +118,8 @@ font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all men
 font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
-iconfont = load_font('entypo.ttf', oled.HEIGHT - 2)           #used for play/pause/stop/shuffle/repeat... icons
+iconfont = load_font('entypo.ttf', oled.HEIGHT - 2)            #used for play/pause/stop/shuffle/repeat... icons
+iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
 fontClock = load_font('DSG.ttf', 41)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
 fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP  
