@@ -870,7 +870,7 @@ while True:
 #this is the loop to get artist/song when changing sources (loops three times)
     
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
-        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth)
+        oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)
         InfoTag += 1
         sleep(1.5)
 
