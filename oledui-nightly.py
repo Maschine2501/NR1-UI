@@ -113,10 +113,10 @@ oled.repeatIcon = '\u1F501'
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
-font = load_font('Oxanium-Bold.ttf', 26)                       #used for Artist
+font = load_font('Oxanium-Bold.ttf', 20)                       #used for Artist
 font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all menus
-font3 = load_font('Oxanium-Regular.ttf', 22)                   #used for Song
-font4 = load_font('Oxanium-Medium.ttf', 14)                    #used for Format/Smplerate/Bitdepth
+font3 = load_font('Oxanium-Regular.ttf', 18)                   #used for Song
+font4 = load_font('Oxanium-Medium.ttf', 12)                    #used for Format/Smplerate/Bitdepth
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
 iconfont = load_font('entypo.ttf', oled.HEIGHT - 2)            #used for play/pause/stop/shuffle/repeat... icons
 iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
@@ -162,7 +162,7 @@ def display_update_service():
 def SetState(status):
     oled.state = status
     if oled.state == STATE_PLAYER:
-        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font, fontClock, fontDate, fontIP, font3, font4, iconfont)
+        oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon, font, fontClock, fontDate, fontIP, font3, font4, iconfont, iconfontBottom)
         oled.modal.SetPlayingIcon(oled.playState, 0)
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
@@ -364,46 +364,62 @@ def onPushListPlaylist(data):
 #this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
 
 class NowPlayingScreen():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, font, fontClock, fontDate, fontIP, font3, font4, iconfont): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, font, fontClock, fontDate, fontIP, font3, font4, iconfont, iconfontBottom): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font = font
         self.font3 = font3
         self.font4 = font4
 	self.iconfont = iconfont
+	self.icontfontBottom = iconfontBottom
         self.fontClock = fontClock
         self.fontDate = fontDate
         self.fontIP = fontIP
-        self.playingText1 = ScrollText(self.height, self.width, row1, font)         #Artist /center=True
-        self.playingText2 = ScrollText(self.height, self.width, row2, font3)        #Title
-        self.playingText3 = StaticText(self.height, self.width, row6, font4)        #format / flac,MP3...
-        self.playingText4 = StaticText(self.height, self.width, row7, font4)        #samplerate / 44100
-        self.playingText5 = StaticText(self.height, self.width, row8, font4)        #bitdepth /16 Bit
-        self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    #Clock /center=True
-        self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    #IP
-        self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     #Date
-	self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    #entypo icons
+        self.playingText1 = ScrollText(self.height, self.width, row1, font)         	#Artist /center=True
+        self.playingText2 = ScrollText(self.height, self.width, row2, font3)        	#Title
+        self.playingText3 = StaticText(self.height, self.width, row6, font4)        	#format / flac,MP3...
+        self.playingText4 = StaticText(self.height, self.width, row7, font4)        	#samplerate / 44100
+        self.playingText5 = StaticText(self.height, self.width, row8, font4)        	#bitdepth /16 Bit
+        self.playingText6 = StaticText(self.height, self.width, row9, iconfontBottom)   #PlayIcon
+        self.playingText7 = StaticText(self.height, self.width, row10, iconfontBottom)  #PauseIcon
+        self.playingText8 = StaticText(self.height, self.width, row11, iconfontBottom)  #StopIcon
+        self.playingText9 = StaticText(self.height, self.width, row12, iconfontBottom)  #PreviousIcon  
+        self.playingText10 = StaticText(self.height, self.width, row13, iconfontBottom) #NextIcon     
+	self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    	#Clock /center=True
+        self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    	#IP
+        self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     	#Date
+	self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    	#entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (42, 2)        #Artist /
-        self.text2Pos = (42, 27)       #Title
+        self.text2Pos = (42, 22)       #Title
         self.text3Pos = (42, 4)        #clock
         self.text4Pos = (46, 54)       #IP
         self.text5Pos = (182, 54)      #Date
-        self.text6Pos = (42, 52)       #format
-        self.text7Pos = (156, 52)      #samplerate
-        self.text8Pos = (217, 52)      #bitdepth
+        self.text6Pos = (42, 42)       #format
+        self.text7Pos = (156, 42)      #samplerate
+        self.text8Pos = (217, 42)      #bitdepth
+	self.text9Pos = (42, 54)       #PlayIcon
+        self.text10Pos = (50, 54)      #PauseIcon
+        self.text11Pos = (90, 54)      #StopIcon
+        self.text12Pos = (200, 54)     #PreviousIcon
+        self.text13Pos = (217, 54)     #NextIcon
 	self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
 # "def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 #Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
 
-    def UpdatePlayingInfo(self, row1, row2, row6, row7, row8):
-        self.playingText1 = ScrollText(self.height, self.width, row1, font)   #Artist/ center=True)
-        self.playingText2 = ScrollText(self.height, self.width, row2, font3)  #Title
-        self.playingText3 = StaticText(self.height, self.width, row6, font4)  #format
-        self.playingText4 = StaticText(self.height, self.width, row7, font4)  #samplerate
-        self.playingText5 = StaticText(self.height, self.width, row8, font4)  #bitdepth
+    def UpdatePlayingInfo(self, row1, row2, row6, row7, row8, row9, row10, row11, row12, row13):
+        self.playingText1 = ScrollText(self.height, self.width, row1, font)   		#Artist/ center=True)
+        self.playingText2 = ScrollText(self.height, self.width, row2, font3)  		#Title
+        self.playingText3 = StaticText(self.height, self.width, row6, font4)  		#format
+        self.playingText4 = StaticText(self.height, self.width, row7, font4)  		#samplerate
+        self.playingText5 = StaticText(self.height, self.width, row8, font4)  		#bitdepth
+	self.playingText6 = StaticText(self.height, self.width, row9, iconfontBottom)   #PlayIcon
+        self.playingText7 = StaticText(self.height, self.width, row10, iconfontBottom)  #PauseIcon
+        self.playingText8 = StaticText(self.height, self.width, row11, iconfontBottom)  #StopIcon
+        self.playingText9 = StaticText(self.height, self.width, row12, iconfontBottom)  #PreviousIcon  
+        self.playingText10 = StaticText(self.height, self.width, row13, iconfontBottom) #NextIcon    
 
     def UpdateStandbyInfo(self, row3, row4, row5):
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock) #Clock center=True)
@@ -416,15 +432,20 @@ class NowPlayingScreen():
 
     def DrawOn(self, image):
         if self.playingIcon != self.icon['stop']:
-            self.playingText1.DrawOn(image, self.text1Pos) #Artist
-            self.playingText2.DrawOn(image, self.text2Pos) #Title
-            self.playingText3.DrawOn(image, self.text6Pos) #Format
-            self.playingText4.DrawOn(image, self.text7Pos) #Samplerate
-            self.playingText5.DrawOn(image, self.text8Pos) #Bitdepth
+            self.playingText1.DrawOn(image, self.text1Pos)   #Artist
+            self.playingText2.DrawOn(image, self.text2Pos)   #Title
+            self.playingText3.DrawOn(image, self.text6Pos)   #Format
+            self.playingText4.DrawOn(image, self.text7Pos)   #Samplerate
+            self.playingText5.DrawOn(image, self.text8Pos)   #Bitdepth
+	    self.playingText6.DrawOn(image, self.text9Pos)   #play
+            self.playingText7.DrawOn(image, self.text10Pos)  #pause
+            self.playingText8.DrawOn(image, self.text11Pos)  #stop
+            self.playingText9.DrawOn(image, self.text12Pos)  #previous
+            self.playingText10.DrawOn(image, self.text13Pos) #next
         if self.playingIcon == self.icon['stop']:
-            self.standbyText1.DrawOn(image, self.text3Pos) #Clock
-            self.standbyText2.DrawOn(image, self.text4Pos) #IP
-            self.standbyText3.DrawOn(image, self.text5Pos) #Date
+            self.standbyText1.DrawOn(image, self.text3Pos)   #Clock
+            self.standbyText2.DrawOn(image, self.text4Pos)   #IP
+            self.standbyText3.DrawOn(image, self.text5Pos)   #Date
             
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
