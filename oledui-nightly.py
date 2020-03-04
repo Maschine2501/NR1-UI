@@ -398,9 +398,9 @@ class NowPlayingScreen():
         self.iconcountdown = 0
         self.text1Pos = (42, 2)        #Artist /
         self.text2Pos = (42, 22)       #Title
-        self.text3Pos = (42, 4)        #clock
-        self.text4Pos = (46, 42)       #IP
-        self.text5Pos = (182, 42)      #Date
+        self.text3Pos = (73, 4)        #clock (clock  text is 161 pixels long) (222px viewable - text = 73 : 2 = 31 + 42offset = 73)
+        self.text4Pos = (42, 41)       #IP
+        self.text5Pos = (184, 41)      #Date
         self.text6Pos = (42, 41)       #format
         self.text7Pos = (156, 41)      #samplerate
         self.text8Pos = (217, 41)      #bitdepth
