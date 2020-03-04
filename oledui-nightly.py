@@ -401,18 +401,18 @@ class NowPlayingScreen():
         self.text3Pos = (42, 4)        #clock
         self.text4Pos = (46, 42)       #IP
         self.text5Pos = (182, 42)      #Date
-        self.text6Pos = (42, 42)       #format
-        self.text7Pos = (156, 42)      #samplerate
-        self.text8Pos = (217, 42)      #bitdepth
-	self.text9Pos = (52, 52)       #PlayIcon
-        self.text10Pos = (62, 52)      #PauseIcon
-        self.text11Pos = (109, 52)      #StopIcon
-        self.text12Pos = (194, 52)     #PreviousIcon
-        self.text13Pos = (241, 52)     #NextIcon
-	self.text14Pos = (57, 52)      #LibraryIcon
-        self.text15Pos = (109, 52)      #PlaylistIcon
-        self.text16Pos = (194, 52)     #QueueIcon
-        self.text17Pos = (241, 52)     #LibraryInfoIcon
+        self.text6Pos = (42, 41)       #format
+        self.text7Pos = (156, 41)      #samplerate
+        self.text8Pos = (217, 41)      #bitdepth
+	self.text9Pos = (52, 54)       #PlayIcon
+        self.text10Pos = (62, 54)      #PauseIcon
+        self.text11Pos = (109, 54)      #StopIcon
+        self.text12Pos = (194, 54)     #PreviousIcon
+        self.text13Pos = (241, 54)     #NextIcon
+	self.text14Pos = (57, 54)      #LibraryIcon
+        self.text15Pos = (109, 54)      #PlaylistIcon
+        self.text16Pos = (194, 54)     #QueueIcon
+        self.text17Pos = (241, 54)     #LibraryInfoIcon
 	self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
 # "def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
@@ -510,10 +510,10 @@ class MediaLibrarayInfo():
         self.text6Pos = (42, 15)     						   #Text for Albums
         self.text7Pos = (42, 28)     						   #Text for Songs
         self.text8Pos = (42, 41)     						   #Text for duration
-	self.text9Pos = (57, 52)      						   #LibraryIcon
-        self.text10Pos = (109, 52)     						   #PlaylistIcon
-        self.text11Pos = (194, 52)    						   #QueueIcon
-        self.text12Pos = (241, 52)    						   #LibraryInfoIcon
+	self.text9Pos = (57, 54)      						   #LibraryIcon
+        self.text10Pos = (109, 54)     						   #PlaylistIcon
+        self.text11Pos = (194, 54)    						   #QueueIcon
+        self.text12Pos = (241, 54)    						   #LibraryInfoIcon
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12):
