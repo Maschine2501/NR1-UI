@@ -102,8 +102,8 @@ oled.prevIcon = '\u23EE'
 oled.libraryIcon = '\uE003'
 oled.playlistIcon = '\uE005'
 oled.queueIcon = '\u2630'
-oled.arrowUpIcon = '\E75F'
-oled.arrowDownIcon = '\E75C'
+oled.arrowUpIcon = '\U0000E75F'
+oled.arrowDownIcon = '\U0000E75C'
 oled.acceptIcon = '\u2713'
 oled.discardIcon = '\u2715'
 oled.randomIcon = '\U0001F500'
@@ -168,11 +168,11 @@ def SetState(status):
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
     elif oled.state == STATE_PLAYLIST_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.playlistoptions, rows=3, label='_/ PlaylistAuswahl \______________________________')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.playlistoptions, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='Playlisten')
     elif oled.state == STATE_QUEUE_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.queue, rows=4, selected=oled.playPosition, showIndex=True)
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.queue, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, selected=oled.playPosition, showIndex=True, label='Queue-Menu')
     elif oled.state == STATE_LIBRARY_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, oled.libraryNames, rows=3, label='_/ Musikbibliothek \________________________________')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='Mediathek')
     elif oled.state == STATE_LIBRARY_INFO:
         oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryReturn, hugefontaw, font5, iconfontBottom)
 
@@ -371,8 +371,8 @@ class NowPlayingScreen():
         self.font = font
         self.font3 = font3
         self.font4 = font4
-	self.iconfont = iconfont
-	self.icontfontBottom = iconfontBottom
+        self.iconfont = iconfont
+        self.icontfontBottom = iconfontBottom
         self.fontClock = fontClock
         self.fontDate = fontDate
         self.fontIP = fontIP
@@ -589,25 +589,38 @@ class VolumeScreen():
         self.volumeBar.DrawOn(image, self.barPos)
 
 class MenuScreen():
-    def __init__(self, height, width, font2, menuList, selected=0, rows=3, label='', showIndex=False):
+    def __init__(self, height, width, font2, iconfontBottom, menuList, row1, row2, row3, row4, selected=0, rows=3, label='', showIndex=False):
         self.height = height
         self.width = width
         self.font2 = font2
+        self.iconfontBottom = iconfontBottom
         self.selectedOption = selected
+	self.row1 = row1
+	self.row2 = row2
+	self.row3 = row3
+	self.row4 = row4
         self.menuLabel = StaticText(self.height, self.width, label, self.font2)
         if label == '':
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (42, 2)                      #here is the position of the menu title
+        self.labelPos = (120, 52)                      #here is the position of the menu title
         self.menuYPos = 2 + 12 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
+        self.Icon1 = StaticText(self.height, self.width, row1, iconfontBottom)  #UpIcon
+        self.Icon2 = StaticText(self.height, self.width, row2, iconfontBottom)	#DownlistIcon
+        self.Icon3 = StaticText(self.height, self.width, row4, iconfontBottom)  #DiscardIcon
+        self.Icon4 = StaticText(self.height, self.width, row3, iconfontBottom)  #AcceptInfoIcon
         self.menuList = menuList
         self.totaloptions = len(menuList)
         self.onscreenoptions = min(self.menurows, self.totaloptions)
         self.firstrowindex = 0
         self.showIndex = showIndex
+        self.text1Pos = (57, 54)      						   #UpIcon
+        self.text2Pos = (109, 54)     						   #DownIcon
+        self.text3Pos = (194, 54)    						   #DiscardIcon
+        self.text4Pos = (241, 54)    						   #AcceptIcon
         self.MenuUpdate()
 
     def MenuUpdate(self):
@@ -642,10 +655,14 @@ class MenuScreen():
     def DrawOn(self, image):
         if self.hasLabel:
             self.menuLabel.DrawOn(image, self.labelPos)
+            self.Icon1.DrawOn(image, self.text1Pos)    #UP
+            self.Icon2.DrawOn(image, self.text2Pos)    #Down
+            self.Icon3.DrawOn(image, self.text3Pos)    #Discard
+            self.Icon4.DrawOn(image, self.text4Pos)    #Accept
         for row in range(self.onscreenoptions):
-            self.menuText[row].DrawOn(image, (42, self.menuYPos + row*16))       #Here is the position of the list entrys from left set (42)
+            self.menuText[row].DrawOn(image, (42, 4 + row*16))       #Here is the position of the list entrys from left set (42)
         if self.totaloptions == 0:
-            self.menuText[0].DrawOn(image, (42, self.menuYPos))                  #Here is the position of the list entrys from left set (42)
+            self.menuText[0].DrawOn(image, (42, 4))                  #Here is the position of the list entrys from left set (42)
 	
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
