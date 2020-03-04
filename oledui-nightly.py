@@ -93,7 +93,7 @@ oled.Pla = 'Playtime :'                                                         
 oled.randomTag = False                                                           #helper to detect if "Random/shuffle" is set
 oled.repeatTag = False                                                           #helper to detect if "repeat" is set
 oled.ShutdownFlag = False                                                        #helper to detect if "shutdown" is running. Prevents artifacts from Standby-Screen during shutdown
-oled.libraryInfo = '\u1F4D6'
+oled.libraryInfo = '\U0001F4D6'
 oled.libraryReturn = '\u2302'
 oled.playIcon = '\u25B6'
 oled.pauseIcon = '\u2389'
@@ -107,8 +107,8 @@ oled.arrowUpIcon = '\E75F'
 oled.arrowDownIcon = '\E75C'
 oled.acceptIcon = '\u2713'
 oled.discardIcon = '\u2715'
-oled.randomIcon = '\u1F500'
-oled.repeatIcon = '\u1F501'
+oled.randomIcon = '\U0001F500'
+oled.repeatIcon = '\U0001F501'
 
 
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
