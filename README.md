@@ -5,7 +5,7 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 Demo Video from early Build:
 
-[![Video-Sample](http://img.youtube.com/vi/1nwmKzCCoZE/0.jpg)](http://www.youtube.com/watch?v=1nwmKzCCoZE "Video-Sample")
+[![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
 
 ## Why is the first part of the display empty?
 
