@@ -3,9 +3,22 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 # Volumio-OledUI MK2
 
-Demo Video from early Build:
+#### Demo Video from nightly-build (05.03.2020):
 
 [![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
+
+#### "Screenshots":
+
+![Standby-Screen](https://i.ibb.co/R6s2HpH/Screenshot-05-03-2020-20-08-25.png)
+
+![Now-Playing-Screen](https://i.ibb.co/Qf4GJht/Screenshot-05-03-2020-20-08-47.png)
+
+![Playlist-Menu](https://i.ibb.co/tHRkKdD/Screenshot-05-03-2020-20-09-05.png)
+
+![Queue-Menu](https://i.ibb.co/6PF625D/Screenshot-05-03-2020-20-09-29.png)
+
+![Media-Library-Info](https://i.ibb.co/SyrczvX/Screenshot-05-03-2020-20-09-59.png)
+
 
 ## Why is the first part of the display empty?
 
