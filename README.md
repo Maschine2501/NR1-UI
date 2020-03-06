@@ -21,7 +21,7 @@ I want to use the display in a case of an old hifi-tuner, the cutout in the fron
 
 ![hifi-tuner case](https://i.ibb.co/xgMhvXj/Screenshot-06-03-2020-05-33-52.jpg)
 
-[Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
+#### [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
 ### But you want it on the whole Display?
 
