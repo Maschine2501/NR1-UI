@@ -17,7 +17,7 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 ## Why is the first part of the display empty?
 
-I want to use the display in a case of an old hifi-tuner, the cutout in the front of the device is smaller as the display.
+I want to use the display in a case of an old hifi-tuner, the cutout in the front of the device is smaller as the ssd1322 display.
 
 ![hifi-tuner case](https://i.ibb.co/xgMhvXj/Screenshot-06-03-2020-05-33-52.jpg)
 
