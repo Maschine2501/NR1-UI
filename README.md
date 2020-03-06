@@ -9,20 +9,17 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 #### "Screenshots":
 
-![Standby-Screen](https://i.ibb.co/R6s2HpH/Screenshot-05-03-2020-20-08-25.png)
-
-![Now-Playing-Screen](https://i.ibb.co/Qf4GJht/Screenshot-05-03-2020-20-08-47.png)
-
-![Playlist-Menu](https://i.ibb.co/tHRkKdD/Screenshot-05-03-2020-20-09-05.png)
-
-![Queue-Menu](https://i.ibb.co/6PF625D/Screenshot-05-03-2020-20-09-29.png)
-
-![Media-Library-Info](https://i.ibb.co/SyrczvX/Screenshot-05-03-2020-20-09-59.png)
-
+![Standby-Screen](https://i.ibb.co/Sr2xK8H/Screenshot-05-03-2020-20-08-25.jpg)
+![Now-Playing-Screen](https://i.ibb.co/ZKGB3Wb/Screenshot-05-03-2020-20-08-47.jpg)
+![Playlist-Menu](https://i.ibb.co/tbM3JNf/Screenshot-05-03-2020-20-09-05.jpg)
+![Queue-Menu](https://i.ibb.co/HrRhxJL/Screenshot-05-03-2020-20-09-29.jpg)
+![Media-Library-Info](https://i.ibb.co/P9ZtKsc/Screenshot-05-03-2020-20-09-59.jpg)
 
 ## Why is the first part of the display empty?
 
 I want to use the display in a case of an old hifi-tuner, the cutout in the front of the device is smaller as the display.
+
+![hifi-tuner case](https://i.ibb.co/xgMhvXj/Screenshot-06-03-2020-05-33-52.jpg)
 
 ### But you want it on the whole Display?
 
