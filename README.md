@@ -5,19 +5,12 @@ This is a fork from diehrdsk/Volumio-OledUi
 # Volumio-OledUI MK2
 
 Im building a Network Hifi Receiver from scratch.
-
 An old Braun T2 Tuner serves as case for the player.
-
 To keep as much as possible from the look of the device i needed an Interface for Volumio.
-
 And especialy one that supports a 3,2" ssd1322 SPI Oled with 256x64Pixel.
-
 After doing some research i found diehrdsk/Volumio-OledUI.
-
 It fullfills many points on my "wishlist" but not nearly all.
-
 As we all know, the way is the destination, i spent some time (much time....) in modifying the original code.
-
 The project is not finished yet...
 
 #### Demo Video from nightly-build (05.03.2020):
