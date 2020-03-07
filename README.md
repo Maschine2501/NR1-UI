@@ -19,7 +19,7 @@ This is a fork from diehrdsk/Volumio-OledUi
 
 I want to use the display in a case of an old hifi-tuner, the cutout in the front of the device is smaller as the ssd1322 display.
 
-![hifi-tuner case](https://i.ibb.co/xgMhvXj/Screenshot-06-03-2020-05-33-52.jpg)
+![hifi-tuner case](https://i.ibb.co/WpsSd5z/Entwurfszeichnung-NR1-500px.jpg)
 
 #### [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
