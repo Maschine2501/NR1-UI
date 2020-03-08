@@ -514,7 +514,7 @@ class MediaLibrarayInfo():
         self.text10Pos = (241, 54)     						   #LibraryInfoIcon
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
-    def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12):
+    def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10):
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)  		#Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  		#Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  		#Text for Albums
