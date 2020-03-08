@@ -121,6 +121,7 @@ font5 = load_font('Oxanium-Medium.ttf', 11)                    #used for MediaLi
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
 iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
 labelfont = load_font('entypo.ttf', 16)                        #used for Menu-icons 
+labelfont2 = load_font('entypo.ttf', 12)                        #used for Menu-icons
 iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
 fontClock = load_font('DSG.ttf', 30)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
@@ -175,7 +176,7 @@ def SetState(status):
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, hugefontaw, font5, iconfontBottom, labelfont)
+        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, hugefontaw, font5, iconfontBottom, labelfont, labelfont2)
 
 def LoadPlaylist(playlistname):
     print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
@@ -482,13 +483,14 @@ class NowPlayingScreen():
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, fontaw, font5, iconfontBottom, labelfont): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, fontaw, font5, iconfontBottom, labelfont, lablefont2): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font4 = font4
         self.fontaw = fontaw
 	self.iconfontBottom = iconfontBottom
 	self.labelfont = labelfont
+	self.labelfont2 = labelfont2
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   	      #Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  	      #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  	      #Text for Albums
@@ -497,20 +499,20 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, row3, font4)   	      #Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, row8, font4)   	      #Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)   	      #Summary of duration
-	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont)   	      #Menu-label Icon
+	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)  	      #Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)   #LibraryInfo Return
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
-        self.text1Pos = (140, 2)        					   #Number of Artists
-        self.text2Pos = (140, 15)      						   #Number of Albums
-        self.text3Pos = (140, 28)      						   #Number of Songs
-        self.text4Pos = (140, 41)      						   #Summary of duration
+        self.text1Pos = (120, 2)        					   #Number of Artists
+        self.text2Pos = (120, 15)      						   #Number of Albums
+        self.text3Pos = (120, 28)      						   #Number of Songs
+        self.text4Pos = (120, 41)      						   #Summary of duration
         self.text5Pos = (42, 2)      						   #Text for Artists
         self.text6Pos = (42, 15)     						   #Text for Albums
         self.text7Pos = (42, 28)     						   #Text for Songs
         self.text8Pos = (42, 41)     						   #Text for duration
-	self.text9Pos = (148, 54)      						   #Menu-Label Icon
+	self.text9Pos = (148, 52)      						   #Menu-Label Icon
         self.text10Pos = (241, 54)     						   #LibraryInfoIcon
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
@@ -523,7 +525,7 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, row3, font4)  		#Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, row8, font4)  		#Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)  		#Summary of duration
-	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont)   	     	#Menu-label Icon
+	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)   	     	#Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)     #LibraryInfo Return
 
 
