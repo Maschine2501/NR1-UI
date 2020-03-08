@@ -662,7 +662,7 @@ class MenuScreen():
 	
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
-    if hold_time < 3:
+    if hold_time < 3 and oled.state != STATE_LIBRARY_INFO:
 #shortpress functions below
         print('ButtonA short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
@@ -671,9 +671,6 @@ def ButtonA_PushEvent(hold_time):
             else:
                 volumioIO.emit('play')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-              oled.stateTimeout = 10.0
-              volumioIO.emit('browseLibrary',{'uri':'music-library'})
-        elif oled.state == STATE_LIBRARY_INFO:
               oled.stateTimeout = 10.0
               volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
@@ -691,7 +688,7 @@ def ButtonA_PushEvent(hold_time):
 
 def ButtonB_PushEvent(hold_time):
     global UPDATE_INTERVAL
-    if hold_time < 2:
+    if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
 #shortpress functions below
         print('ButtonB short press event')
 	if oled.state == STATE_PLAYER and oled.playState != 'stop':
@@ -700,24 +697,17 @@ def ButtonB_PushEvent(hold_time):
               volumioIO.emit('listPlaylist')
               oled.stateTimeout = 10.0
               SetState(STATE_PLAYLIST_MENU)
-        elif oled.state == STATE_LIBRARY_INFO:
-              volumioIO.emit('listPlaylist')
-              oled.stateTimeout = 10.0
-              SetState(STATE_PLAYLIST_MENU)
         elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
               oled.modal.NextOption()
 
 def ButtonC_PushEvent(hold_time):
     global UPDATE_INTERVAL
-    if hold_time < 3:
+    if hold_time < 3 and oled.state != STATE_LIBRARY_INFO:
 #shortpress functions below
         print('ButtonC short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-              oled.stateTimeout = 6.0
-              SetState(STATE_QUEUE_MENU)
-        elif oled.state == STATE_LIBRARY_INFO:
               oled.stateTimeout = 6.0
               SetState(STATE_QUEUE_MENU)
 #Longpress functions below
