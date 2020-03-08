@@ -181,7 +181,7 @@ def SetState(status):
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon,ugefontaw, font5, iconfontBottom, labelfont, labelfont2, mediaicon)
+        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon, hugefontaw, font5, iconfontBottom, labelfont, labelfont2, mediaicon)
 
 def LoadPlaylist(playlistname):
     print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
