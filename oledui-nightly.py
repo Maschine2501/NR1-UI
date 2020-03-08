@@ -108,6 +108,10 @@ oled.acceptIcon = '\u2713'
 oled.discardIcon = '\u2715'
 oled.randomIcon = '\U0001F500'
 oled.repeatIcon = '\U0001F501'
+oled.ArtistIcon = '\uF0F3'
+oled.AlbumIcon = '\uF2BB'
+oled.SongIcon = '\U0000F001'
+oled.PlaytimeIcon = '\U0000F1DA'
 
 
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
@@ -119,6 +123,7 @@ font3 = load_font('Oxanium-Regular.ttf', 18)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 12)                    #used for Format/Smplerate/Bitdepth
 font5 = load_font('Oxanium-Medium.ttf', 11)                    #used for MediaLibraryInfo
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
+mediaicon = load_font('fa-solid-900.ttf', 14)    #used for play/pause/stop icons -> Status change overlay
 iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
 labelfont = load_font('entypo.ttf', 16)                        #used for Menu-icons 
 labelfont2 = load_font('entypo.ttf', 12)                        #used for Menu-icons
@@ -176,7 +181,7 @@ def SetState(status):
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, hugefontaw, font5, iconfontBottom, labelfont, labelfont2)
+        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon,ugefontaw, font5, iconfontBottom, labelfont, labelfont2, mediaicon)
 
 def LoadPlaylist(playlistname):
     print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
@@ -483,7 +488,7 @@ class NowPlayingScreen():
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, fontaw, font5, iconfontBottom, labelfont, lablefont2): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14, fontaw, font5, iconfontBottom, labelfont, lablefont2, mediaicon): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font4 = font4
@@ -491,6 +496,7 @@ class MediaLibrarayInfo():
 	self.iconfontBottom = iconfontBottom
 	self.labelfont = labelfont
 	self.labelfont2 = labelfont2
+	self.mediaicon = mediaicon
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   	      #Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  	      #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  	      #Text for Albums
@@ -501,22 +507,30 @@ class MediaLibrarayInfo():
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)   	      #Summary of duration
 	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)  	      #Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)   #LibraryInfo Return
+	self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
+	self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
+	self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
+	self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
-        self.text1Pos = (120, 2)        					   #Number of Artists
-        self.text2Pos = (120, 15)      						   #Number of Albums
-        self.text3Pos = (120, 28)      						   #Number of Songs
-        self.text4Pos = (120, 41)      						   #Summary of duration
-        self.text5Pos = (42, 2)      						   #Text for Artists
-        self.text6Pos = (42, 15)     						   #Text for Albums
-        self.text7Pos = (42, 28)     						   #Text for Songs
-        self.text8Pos = (42, 41)     						   #Text for duration
+        self.text1Pos = (140, 2)        					   #Number of Artists
+        self.text2Pos = (140, 15)      						   #Number of Albums4
+        self.text3Pos = (140, 28)      						   #Number of Songs
+        self.text4Pos = (140, 41)      						   #Summary of duration
+        self.text5Pos = (52, 2)      						   #Text for Artists
+        self.text6Pos = (52, 15)     						   #Text for Albums
+        self.text7Pos = (52, 28)     						   #Text for Songs
+        self.text8Pos = (52, 41)     						   #Text for duration
 	self.text9Pos = (148, 52)      						   #Menu-Label Icon
         self.text10Pos = (241, 54)     						   #LibraryInfoIcon
+	self.text11Pos = (42, 2)      						   #icon for Artists
+        self.text12Pos = (42, 15)     						   #icon for Albums
+        self.text13Pos = (42, 28)     						   #icon for Songs
+        self.text14Pos = (42, 41)     						   #icon for duration
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
-    def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10):
+    def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14):
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)  		#Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  		#Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  		#Text for Albums
@@ -525,8 +539,12 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, row3, font4)  		#Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, row8, font4)  		#Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)  		#Summary of duration
-	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)   	     	#Menu-label Icon
+	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)   	#Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)     #LibraryInfo Return
+	self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
+	self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
+	self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
+	self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
 
 
     def DrawOn(self, image):
@@ -541,6 +559,10 @@ class MediaLibrarayInfo():
             self.LibraryInfoText8.DrawOn(image, self.text4Pos) 	   #Number of duration
 	    self.LibraryInfoText9.DrawOn(image, self.text9Pos)     #menulabelIcon
             self.LibraryInfoText10.DrawOn(image, self.text10Pos)   #LibraryInfo Return
+	    self.LibraryInfoText11.DrawOn(image, self.text11Pos)   #icon for Artists
+	    self.LibraryInfoText12.DrawOn(image, self.text12Pos)   #icon for Albums
+	    self.LibraryInfoText13.DrawOn(image, self.text13Pos)   #icon for Songs
+	    self.LibraryInfoText14.DrawOn(image, self.text14Pos)   #icon for duration
                     
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
