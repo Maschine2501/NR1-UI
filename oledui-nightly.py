@@ -119,7 +119,8 @@ font3 = load_font('Oxanium-Regular.ttf', 18)                   #used for Song
 font4 = load_font('Oxanium-Medium.ttf', 12)                    #used for Format/Smplerate/Bitdepth
 font5 = load_font('Oxanium-Medium.ttf', 11)                    #used for MediaLibraryInfo
 hugefontaw = load_font('fa-solid-900.ttf', oled.HEIGHT - 4)    #used for play/pause/stop icons -> Status change overlay
-iconfont = load_font('entypo.ttf', oled.HEIGHT)            #used for play/pause/stop/shuffle/repeat... icons
+iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
+labelfont = load_font('entypo.ttf', 16)                        #used for Menu-icons 
 iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
 fontClock = load_font('DSG.ttf', 30)                           #used for clock
 fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
@@ -168,11 +169,11 @@ def SetState(status):
     elif oled.state == STATE_VOLUME:
         oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
     elif oled.state == STATE_PLAYLIST_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.playlistoptions, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='Playlisten')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.playlistoptions, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE005')
     elif oled.state == STATE_QUEUE_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.queue, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, selected=oled.playPosition, showIndex=True, label='Queue-Menu')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.queue, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, selected=oled.playPosition, showIndex=True, label='\u2630')
     elif oled.state == STATE_LIBRARY_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='Mediathek')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
         oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryReturn, hugefontaw, font5, iconfontBottom)
 
@@ -589,22 +590,23 @@ class VolumeScreen():
         self.volumeBar.DrawOn(image, self.barPos)
 
 class MenuScreen():
-    def __init__(self, height, width, font2, iconfontBottom, menuList, row1, row2, row3, row4, selected=0, rows=3, label='', showIndex=False):
+    def __init__(self, height, width, font2, iconfontBottom, labelfont, menuList, row1, row2, row3, row4, selected=0, rows=3, label='', showIndex=False):
         self.height = height
         self.width = width
         self.font2 = font2
         self.iconfontBottom = iconfontBottom
+	self.labelfont = labelfont
         self.selectedOption = selected
 	self.row1 = row1
 	self.row2 = row2
 	self.row3 = row3
 	self.row4 = row4
-        self.menuLabel = StaticText(self.height, self.width, label, self.font2)
+        self.menuLabel = StaticText(self.height, self.width, label, labelfont)
         if label == '':
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (120, 52)                      #here is the position of the menu title
+        self.labelPos = (148, 52)                      #here is the position of the menu label
         self.menuYPos = 2 + 12 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
