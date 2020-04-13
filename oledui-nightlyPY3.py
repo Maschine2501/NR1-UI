@@ -14,7 +14,7 @@ GPIO.setmode(GPIO.BCM)
 
 from time import*
 from threading import Thread
-from socketIO_client import SocketIO
+from socketIO-client import SocketIO
 from datetime import datetime
 from io import BytesIO 
 
