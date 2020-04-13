@@ -1,0 +1,15 @@
+[Unit]
+Description=Volumio oled UI nightly
+ 
+[Service]
+Type=simple
+WorkingDirectory=/home/volumio
+ExecStart=/usr/bin/python -u /home/volumio/Volumio-OledUI/oledui-nightlyPY3.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=oledui-nightlyPY3
+User=volumio
+Group=volumio
+ 
+[Install]
+WantedBy=multi-user.target
