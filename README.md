@@ -70,6 +70,8 @@ Simply change the value's from "42" to "0" (self.text1Pos = (42, 2))... that's i
 
 ## [installation steps (nightly build)](https://github.com/Maschine2501/Volumio-OledUI/wiki/Installation-steps-(nightly))
 
+## [Installation steps (nightly build Python3)](https://github.com/Maschine2501/Volumio-OledUI/wiki/Installation-Steps-(Nightly---Python3))
+
 ## Check the logs
 
 #### for the stable build
