@@ -82,6 +82,10 @@ sudo journalctl -fu oledui.service
 
 sudo journalctl -fu oledui-nightly.service
 
+#### for the nightly (Python3) build:
+
+sudo journalctl -fu oledui-nightlyPY3.service
+
 ## [Hints](https://github.com/Maschine2501/Volumio-OledUI/wiki/hints---tricks---nice-to-know)
 
 ## [wiring / button-layout / truthtable](https://github.com/Maschine2501/Volumio-OledUI/wiki/Wiring---Button-Truthtable)
