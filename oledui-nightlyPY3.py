@@ -9,12 +9,13 @@ import time
 import json
 import pycurl
 import pprint
+#import python-socketio
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
 
 from time import*
 from threading import Thread
-from socketIO-client import *
+from socketIO_client import SocketIO
 from datetime import datetime
 from io import BytesIO 
 
@@ -154,8 +155,8 @@ def display_update_service():
         try:
             oled.modal.DrawOn(image)
         except AttributeError:
-            print "render error"
-	    sleep(1)
+            print("render error")
+            sleep(1)
         cimg = image.crop((pixshift[0], pixshift[1], pixshift[0] + oled.WIDTH, pixshift[1] + oled.HEIGHT)) 
         oled.display(cimg)
         sleep(UPDATE_INTERVAL)
@@ -197,10 +198,12 @@ def onPushState(data):
 	
 #    print(data) #for log, if enabled you see the values for 'data'
 
-    OPDsave = data	
+#    OPDsave = data	
 
     global OPDsave	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
+
+    OPDsave = data
 
     if 'title' in data:
         newSong = data['title']
@@ -223,7 +226,7 @@ def onPushState(data):
     if newFormat is None:
         newFormat = ''
     if newFormat == True:
-	newFormat = 'WebRadio'
+       newFormat = 'WebRadio'
 
 	#If a stream (like webradio) is playing, the data set for 'stream'/newFormat is a boolian (True)
 	#drawOn can't handle that and gives an error. 
@@ -266,9 +269,9 @@ def onPushState(data):
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
         oled.activeSong = newSong
         oled.activeArtist = newArtist
-	if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
+        if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
-	if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
+        if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
     
     if newStatus != oled.playState:
@@ -317,7 +320,7 @@ def onPushCollectionStats(data):
     oled.activePlaytime = str(newPlaytime)
 	
     if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                                   #this is the "Media-Library-Info-Screen"
-	oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryReturn)  
+       oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryReturn)  
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
@@ -393,14 +396,14 @@ class NowPlayingScreen():
         self.playingText8 = StaticText(self.height, self.width, row11, iconfontBottom)  #StopIcon
         self.playingText9 = StaticText(self.height, self.width, row12, iconfontBottom)  #PreviousIcon  
         self.playingText10 = StaticText(self.height, self.width, row13, iconfontBottom) #NextIcon     
-	self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    	#Clock /center=True
+        self.standbyText1 = StaticText(self.height, self.width, row3, fontClock)    	#Clock /center=True
         self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)	    	#IP
         self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)     	#Date
-	self.standbyText4 = StaticText(self.height, self.width, row14, iconfontBottom)  #LibraryIcon
+        self.standbyText4 = StaticText(self.height, self.width, row14, iconfontBottom)  #LibraryIcon
         self.standbyText5 = StaticText(self.height, self.width, row15, iconfontBottom)	#PlaylistIcon
         self.standbyText6 = StaticText(self.height, self.width, row16, iconfontBottom)  #QueueIcon
         self.standbyText7 = StaticText(self.height, self.width, row17, iconfontBottom)  #LibraryInfoIcon
-	self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    	#entypo icons
+        self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    	#entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
         self.text1Pos = (42, 2)        #Artist /
@@ -411,16 +414,16 @@ class NowPlayingScreen():
         self.text6Pos = (42, 41)       #format
         self.text7Pos = (156, 41)      #samplerate
         self.text8Pos = (217, 41)      #bitdepth
-	self.text9Pos = (52, 54)       #PlayIcon
+        self.text9Pos = (52, 54)       #PlayIcon
         self.text10Pos = (62, 54)      #PauseIcon
         self.text11Pos = (109, 54)      #StopIcon
         self.text12Pos = (194, 54)     #PreviousIcon
         self.text13Pos = (241, 54)     #NextIcon
-	self.text14Pos = (57, 54)      #LibraryIcon
+        self.text14Pos = (57, 54)      #LibraryIcon
         self.text15Pos = (109, 54)      #PlaylistIcon
         self.text16Pos = (194, 54)     #QueueIcon
         self.text17Pos = (241, 54)     #LibraryInfoIcon
-	self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
+        self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
 # "def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
 #Here you need to define the variables, which "data-string" is which textposition, where each textposition is displayed in the display...
@@ -431,7 +434,7 @@ class NowPlayingScreen():
         self.playingText3 = StaticText(self.height, self.width, row6, font4)  		#format
         self.playingText4 = StaticText(self.height, self.width, row7, font4)  		#samplerate
         self.playingText5 = StaticText(self.height, self.width, row8, font4)  		#bitdepth
-	self.playingText6 = StaticText(self.height, self.width, row9, iconfontBottom)   #PlayIcon
+        self.playingText6 = StaticText(self.height, self.width, row9, iconfontBottom)   #PlayIcon
         self.playingText7 = StaticText(self.height, self.width, row10, iconfontBottom)  #PauseIcon
         self.playingText8 = StaticText(self.height, self.width, row11, iconfontBottom)  #StopIcon
         self.playingText9 = StaticText(self.height, self.width, row12, iconfontBottom)  #PreviousIcon  
@@ -441,7 +444,7 @@ class NowPlayingScreen():
         self.standbyText1 = StaticText(self.height, self.width, row3, fontClock) 	#Clock center=True)
         self.standbyText2 = StaticText(self.height, self.width, row4, fontIP)    	#IP
         self.standbyText3 = StaticText(self.height, self.width, row5, fontDate)  	#Date
-	self.standbyText4 = StaticText(self.height, self.width, row14, iconfontBottom)  #LibraryIcon
+        self.standbyText4 = StaticText(self.height, self.width, row14, iconfontBottom)  #LibraryIcon
         self.standbyText5 = StaticText(self.height, self.width, row15, iconfontBottom)	#PlaylistIcon
         self.standbyText6 = StaticText(self.height, self.width, row16, iconfontBottom)  #QueueIcon
         self.standbyText7 = StaticText(self.height, self.width, row17, iconfontBottom)  #LibraryInfoIcon
@@ -456,8 +459,8 @@ class NowPlayingScreen():
             self.playingText2.DrawOn(image, self.text2Pos)    #Title
             self.playingText3.DrawOn(image, self.text6Pos)    #Format
             self.playingText4.DrawOn(image, self.text7Pos)    #Samplerate
-            self.playingText5.DrawOn(image, self.text8Pos)    #Bitdepth
-	    self.playingText6.DrawOn(image, self.text9Pos)    #play
+            self.playingText5.DrawOn(image, self.text8Pos)    #Bitdep
+            self.playingText6.DrawOn(image, self.text9Pos)    #play
             self.playingText7.DrawOn(image, self.text10Pos)   #pause
             self.playingText8.DrawOn(image, self.text11Pos)   #stop
             self.playingText9.DrawOn(image, self.text12Pos)   #previous
@@ -479,12 +482,12 @@ class NowPlayingScreen():
             
     def SetPlayingIcon(self, state, time=0):
         if state in self.icon:
-		self.playingIcon = self.icon[state]
+           self.playingIcon = self.icon[state]
         self.alfaimage.paste((0, 0, 0, 200), [0, 0, image.size[0], image.size[1]])                 #(0, 0, 0, 200) means Background (nowplayingscreen with artist, song etc.) is darkend. Change 200 to 0 -> Background is completely visible. 255 -> Bachground is not visible. scale = 0-255
         drawalfa = ImageDraw.Draw(self.alfaimage)
-	iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)            #entypo
+        iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)            #entypo
         left = (self.width - iconwidth + 42) / 2						   #here is defined where the play/pause/stop icons are displayed. 
-	drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 200))  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+        drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 200))  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
@@ -493,10 +496,10 @@ class MediaLibrarayInfo():
         self.width = width
         self.font4 = font4
         self.fontaw = fontaw
-	self.iconfontBottom = iconfontBottom
-	self.labelfont = labelfont
-	self.labelfont2 = labelfont2
-	self.mediaicon = mediaicon
+        self.iconfontBottom = iconfontBottom
+        self.labelfont = labelfont
+        self.labelfont2 = labelfont2
+        self.mediaicon = mediaicon
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   	      #Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  	      #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  	      #Text for Albums
@@ -505,12 +508,12 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, row3, font4)   	      #Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, row8, font4)   	      #Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)   	      #Summary of duration
-	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)  	      #Menu-label Icon
+        self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)  	      #Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)   #LibraryInfo Return
-	self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
-	self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
-	self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
-	self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
+        self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
+        self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
+        self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
+        self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
@@ -522,9 +525,9 @@ class MediaLibrarayInfo():
         self.text6Pos = (56, 15)     						   #Text for Albums
         self.text7Pos = (56, 28)     						   #Text for Songs
         self.text8Pos = (56, 41)     						   #Text for duration
-	self.text9Pos = (148, 52)      						   #Menu-Label Icon
+        self.text9Pos = (148, 52)      						   #Menu-Label Icon
         self.text10Pos = (241, 54)     						   #LibraryInfoIcon
-	self.text11Pos = (42, 2)      						   #icon for Artists
+        self.text11Pos = (42, 2)      						   #icon for Artists
         self.text12Pos = (42, 15)     						   #icon for Albums
         self.text13Pos = (42, 28)     						   #icon for Songs
         self.text14Pos = (42, 41)     						   #icon for duration
@@ -539,12 +542,12 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, row3, font4)  		#Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, row8, font4)  		#Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, row4, font4)  		#Summary of duration
-	self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)   	#Menu-label Icon
+        self.LibraryInfoText9 = StaticText(self.height, self.width, row9, labelfont2)   	#Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, row10, iconfontBottom)     #LibraryInfo Return
-	self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
-	self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
-	self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
-	self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
+        self.LibraryInfoText11 = StaticText(self.height, self.width, row11, mediaicon)        #icon for Artists
+        self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
+        self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
+        self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
 
 
     def DrawOn(self, image):
@@ -556,13 +559,13 @@ class MediaLibrarayInfo():
             self.LibraryInfoText5.DrawOn(image, self.text7Pos)     #Text for Songs
             self.LibraryInfoText6.DrawOn(image, self.text3Pos)     #Number of Songs
             self.LibraryInfoText7.DrawOn(image, self.text8Pos)     #Text for duration
-            self.LibraryInfoText8.DrawOn(image, self.text4Pos) 	   #Number of duration
-	    self.LibraryInfoText9.DrawOn(image, self.text9Pos)     #menulabelIcon
+            self.LibraryInfoText8.DrawOn(image, self.text4Pos) 	   #Number of durati
+            self.LibraryInfoText9.DrawOn(image, self.text9Pos)     #menulabelIcon
             self.LibraryInfoText10.DrawOn(image, self.text10Pos)   #LibraryInfo Return
-	    self.LibraryInfoText11.DrawOn(image, self.text11Pos)   #icon for Artists
-	    self.LibraryInfoText12.DrawOn(image, self.text12Pos)   #icon for Albums
-	    self.LibraryInfoText13.DrawOn(image, self.text13Pos)   #icon for Songs
-	    self.LibraryInfoText14.DrawOn(image, self.text14Pos)   #icon for duration
+            self.LibraryInfoText11.DrawOn(image, self.text11Pos)   #icon for Artists
+            self.LibraryInfoText12.DrawOn(image, self.text12Pos)   #icon for Albums
+            self.LibraryInfoText13.DrawOn(image, self.text13Pos)   #icon for Songs
+            self.LibraryInfoText14.DrawOn(image, self.text14Pos)   #icon for duration
                     
         if self.iconcountdown > 0:
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
@@ -613,12 +616,12 @@ class MenuScreen():
         self.width = width
         self.font2 = font2
         self.iconfontBottom = iconfontBottom
-	self.labelfont = labelfont
+        self.labelfont = labelfont
         self.selectedOption = selected
-	self.row1 = row1
-	self.row2 = row2
-	self.row3 = row3
-	self.row4 = row4
+        self.row1 = row1
+        self.row2 = row2
+        self.row3 = row3
+        self.row4 = row4
         self.menuLabel = StaticText(self.height, self.width, label, labelfont)
         if label == '':
             self.hasLabel = 0
@@ -701,8 +704,8 @@ def ButtonA_PushEvent(hold_time):
               oled.modal.PrevOption()
 #longpress functions below
     elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-	print('ButtonA long press event')
-	oled.ShutdownFlag = True
+        print('ButtonA long press event')
+        oled.ShutdownFlag = True
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
         sleep(5)
@@ -715,7 +718,7 @@ def ButtonB_PushEvent(hold_time):
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
 #shortpress functions below
         print('ButtonB short press event')
-	if oled.state == STATE_PLAYER and oled.playState != 'stop':
+        if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('stop')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
               volumioIO.emit('listPlaylist')
@@ -755,7 +758,7 @@ def ButtonD_PushEvent(hold_time):
             volumioIO.emit('next')
         elif oled.state == STATE_PLAYER and oled.playState == 'stop':
             SetState(STATE_LIBRARY_INFO)
-	    oled.playState = 'info'
+            oled.playState = 'info'
             crl.setopt(crl.URL, 'localhost:3000/api/v1/collectionstats')
             crl.setopt(crl.WRITEDATA, b_obj)
             crl.perform()
@@ -778,7 +781,7 @@ def ButtonD_PushEvent(hold_time):
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
         print('ButtonD long press event')
         if oled.randomTag == False:
-	    volumioIO.emit('setRandom', {"value":"true"})
+            volumioIO.emit('setRandom', {"value":"true"})
             oled.randomTag = True
         elif oled.randomTag == True:
             volumioIO.emit('setRandom', {"value":"false"})
@@ -939,7 +942,7 @@ while True:
 #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
 
     if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False:
-    	InfoTag = 0  #resets the InfoTag helper from artist/song update loop
+        InfoTag = 0  #resets the InfoTag helper from artist/song update loop
         oled.time = strftime("%H:%M:%S")
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date,  oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)
 
