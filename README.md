@@ -84,5 +84,7 @@ sudo journalctl -fu nr1ui-nightly.service
 
 ### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
 
-### [Sources & font-info](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
+### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
+
+### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
 
