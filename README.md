@@ -64,9 +64,9 @@ The cutout in the front of the device is smaller as the ssd1322 display -> so th
 
 Simply change the value's from "42" to "0" (self.text1Pos = (42, 2))... that's it! (Tutorials/Guides will follow...)
 
-## [installation steps (stable release)](https://github.com/Maschine2501/Volumio-OledUI/wiki/Installation-steps-(stable-release))
+## [installation steps (stable release)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(stable-release))
 
-## [installation steps (nightly build)](https://github.com/Maschine2501/Volumio-OledUI/wiki/Installation-steps-(nightly))
+## [installation steps (nightly build)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(nightly))
 
 ## Check the logs
 
@@ -78,13 +78,11 @@ sudo journalctl -fu nr1ui.service
 
 sudo journalctl -fu nr1ui-nightly.service
 
-## [Hints](https://github.com/Maschine2501/Volumio-OledUI/wiki/hints---tricks---nice-to-know)
+## [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
 
-## [wiring / button-layout / truthtable](https://github.com/Maschine2501/Volumio-OledUI/wiki/Wiring---Button-Truthtable)
+### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
 
-### [hardware](https://github.com/Maschine2501/Volumio-OledUI/wiki/Hardware)
+### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
 
-### [dependencies](https://github.com/Maschine2501/Volumio-OledUI/wiki/Dependencies)
-
-### [Sources & font-info](https://github.com/Maschine2501/Volumio-OledUI/wiki/Sources---font-information)
+### [Sources & font-info](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
 
