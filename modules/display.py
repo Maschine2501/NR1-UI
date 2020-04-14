@@ -10,7 +10,7 @@ def show_logo(filename, device):
     try:
         logoImage = Image.open(img_path + filename) #.resize((device.width, device.height), Image.ANTIALIAS)
     except IOError:
-        print "Cannot open file %s" % filename
+        print("Cannot open file %s" % filename)
         pass
     device.display(logoImage)
 
