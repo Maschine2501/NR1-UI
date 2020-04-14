@@ -4,7 +4,6 @@ Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-Ole
 ---
 
 # NR1-UI
----
 Im building a Network Hifi Receiver from scratch.
 An old Braun T2 Tuner serves as case for the player.
 To keep as much as possible from the look of the device i needed an Interface for Volumio.
@@ -32,13 +31,13 @@ The project is not finished yet... but close the the goal!
 * Some bugs will (not often) happen. Will debug it soon.
 
 ## To-Do: 
-
+---
 * Tune the whole UI (fonts, positions... etc.)
 * Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
 * Make versions for other displays? like ssd1306, ssd1309? Maybe...
 
 ## Allready Done:
-
+---
 * Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
 * Automatic stop when playback is paused (value could be defined / declared)
 * display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
@@ -50,11 +49,11 @@ The project is not finished yet... but close the the goal!
 * migration to Python 3.5.2
 
 ## Demo Video from nightly-build (05.03.2020):
-
+---
 [![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
 
 ## Why is the first part of the display empty?
-
+---
 The cutout in the front of the device is smaller as the ssd1322 display -> so the display actually don't use the first 42 pixels.
 
 ![hifi-tuner case](https://i.ibb.co/WpsSd5z/Entwurfszeichnung-NR1-500px.jpg)
@@ -62,15 +61,15 @@ The cutout in the front of the device is smaller as the ssd1322 display -> so th
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
 ## But you want it on the whole Display?
-
+---
 Simply change the value's from "42" to "0" (self.text1Pos = (42, 2))... that's it! (Tutorials/Guides will follow...)
 
 ## [installation steps (stable release)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(stable-release))
-
+---
 ## [installation steps (nightly build)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(nightly))
-
+---
 ## Check the logs
-
+---
 #### for the stable build
 
 sudo journalctl -fu nr1ui.service
@@ -79,20 +78,19 @@ sudo journalctl -fu nr1ui.service
 
 sudo journalctl -fu nr1ui-nightly.service
 
-## [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
-
+### [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
+---
 
 ### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
-
+---
 
 ### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
-
+---
 
 ### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
-
 ---
-### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
 
+### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
 ---
 
 ### [Oled-UI-Remote Project](https://github.com/Maschine2501/OledUI-Remote)
