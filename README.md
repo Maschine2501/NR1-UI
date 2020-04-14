@@ -1,10 +1,10 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 
-## This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
-
+###This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 ---
-# NR1-UI
 
+# NR1-UI
+---
 Im building a Network Hifi Receiver from scratch.
 An old Braun T2 Tuner serves as case for the player.
 To keep as much as possible from the look of the device i needed an Interface for Volumio.
@@ -16,9 +16,9 @@ Unfortuneatly luma.oled does not support Python2 anymore.
 So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
----
-## Features of Maschine2501/NR1-UI:
 
+## Features of Maschine2501/NR1-UI:
+---
 * 4 Button Interface (Button function depends on "State" of the screen, e.g. playback, menu...)
 * 1 Rotary with button (function also depends on "State")
 * Playback Screen with Artist, Song, file-format, samplerate and bitdepth
