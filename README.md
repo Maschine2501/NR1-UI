@@ -93,7 +93,7 @@ sudo journalctl -fu nr1ui-nightly.service
 ### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
 ---
 
-### [Oled-UI-Remote Project](https://github.com/Maschine2501/OledUI-Remote)
+### [Oled-UI-Remote Project](https://github.com/Maschine2501/RC2-UI)
 ![Remote](https://i.ibb.co/qWpqB0M/20200405-124431.jpg)
 
 
