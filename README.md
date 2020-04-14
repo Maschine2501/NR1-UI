@@ -80,11 +80,23 @@ sudo journalctl -fu nr1ui-nightly.service
 
 ## [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
 
+
 ### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
+
 
 ### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
 
+
 ### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
 
+---
 ### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
+
+---
+
+### [Oled-UI-Remote Project](https://github.com/Maschine2501/OledUI-Remote)
+![Remote](https://i.ibb.co/qWpqB0M/20200405-124431.jpg)
+
+
+
 
