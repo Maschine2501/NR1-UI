@@ -2,6 +2,7 @@ Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-Ole
 
 ## This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
+---
 # NR1-UI
 
 Im building a Network Hifi Receiver from scratch.
@@ -15,7 +16,7 @@ Unfortuneatly luma.oled does not support Python2 anymore.
 So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
-
+---
 ## Features of Maschine2501/NR1-UI:
 
 * 4 Button Interface (Button function depends on "State" of the screen, e.g. playback, menu...)
