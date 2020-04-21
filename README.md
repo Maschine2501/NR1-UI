@@ -97,6 +97,6 @@ sudo journalctl -fu nr1ui-nightly.service
 ![Remote](https://i.ibb.co/qWpqB0M/20200405-124431.jpg)
 
 
-### [buy me a coffee ;-)](www.paypal.me/maschine2501)
+### [buy me a coffee ;-)](https://paypal.me/maschine2501)
 
 
