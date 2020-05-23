@@ -28,7 +28,8 @@ from PIL import ImageFont
 
 from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
-from modules.display import *
+from modules.display import*
+from modules.StatusLED import*
 
 volumio_host = 'localhost'
 volumio_port = 3000
@@ -136,6 +137,8 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #above are the "imports" for the fonts. 
 #After the name of the font comes a number, this defines the Size (height) of the letters. 
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
+
+SysStart()
 
 def display_update_service():
     pixshift = [2, 2]
@@ -257,6 +260,16 @@ def onPushState(data):
             oled.volume = int(data['volume'])
         except (KeyError, ValueError):
             pass
+
+    if 'channels' in data:
+        channels = data['channels']
+        if channels == 2:
+	   StereoLEDon()
+	else:
+	   StereoLEDoff()
+	   
+    if newArtist is None:   #volumio can push NoneType
+        newArtist = ''
     
     if 'disableVolumeControl' in data:
         oled.volumeControlDisabled = data['disableVolumeControl']
@@ -270,9 +283,11 @@ def onPushState(data):
         oled.activeSong = newSong
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
-            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
+            PlayLEDon()
+	    oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
         if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
-            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
+            PlayLEDoff()
+	    oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
     
     if newStatus != oled.playState:
         oled.playState = newStatus
