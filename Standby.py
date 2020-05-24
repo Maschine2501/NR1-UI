@@ -4,9 +4,9 @@ from subprocess import call
 import RPi.GPIO as GPIO
 from time import sleep
 
-Standby = 37
+Standby = 26
 
-GPIO.setmode(GPIO.BOARD) # Set pin numbering to board numbering
+GPIO.setmode(GPIO.BCM) # Set pin numbering to board numbering
 
 GPIO.setup(Standby, GPIO.IN) # Set up PinSeven as an input
 
