@@ -3,11 +3,11 @@ import psutil
 from time import sleep
 from gpiozero import LED
 
-CPU0 = LED(14)
-CPU3 = LED(15)
-CPU6 = LED(12)
+CPU0 = LED(13)
+CPU3 = LED(12)
+CPU6 = LED(15)
 PlayLED = LED(16)
-StereoLED = LED(13)
+StereoLED = LED(14)
 
 def SysStart():
     CPU0.off()
