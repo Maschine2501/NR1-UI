@@ -6,6 +6,7 @@ import requests
 import os
 import sys
 import time
+import threading
 import json
 import pycurl
 import pprint
@@ -268,9 +269,9 @@ def onPushState(data):
     if 'channels' in data:
         channels = data['channels']
         if channels == 2:
-	   StereoLEDon()
-	else:
-	   StereoLEDoff()
+           StereoLEDon()
+        else:
+           StereoLEDoff()
 	   
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
@@ -288,10 +289,10 @@ def onPushState(data):
         oled.activeArtist = newArtist
         if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
             PlayLEDon()
-	    oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
+            oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)     #here is defined which "data" should be displayed in the class
         if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
             PlayLEDoff()
-	    oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
+            oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
     
     if newStatus != oled.playState:
         oled.playState = newStatus
