@@ -1,6 +1,6 @@
 #!/usr/bin//python3
 import psutil
-import time
+from time import sleep
 from gpiozero import LED
 
 CPU0 = LED(14)
