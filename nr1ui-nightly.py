@@ -924,6 +924,8 @@ volumioIO.emit('getState')
 volumioIO.emit('getQueue')
 #volumioIO.emit('collectionstats')
 
+StandbySignal = GPIO.input(26)
+
 #volumioIO.emit('getBrowseSources')
 sleep(0.1)
 
@@ -984,7 +986,7 @@ while True:
          varcanc = True
          volumioIO.emit('stop')
 		
-    if GPIO.input(26) == GPIO.LOW:
+    if StandbySignal == 0:
         oled.ShutdownFlag = True
         sleep(0.1)
         show_logo("shutdown.ppm", oled)
