@@ -954,6 +954,7 @@ while True:
 #this is the loop to get artist/song when changing sources (loops three times)
     
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
+        PlayLEDon()
         oled.modal.UpdatePlayingInfo(oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)
         InfoTag += 1
         sleep(1.5)
@@ -962,14 +963,15 @@ while True:
 
     if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False:
         InfoTag = 0  #resets the InfoTag helper from artist/song update loop
-	PlayLEDoff()
-	StereoLEDoff()
+        PlayLEDoff()
+        StereoLEDoff()
         oled.time = strftime("%H:%M:%S")
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date,  oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)
 
 #if playback is paused, here is defined when the Player goes back to "Standby"/Stop		
 
     if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
+       PlayLEDoff()
        secvar = int(round(time()))
        varcanc = False
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
