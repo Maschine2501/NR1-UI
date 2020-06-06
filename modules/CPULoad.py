@@ -1,23 +1,32 @@
-#import time
-import RPi.GPIO as GPIO
-import psutil
+#!/usr/bin/env python3
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(14, GPIO.OUT)
-GPIO.setup(15, GPIO.OUT)
-GPIO.setup(12, GPIO.OUT)
+import sys, tty, termios, os, readchar, time
+import psutil
+from pcf8574 import PCF8574
+
+i2c_port_num = 1
+pcf_address = 0x38
+pcf = PCF8574(i2c_port_num, pcf_address)
+
+io1 = pcf.port[7] 
+io2 = pcf.port[6]
+io3 = pcf.port[5]
+io4 = pcf.port[4]
+io5 = pcf.port[3]
 
 while True:
-    mytime = psutil.cpu_percent(interval=0.2, percpu=False)
-    io1=io2=io3 = False
-    
-    if mytime > 66:
-        io1=io2=io3 = True
-    elif mytime > 34:
-        io1=io2 = True
-    elif mytime < 33:
-        io1 = True
+    CPUpercent = psutil.cpu_percent(interval=0.2, percpu=False)
+    io1=io2=io3=io4=io5 = True
+    if CPUpercent > 75:
+        io1=io2=io3=io4=io5 = False
+    elif CPUpercent > 50 :
+        io1=io2=io3=io4 = False
+    elif CPUpercent > 25:
+        io1=io2=io3 = False
+    elif CPUpercent > 10:
+        io1=io2 = False
+    elif CPUpercent > 2:
+        io1 = False
+    elif CPUpercent < 2:
+        io1=io2=io3=io4=io5 = True
 
-    GPIO.output(11,io1)
-    GPIO.output(12,io2)
-    GPIO.output(13,io3)
