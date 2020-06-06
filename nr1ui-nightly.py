@@ -962,6 +962,8 @@ while True:
 
     if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False:
         InfoTag = 0  #resets the InfoTag helper from artist/song update loop
+	PlayLEDoff()
+	StereoLEDoff()
         oled.time = strftime("%H:%M:%S")
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date,  oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)
 
