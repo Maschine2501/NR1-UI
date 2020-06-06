@@ -13,6 +13,7 @@ import pprint
 #import python-socketio
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
+GPIO.setwarnings(False)
 
 from time import*
 from threading import Thread
@@ -37,6 +38,11 @@ volumio_port = 3000
 VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
+
+GPIO.setup(13, GPIO.OUT)
+GPIO.setup(26, GPIO.IN)
+
+GPIO.output(13, GPIO.HIGH)
 
 #imports for REST API (MediaInfoScreen)
 b_obj = BytesIO() 
@@ -977,4 +983,14 @@ while True:
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
          varcanc = True
          volumioIO.emit('stop')
+		
+    if GPIO.input(26) == GPIO.LOW:
+        oled.ShutdownFlag = True
+        sleep(0.1)
+        show_logo("shutdown.ppm", oled)
+        sleep(5)
+        oled.cleanup()                                              # put display into low power mode
+        volumioIO.emit('shutdown')
+        sleep(60)
+	
 sleep(0.1)
