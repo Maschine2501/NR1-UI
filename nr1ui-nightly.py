@@ -140,9 +140,8 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 SysStart()
-sleep(3.2)
 
-Processor = threading.Thread(target=ProcessorLED, daemon=True)
+Processor = threading.Thread(target=CPUload, daemon=True)
 Processor.start()
 
 def display_update_service():
