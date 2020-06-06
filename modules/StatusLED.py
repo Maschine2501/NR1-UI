@@ -97,10 +97,10 @@ def PlayLEDon():
     pcf.port[1] = False
     
 def StereoLEDon():
-    pcf.port[1] = False
+    pcf.port[0] = False
     
 def PlayLEDoff():
     pcf.port[1] = True
     
 def StereoLEDoff():
-    pcf.port[1] = True
+    pcf.port[0] = True
