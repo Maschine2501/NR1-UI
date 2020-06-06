@@ -8,25 +8,47 @@ i2c_port_num = 1
 pcf_address = 0x20
 pcf = PCF8574(i2c_port_num, pcf_address)
 
-io1 = pcf.port[7] 
-io2 = pcf.port[6]
-io3 = pcf.port[5]
-io4 = pcf.port[4]
-io5 = pcf.port[3]
-
 while True:
     CPUpercent = psutil.cpu_percent(interval=0.2, percpu=False)
-    io1=io2=io3=io4=io5 = True
+    pcf.port[7] = True
+    pcf.port[6] = True
+    pcf.port[5] = True
+    pcf.port[4] = True
+    pcf.port[3] = True
     if CPUpercent > 75:
-        io1=io2=io3=io4=io5 = False
+      pcf.port[7] = False
+      pcf.port[6] = False
+      pcf.port[5] = False
+      pcf.port[4] = False
+      pcf.port[3] = False
     elif CPUpercent > 50 :
-        io1=io2=io3=io4 = False
+      pcf.port[7] = False
+      pcf.port[6] = False
+      pcf.port[5] = False
+      pcf.port[4] = False
+      pcf.port[3] = True
     elif CPUpercent > 25:
-        io1=io2=io3 = False
+      pcf.port[7] = False 
+      pcf.port[6] = False
+      pcf.port[5] = False
+      pcf.port[4] = True
+      pcf.port[3] = True
     elif CPUpercent > 10:
-        io1=io2 = False
+      pcf.port[7] = False
+      pcf.port[6] = False
+      pcf.port[5] = True
+      pcf.port[4] = True
+      pcf.port[3] = True
     elif CPUpercent > 2:
-        io1 = False
+      pcf.port[7] = False
+      pcf.port[6] = True
+      pcf.port[5] = True
+      pcf.port[4] = True
+      pcf.port[3] = True
     elif CPUpercent < 2:
-        io1=io2=io3=io4=io5 = True
+      pcf.port[7] = True
+      pcf.port[6] = True
+      pcf.port[5] = True
+      pcf.port[4] = True
+      pcf.port[3] = True
 
