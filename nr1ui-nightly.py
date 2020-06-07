@@ -146,7 +146,7 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 def StandByWatcher():
-    While True:
+    while True:
          StandbySignal = GPIO.input(26)
 	 if StandbySignal == 0:
            oled.ShutdownFlag = True
@@ -156,7 +156,7 @@ def StandByWatcher():
            oled.cleanup()                                              # put display into low power mode
            volumioIO.emit('shutdown')
            sleep(60)
-         elif StandbySignal = 1:
+         elif StandbySignal == 1:
            sleep(1)
 
 StandByListen = threading.Thread(target=StandByWatcher, daemon=True)
