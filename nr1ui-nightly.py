@@ -122,7 +122,6 @@ oled.AlbumIcon = '\uF2BB'
 oled.SongIcon = '\U0000F001'
 oled.PlaytimeIcon = '\U0000F1DA'
 
-
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 oled.clear()
 
@@ -146,18 +145,20 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 def StandByWatcher():
+    StandbySignal = GPIO.input(26)
     while True:
-         StandbySignal = GPIO.input(26)
-	 if StandbySignal == 0:
-           oled.ShutdownFlag = True
-           sleep(0.1)
-           show_logo("shutdown.ppm", oled)
-           sleep(5)
-           oled.cleanup()                                              # put display into low power mode
-           volumioIO.emit('shutdown')
-           sleep(60)
-         elif StandbySignal == 1:
-           sleep(1)
+        StandbySignal = GPIO.input(26)
+        if StandbySignal == 0:
+            oled.ShutdownFlag = True
+            volumioIO.emit('stop')
+            sleep(1)
+            oled.clear()
+            show_logo("shutdown.ppm", oled)
+            volumioIO.emit('shutdown')
+            sleep(10)
+            
+        elif StandbySignal == 1:
+            sleep(1)
 
 StandByListen = threading.Thread(target=StandByWatcher, daemon=True)
 StandByListen.start()
@@ -168,12 +169,9 @@ Processor = threading.Thread(target=CPUload, daemon=True)
 Processor.start()
 
 def display_update_service():
-    pixshift = [2, 2]
-    lastshift = prevTime = time()
-    while UPDATE_INTERVAL > 0:
-        dt = time() - prevTime
+    while UPDATE_INTERVAL > 0 and oled.ShutdownFlag == False:
         prevTime = time()
-       # auto return to home display screen (from volume display / queue list..)
+        dt = time() - prevTime
         if oled.stateTimeout > 0:
             oled.timeOutRunning = True
             oled.stateTimeout -= dt
@@ -187,7 +185,7 @@ def display_update_service():
         except AttributeError:
             print("render error")
             sleep(1)
-        cimg = image.crop((pixshift[0], pixshift[1], pixshift[0] + oled.WIDTH, pixshift[1] + oled.HEIGHT)) 
+        cimg = image.crop((0, 0, oled.WIDTH, oled.HEIGHT)) 
         oled.display(cimg)
         sleep(UPDATE_INTERVAL)
 
@@ -728,7 +726,7 @@ class MenuScreen():
             self.menuText[row].DrawOn(image, (42, 4 + row*16))       #Here is the position of the list entrys from left set (42)
         if self.totaloptions == 0:
             self.menuText[0].DrawOn(image, (42, 4))                  #Here is the position of the list entrys from left set (42)
-	
+        
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
     if hold_time < 3 and oled.state != STATE_LIBRARY_INFO:
@@ -744,16 +742,6 @@ def ButtonA_PushEvent(hold_time):
               volumioIO.emit('browseLibrary',{'uri':'music-library'})
         elif oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_QUEUE_MENU or oled.state == STATE_LIBRARY_MENU:
               oled.modal.PrevOption()
-#longpress functions below
-    elif oled.state == STATE_PLAYER and oled.playState == 'stop':
-        print('ButtonA long press event')
-        oled.ShutdownFlag = True
-        sleep(0.1)
-        show_logo("shutdown.ppm", oled)
-        sleep(5)
-        oled.cleanup()                                              # put display into low power mode
-        volumioIO.emit('shutdown')
-        sleep(60)
 
 def ButtonB_PushEvent(hold_time):
     global UPDATE_INTERVAL
@@ -939,13 +927,8 @@ volumioIO.on('pushBrowseLibrary', onLibraryBrowse)
 volumioIO.emit('listPlaylist')
 volumioIO.emit('getState')
 volumioIO.emit('getQueue')
-#volumioIO.emit('collectionstats')
 
-#volumioIO.emit('getBrowseSources')
 sleep(0.1)
-
-#def timeupdate()
-#    start_time = datetime.datetime.now()
 
 try:
     with open('oledconfig.json', 'r') as f:   #load last playing track number
@@ -1000,5 +983,5 @@ while True:
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
          varcanc = True
          volumioIO.emit('stop')
-	
+
 sleep(0.1)
