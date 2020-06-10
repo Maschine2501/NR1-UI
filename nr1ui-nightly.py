@@ -54,7 +54,6 @@ from modules.StatusLED import*
 
 volumio_host = 'localhost'
 volumio_port = 3000
-VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
 
@@ -71,10 +70,9 @@ STATE_NONE = -1
 STATE_PLAYER = 0
 STATE_PLAYLIST_MENU = 1
 STATE_QUEUE_MENU = 2
-STATE_VOLUME = 3
-STATE_SHOW_INFO = 4
-STATE_LIBRARY_MENU = 5
-STATE_LIBRARY_INFO = 6
+STATE_SHOW_INFO = 3
+STATE_LIBRARY_MENU = 4
+STATE_LIBRARY_INFO = 5
 
 UPDATE_INTERVAL = 0.034
 PIXEL_SHIFT_TIME = 120    #time between picture position shifts in sec.
@@ -194,7 +192,6 @@ def sigterm_handler(signal, frame):
     sys.exit(0)
 
 def GetIP():
-#    global ip
     lanip = GetLANIP()
     print(lanip)
     LANip = str(lanip.decode('ascii'))
@@ -271,8 +268,6 @@ def SetState(status):
     if oled.state == STATE_PLAYER:
         oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo, font, fontClock, fontDate, fontIP, font3, font4, iconfont, iconfontBottom)
         oled.modal.SetPlayingIcon(oled.playState, 0)
-    elif oled.state == STATE_VOLUME:
-        oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
     elif oled.state == STATE_PLAYLIST_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.playlistoptions, oled.arrowUpIcon, oled.arrowDownIcon, oled.acceptIcon, oled.discardIcon, rows=3, label='\uE005')
     elif oled.state == STATE_QUEUE_MENU:
@@ -293,14 +288,8 @@ def LoadPlaylist(playlistname):
 #Volumio-OledUI is always listening on this port. If there's new 'data', the "def onPushState(data):" runs again.
 
 def onPushState(data):
-	
-#    print(data) #for log, if enabled you see the values for 'data'
-
-#    OPDsave = data	
-
     global OPDsave	
     global newStatus #global definition for newStatus, used at the end-loop to update standby
-
     OPDsave = data
 
     if 'title' in data:
@@ -350,12 +339,6 @@ def onPushState(data):
     if 'status' in data:
         newStatus = data['status']
         
-    if oled.state != STATE_VOLUME:              #get volume on startup and remote control
-        try:                                    #it is either number or unicode text
-            oled.volume = int(data['volume'])
-        except (KeyError, ValueError):
-            pass
-
     if 'channels' in data:
         channels = data['channels']
         if channels == 2:
@@ -365,9 +348,6 @@ def onPushState(data):
 	   
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
-    
-    if 'disableVolumeControl' in data:
-        oled.volumeControlDisabled = data['disableVolumeControl']
     
     oled.activeFormat = newFormat
     oled.activeSamplerate = newSamplerate
@@ -435,12 +415,6 @@ def onPushCollectionStats(data):
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
     print('Queue length is ' + str(len(oled.queue)))
-
-def onPushBrowseSources(data):
-#    print('Browse sources:')
-#    for item in data:
-#        print(item['uri']) 
-    pass
 
 def onLibraryBrowse(data):
     oled.libraryFull = data
@@ -691,34 +665,6 @@ class MediaLibrarayInfo():
         left = (self.width - iconwidth + 42) / 2 #here is defined where the play/pause/stop icons are displayed. 
         drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96))
         self.iconcountdown = time
-
-class VolumeScreen():
-    def __init__(self, height, width, volume, font, font2):
-        self.height = height
-        self.width = width
-        self.font = font
-        self.font2 = font2
-        self.volumeLabel = None
-        self.labelPos = (40, 5)
-        self.volumeNumber = None
-        self.numberPos = (40, 25)
-        self.barHeight = 22
-        self.barWidth = 140
-        self.volumeBar = Bar(self.height, self.width, self.barHeight, self.barWidth)
-        self.barPos = (105, 27)
-        self.volume = 0
-        self.DisplayVolume(volume)
-
-    def DisplayVolume(self, volume):
-        self.volume = volume
-        self.volumeNumber = StaticText(self.height, self.width, str(volume) + '%', self.font)
-        self.volumeLabel = StaticText(self.height, self.width, 'Volume', self.font2)
-        self.volumeBar.SetFilledPercentage(volume)
-
-    def DrawOn(self, image):
-        self.volumeLabel.DrawOn(image, self.labelPos)
-        self.volumeNumber.DrawOn(image, self.numberPos)
-        self.volumeBar.DrawOn(image, self.barPos)
 
 class MenuScreen():
     def __init__(self, height, width, font2, iconfontBottom, labelfont, menuList, row1, row2, row3, row4, selected=0, rows=3, label='', showIndex=False):
@@ -990,7 +936,6 @@ volumioIO.on('pushState', onPushState)
 #volumioIO.on('pushcollectionstats', onPushCollectionStats)
 volumioIO.on('pushListPlaylist', onPushListPlaylist)
 volumioIO.on('pushQueue', onPushQueue)
-volumioIO.on('pushBrowseSources', onPushBrowseSources)
 volumioIO.on('pushBrowseLibrary', onLibraryBrowse)
 
 # get list of Playlists and initial state
@@ -1015,10 +960,6 @@ varcanc = True                      #helper for pause -> stop timeout counter
 InfoTag = 0                         #helper for missing Artist/Song when changing sources
 GetIP()
 while True:
-    if emit_volume:
-        emit_volume = False
-        print("volume: " + str(oled.volume))
-        volumioIO.emit('volume', oled.volume)
     if emit_track and oled.stateTimeout < 4.5:
         emit_track = False
         try:
