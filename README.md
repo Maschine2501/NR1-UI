@@ -26,6 +26,10 @@ The project is not finished yet... but close the the goal!
 * Button-Layout-Icons on each Screen (depending on "State")
 * Media-Library-Information Screen (Statistics about your Media-Library -> Artists, Albums, Songs, total Playtime)
 * Boot and Shutdown Logo
+* interaction with standby module ([hardware](https://github.com/Maschine2501/NR1-UI/wiki/Standby-Module)
+* shutdown interaction with SIGNAL (SIGTERM)
+* 8 LED's controlled by an PCF8574T (i2c gpio-extender) -> Cpu-load on 5 LED's, power-, play- and stere-indicator.
+* IP adress is selected automaticaly (eth0 or wlan0)
 * maybe more features will come... ^^
 
 * Some bugs will (not often) happen. Will debug it soon.
@@ -33,6 +37,8 @@ The project is not finished yet... but close the the goal!
 ## To-Do: 
 ---
 * Tune the whole UI (fonts, positions... etc.)
+* Add RS232 -> Braun Master Control communication
+* 
 * Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
 * Make versions for other displays? like ssd1306, ssd1309? Maybe...
 
@@ -47,6 +53,10 @@ The project is not finished yet... but close the the goal!
 * MediaInformationScreen (volumio.local/api/v1/collectionstats)
 * Icons for the function of each button, depending on "state"
 * migration to Python 3.5.2
+* implemented an SIGTERM handler
+* implemented a new StandbyLED module
+* implemented a logic to select the active network card and display it`s IP
+* removed Volume Screen and Volume interactions completely
 
 ## Demo Video from nightly-build (05.03.2020):
 ---
