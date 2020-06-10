@@ -175,8 +175,8 @@ def StandByWatcher():
             oled.clear()
             show_logo("shutdown.ppm", oled)
             volumioIO.emit('shutdown')
-            sleep(10)
-            sys.exit(0)   
+#            sleep(10)
+#            sys.exit(0)   
         elif StandbySignal == 1:
             sleep(1)
 
@@ -184,12 +184,12 @@ def sigterm_handler(signal, frame):
     oled.ShutdownFlag = True
     volumioIO.emit('stop')
     GPIO.output(13, GPIO.LOW)
-    sleep(1)
+#    sleep(1)
     oled.clear()
     show_logo("shutdown.ppm", oled)
-    sleep(10)
+#    sleep(10)
     print('booyah! bye bye')
-    sys.exit(0)
+#    sys.exit(0)
 
 def GetIP():
     lanip = GetLANIP()
