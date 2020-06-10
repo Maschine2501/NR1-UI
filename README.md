@@ -67,6 +67,8 @@ The project is not finished yet... but close the the goal!
 ---
 [![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
 
+[Pictures of the assembled Network Receiver](https://github.com/Maschine2501/NR1-UI/wiki/Pictures-and-Videos)
+
 ## Why is the first part of the display empty?
 ---
 The cutout in the front of the device is smaller as the ssd1322 display -> so the display actually don't use the first 42 pixels.
