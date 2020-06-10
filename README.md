@@ -58,6 +58,11 @@ The project is not finished yet... but close the the goal!
 * implemented a logic to select the active network card and display it`s IP
 * removed Volume Screen and Volume interactions completely
 
+## IMPORTANT!
+---
+* in the nightly script, the interaction with my Standby-Module is active 
+* if you don't put an "HIGH" Signal on GPIO 26 the pi will shutdown
+
 ## Demo Video from nightly-build (05.03.2020):
 ---
 [![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
