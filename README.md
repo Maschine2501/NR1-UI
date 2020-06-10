@@ -99,4 +99,4 @@ sudo journalctl -fu nr1ui-nightly.service
 
 ### [buy me a coffee ;-)](https://paypal.me/maschine2501)
 
-
+![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
