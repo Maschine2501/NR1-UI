@@ -1,5 +1,22 @@
 #!/usr/bin/python3
-
+#      ____  ____  ___   __  ___   __     _   ______ ___
+#     / __ )/ __ \/   | / / / / | / /    / | / / __ <  /
+#    / __  / /_/ / /| |/ / / /  |/ /    /  |/ / /_/ / / 
+#   / /_/ / _, _/ ___ / /_/ / /|  /    / /|  / _, _/ /  
+#  /_____/_/ |_/_/  |_\____/_/ |_/    /_/ |_/_/ |_/_/   
+#    __  __              ____     __          ___            
+#   / / / /__ ___ ____  /  _/__  / /____ ____/ _/__ ________ 
+#  / /_/ (_-</ -_) __/ _/ // _ \/ __/ -_) __/ _/ _ `/ __/ -_)
+#  \____/___/\__/_/   /___/_//_/\__/\__/_/ /_/ \_,_/\__/\__/ 
+#
+#  For more Informations visit: https://github.com/Maschine2501/NR1-UI
+#   _           __  __ ___ ___ ___  __  _ 
+#  | |__ _  _  |  \/  / __|_  ) __|/  \/ |
+#  | '_ \ || | | |\/| \__ \/ /|__ \ () | |
+#  |_.__/\_, | |_|  |_|___/___|___/\__/|_|
+#        |__/                                                                                       
+#  www.github.com/Maschine2501                                                         
+#
 from __future__ import unicode_literals
 
 import requests
@@ -7,6 +24,7 @@ import os
 import sys
 import time
 import threading
+import signal
 import json
 import pycurl
 import pprint
@@ -17,6 +35,7 @@ GPIO.setwarnings(False)
 
 from time import*
 from threading import Thread
+from subprocess import *
 from socketIO_client import SocketIO
 from datetime import datetime
 from io import BytesIO 
@@ -83,7 +102,7 @@ oled.volume = 100
 now = datetime.now()                                                             #current date and time
 oled.time = now.strftime("%H:%M:%S")                                             #resolves time as HH:MM:SS eg. 14:33:15
 oled.date = now.strftime("%d.  %m.  %Y")                                         #resolves time as dd.mm.YYYY eg. 17.04.2020
-oled.IP = os.popen('ip addr show eth0').read().split("inet ")[1].split("/")[0]   #resolves IP from Ethernet Adapator
+oled.IP = ''
 emit_volume = False
 emit_track = False
 newStatus = 0              							 #makes newStatus usable outside of onPushState
@@ -145,24 +164,75 @@ fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP
 #Just put .ttf file in the 'Volumio-OledUI/fonts' directory and make an import like above. 
 
 def StandByWatcher():
+# listens to GPIO 26. If Signal is High, everything is fine, raspberry will keep doing it's shit.
+# If GPIO 26 is Low, Raspberry will shutdown.
     StandbySignal = GPIO.input(26)
     while True:
         StandbySignal = GPIO.input(26)
         if StandbySignal == 0:
             oled.ShutdownFlag = True
             volumioIO.emit('stop')
+            GPIO.output(13, GPIO.LOW)
             sleep(1)
             oled.clear()
             show_logo("shutdown.ppm", oled)
             volumioIO.emit('shutdown')
             sleep(10)
-            
+            sys.exit(0)   
         elif StandbySignal == 1:
             sleep(1)
+
+def sigterm_handler(signal, frame):
+    oled.ShutdownFlag = True
+    volumioIO.emit('stop')
+    GPIO.output(13, GPIO.LOW)
+    sleep(1)
+    oled.clear()
+    show_logo("shutdown.ppm", oled)
+    sleep(10)
+    print('booyah! bye bye')
+    sys.exit(0)
+
+def GetIP():
+#    global ip
+    lanip = GetLANIP()
+    print(lanip)
+    LANip = str(lanip.decode('ascii'))
+    print('LANip: ', LANip)
+    wanip = GetWLANIP()
+    print(wanip)
+    WLANip = str(wanip.decode('ascii'))
+    print('WLANip: ', WLANip)
+    if LANip != '':
+       ip = LANip
+       print('LanIP: ', ip)
+    elif WLANip != '':
+       ip = WLANip
+       print('WlanIP: ', ip)
+    else:
+       ip = "no ip"
+    oled.IP = ip
+
+def GetLANIP():
+    cmd = \
+        "ip addr show eth0 | grep inet  | grep -v inet6 | awk '{print $2}' | cut -d '/' -f 1"
+    p = Popen(cmd, shell=True, stdout=PIPE)
+    output = p.communicate()[0]
+    return output[:-1]
+
+def GetWLANIP():
+    cmd = \
+        "ip addr show wlan0 | grep inet  | grep -v inet6 | awk '{print $2}' | cut -d '/' -f 1"
+    p = Popen(cmd, shell=True, stdout=PIPE)
+    output = p.communicate()[0]
+    return output[:-1]
+
+signal.signal(signal.SIGTERM, sigterm_handler)
 
 StandByListen = threading.Thread(target=StandByWatcher, daemon=True)
 StandByListen.start()
 
+GetIP()
 SysStart()
 
 Processor = threading.Thread(target=CPUload, daemon=True)
@@ -943,6 +1013,7 @@ if oled.playState != 'play':
 
 varcanc = True                      #helper for pause -> stop timeout counter
 InfoTag = 0                         #helper for missing Artist/Song when changing sources
+GetIP()
 while True:
     if emit_volume:
         emit_volume = False
@@ -956,8 +1027,6 @@ while True:
             pass
         volumioIO.emit('play', {'value':oled.playPosition})
     sleep(0.1)
-
-#this is the loop to get artist/song when changing sources (loops three times)
     
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
         PlayLEDon()
