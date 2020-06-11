@@ -490,23 +490,23 @@ class NowPlayingScreen():
         self.icon = {'play':'\u25B6', 'pause':'\u2389', 'stop':'\u25A0'}       	    	#entypo icons
         self.playingIcon = self.icon['play']
         self.iconcountdown = 0
-        self.text1Pos = (42, 2)        #Artist /
-        self.text2Pos = (42, 22)       #Title
-        self.text3Pos = (73, 4)        #clock (clock  text is 161 pixels long) (222px viewable - text = 73 : 2 = 31 + 42offset = 73)
-        self.text4Pos = (42, 41)       #IP
-        self.text5Pos = (184, 41)      #Date
-        self.text6Pos = (42, 41)       #format
-        self.text7Pos = (156, 41)      #samplerate
-        self.text8Pos = (217, 41)      #bitdepth
-        self.text9Pos = (52, 54)       #PlayIcon
-        self.text10Pos = (62, 54)      #PauseIcon
-        self.text11Pos = (109, 54)      #StopIcon
-        self.text12Pos = (194, 54)     #PreviousIcon
-        self.text13Pos = (241, 54)     #NextIcon
-        self.text14Pos = (57, 54)      #LibraryIcon
-        self.text15Pos = (109, 54)      #PlaylistIcon
-        self.text16Pos = (194, 54)     #QueueIcon
-        self.text17Pos = (241, 54)     #LibraryInfoIcon
+        self.text1Pos = (36, 2)        #Artist /
+        self.text2Pos = (36, 22)       #Title
+        self.text3Pos = (65, 4)        #clock (clock  text is 161 pixels long) (222px viewable - text = 73 : 2 = 31 + 42offset = 73)
+        self.text4Pos = (30, 41)       #IP
+        self.text5Pos = (172, 41)      #Date
+        self.text6Pos = (36, 41)       #format
+        self.text7Pos = (148, 41)      #samplerate
+        self.text8Pos = (209, 41)      #bitdepth
+        self.text9Pos = (33, 54)       #PlayIcon
+        self.text10Pos = (45, 54)      #PauseIcon
+        self.text11Pos = (94, 54)     #StopIcon
+        self.text12Pos = (179, 54)     #PreviousIcon
+        self.text13Pos = (226, 54)     #NextIcon
+        self.text14Pos = (45, 54)      #LibraryIcon
+        self.text15Pos = (94, 54)     #PlaylistIcon
+        self.text16Pos = (179, 54)     #QueueIcon
+        self.text17Pos = (226, 54)     #LibraryInfoIcon
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
 # "def __init__(self,...." is the "initialization" of the "NowPlayingScreen". 
@@ -570,7 +570,7 @@ class NowPlayingScreen():
         self.alfaimage.paste((0, 0, 0, 200), [0, 0, image.size[0], image.size[1]])                 #(0, 0, 0, 200) means Background (nowplayingscreen with artist, song etc.) is darkend. Change 200 to 0 -> Background is completely visible. 255 -> Bachground is not visible. scale = 0-255
         drawalfa = ImageDraw.Draw(self.alfaimage)
         iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.iconfont)            #entypo
-        left = (self.width - iconwidth + 42) / 2						   #here is defined where the play/pause/stop icons are displayed. 
+        left = (self.width - iconwidth + 34) / 2						   #here is defined where the play/pause/stop icons are displayed. 
         drawalfa.text((left, 4), self.playingIcon, font=self.iconfont, fill=(255, 255, 255, 200))  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
         self.iconcountdown = time
 
@@ -601,20 +601,20 @@ class MediaLibrarayInfo():
         self.icon = {'info':'\F0CA'}
         self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
-        self.text1Pos = (140, 2)        					   #Number of Artists
-        self.text2Pos = (140, 15)      						   #Number of Albums4
-        self.text3Pos = (140, 28)      						   #Number of Songs
-        self.text4Pos = (140, 41)      						   #Summary of duration
-        self.text5Pos = (56, 2)      						   #Text for Artists
-        self.text6Pos = (56, 15)     						   #Text for Albums
-        self.text7Pos = (56, 28)     						   #Text for Songs
-        self.text8Pos = (56, 41)     						   #Text for duration
-        self.text9Pos = (148, 52)      						   #Menu-Label Icon
-        self.text10Pos = (241, 54)     						   #LibraryInfoIcon
-        self.text11Pos = (42, 2)      						   #icon for Artists
-        self.text12Pos = (42, 15)     						   #icon for Albums
-        self.text13Pos = (42, 28)     						   #icon for Songs
-        self.text14Pos = (42, 41)     						   #icon for duration
+        self.text1Pos = (138, 2)        					   #Number of Artists
+        self.text2Pos = (138, 15)      						   #Number of Albums4
+        self.text3Pos = (138, 28)      						   #Number of Songs
+        self.text4Pos = (138, 41)      						   #Summary of duration
+        self.text5Pos = (50, 2)      						   #Text for Artists
+        self.text6Pos = (50, 15)     						   #Text for Albums
+        self.text7Pos = (50, 28)     						   #Text for Songs
+        self.text8Pos = (50, 41)     						   #Text for duration
+        self.text9Pos = (134, 52)      						   #Menu-Label Icon
+        self.text10Pos = (226, 54)     						   #LibraryInfoIcon
+        self.text11Pos = (36, 2)      						   #icon for Artists
+        self.text12Pos = (36, 15)     						   #icon for Albums
+        self.text13Pos = (36, 28)     						   #icon for Songs
+        self.text14Pos = (36, 41)     						   #icon for duration
         self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdateLibraryInfo(self, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14):
@@ -662,7 +662,7 @@ class MediaLibrarayInfo():
         self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
         drawalfa = ImageDraw.Draw(self.alfaimage)
         iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)
-        left = (self.width - iconwidth + 42) / 2 #here is defined where the play/pause/stop icons are displayed. 
+        left = (self.width - iconwidth + 34) / 2 #here is defined where the play/pause/stop icons are displayed. 
         drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96))
         self.iconcountdown = time
 
@@ -683,7 +683,7 @@ class MenuScreen():
             self.hasLabel = 0
         else:
             self.hasLabel = 1
-        self.labelPos = (148, 52)                      #here is the position of the menu label
+        self.labelPos = (140, 52)                      #here is the position of the menu label
         self.menuYPos = 2 + 12 * self.hasLabel
         self.menurows = rows
         self.menuText = [None for i in range(self.menurows)]
@@ -696,10 +696,10 @@ class MenuScreen():
         self.onscreenoptions = min(self.menurows, self.totaloptions)
         self.firstrowindex = 0
         self.showIndex = showIndex
-        self.text1Pos = (57, 54)      						   #UpIcon
-        self.text2Pos = (109, 54)     						   #DownIcon
-        self.text3Pos = (194, 54)    						   #DiscardIcon
-        self.text4Pos = (241, 54)    						   #AcceptIcon
+        self.text1Pos = (45, 54)      						   #UpIcon
+        self.text2Pos = (94, 54)     						   #DownIcon
+        self.text3Pos = (179, 54)    						   #DiscardIcon
+        self.text4Pos = (226, 54)    						   #AcceptIcon
         self.MenuUpdate()
 
     def MenuUpdate(self):
@@ -739,9 +739,9 @@ class MenuScreen():
             self.Icon3.DrawOn(image, self.text3Pos)    #Discard
             self.Icon4.DrawOn(image, self.text4Pos)    #Accept
         for row in range(self.onscreenoptions):
-            self.menuText[row].DrawOn(image, (42, 4 + row*16))       #Here is the position of the list entrys from left set (42)
+            self.menuText[row].DrawOn(image, (34, 4 + row*16))       #Here is the position of the list entrys from left set (42)
         if self.totaloptions == 0:
-            self.menuText[0].DrawOn(image, (42, 4))                  #Here is the position of the list entrys from left set (42)
+            self.menuText[0].DrawOn(image, (34, 4))                  #Here is the position of the list entrys from left set (42)
         
 def ButtonA_PushEvent(hold_time):
     global UPDATE_INTERVAL
