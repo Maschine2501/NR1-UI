@@ -79,7 +79,7 @@ The cutout in the front of the device is smaller as the ssd1322 display -> so th
 
 ## But you want it on the whole Display?
 ---
-Simply change the value's from "42" to "0" (self.text1Pos = (42, 2))... that's it! (Tutorials/Guides will follow...)
+Simply change the value's from "36" to "0" (self.text1Pos = (36, 2))... that's it! (Tutorials/Guides will follow...)
 
 ## [installation steps (stable release)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(stable-release))
 ---
