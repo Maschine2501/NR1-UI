@@ -1,0 +1,7 @@
+# ignore a single file
+LICENSE.md
+README.md
+
+# ignore an entire directory
+/Standby ATTiny85/
+/wiki/
