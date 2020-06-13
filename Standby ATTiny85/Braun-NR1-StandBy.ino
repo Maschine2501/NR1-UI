@@ -55,7 +55,7 @@ void loop()
         RS = HIGH; 
       }
       else if ( NPS == LOW ){                    // if Relais is on and pi signal is low (pi is shutdown)
-        delay(30000);                            // wait 80sec for pi to boot
+        delay(30000);                            // wait 30sec for pi to boot
         NPS = digitalRead(PiStatusReceive);      // check aggain if pi is off
         if ( NPS == LOW ) {
           digitalWrite(PiStatusSend, LOW);       // Set PiStatusSend LOW
@@ -69,7 +69,7 @@ void loop()
       }
       else {                                     // If PI an Relais is on and Button is pressed.
         digitalWrite(PiStatusSend, LOW);         // Set PiStatusSend LOW
-        delay(30000);                            // wait 40 Sec to shutdown all services on your Pi
+        delay(30000);                            // wait 30 Sec to shutdown all services on your Pi
         if ( NPS == LOW ) {
           digitalWrite(Relais, LOW);             // Set Relais LOW
           RS = LOW;
