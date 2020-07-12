@@ -261,11 +261,12 @@ def SetState(status):
     elif oled.state == STATE_PLAYLIST_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.playlistoptions, rows=3, label='\uE005')
     elif oled.state == STATE_QUEUE_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.queue, rows=3, selected=oled.playPosition, showIndex=True, label='\u2630')
+        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.queue, rows=4, selected=oled.playPosition, showIndex=True, label='\u2630')
     elif oled.state == STATE_LIBRARY_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon, hugefontaw, font5, iconfontBottom, labelfont, labelfont2, mediaicon)
+        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon, hugefontaw, font5, iconfontBottom, labelfont, labelfont2) #, mediaicon)
+#        oled.modal.SetMediaIcon(oled.playState, 0)
     elif oled.state == STATE_SPECTRUM_DISPLAY:
         oled.modal = SpectrumScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font4)
 
@@ -585,7 +586,7 @@ class NowPlayingScreen():
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14, fontaw, font5, iconfontBottom, labelfont, lablefont2, mediaicon): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14, fontaw, font5, iconfontBottom, labelfont, lablefont2) #, mediaicon): #this line references to oled.modal = NowPlayingScreen
         self.height = height
         self.width = width
         self.font4 = font4
@@ -593,7 +594,7 @@ class MediaLibrarayInfo():
         self.iconfontBottom = iconfontBottom
         self.labelfont = labelfont
         self.labelfont2 = labelfont2
-        self.mediaicon = mediaicon
+#        self.mediaicon = mediaicon
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   	      #Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  	      #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  	      #Text for Albums
@@ -608,8 +609,8 @@ class MediaLibrarayInfo():
         self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
         self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
         self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
-        self.icon = {'info':'\F0CA'}
-        self.mediaIcon = self.icon['info']
+#        self.icon = {'info':'\F0CA'}
+#        self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
         self.text1Pos = (138, 2)        					   #Number of Artists
         self.text2Pos = (138, 15)      						   #Number of Albums4
@@ -666,14 +667,14 @@ class MediaLibrarayInfo():
             image.paste(compositeimage.convert('RGB'), (0, 0))
             self.iconcountdown -= 1
             
-    def SetPlayingIcon(self, state, time=0):
+    def SetMediaIcon(self, state, time=0):
         if state in self.icon:
             self.mediaIcon = self.icon[state]
         self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
         drawalfa = ImageDraw.Draw(self.alfaimage)
-        iconwidth, iconheight = drawalfa.textsize(self.playingIcon, font=self.fontaw)
+        iconwidth, iconheight = drawalfa.textsize(self.mediaIcon, font=self.fontaw)
         left = (self.width - iconwidth + 34) / 2 #here is defined where the play/pause/stop icons are displayed. 
-        drawalfa.text((left, 4), self.playingIcon, font=self.fontaw, fill=(255, 255, 255, 96))
+        drawalfa.text((left, 4), self.mediaIcon, font=self.fontaw, fill=(255, 255, 255, 96))
         self.iconcountdown = time
 
 class SpectrumScreen():
@@ -784,7 +785,7 @@ def ButtonA_PushEvent(hold_time):
 #shortpress functions below
         print('ButtonA short press event')
         if oled.state == STATE_PLAYER or oled.state == STATE_SPECTRUM_DISPLAY and oled.playstate != 'stop':
-            if playstate == 'play':
+            if oled.playstate == 'play':
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
@@ -827,7 +828,7 @@ def ButtonD_PushEvent(hold_time):
             crl.close()
             get_body = b_obj.getvalue()
             SetState(STATE_LIBRARY_INFO)
-            playState = 'info'
+            oled.playState = 'info'
             onPushCollectionStats(get_body)
             sleep(0.5) 
         elif oled.state == STATE_LIBRARY_INFO:
