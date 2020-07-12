@@ -36,27 +36,27 @@ The project is not finished yet... but close the the goal!
 
 ## To-Do: 
 ---
-* Tune the whole UI (fonts, positions... etc.)
-* Add RS232 -> Braun Master Control communication
-* Add a "progress bar" for Playback
-* Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
-* Make versions for other displays? like ssd1306, ssd1309? Maybe...
+[ ] Tune the whole UI (fonts, positions... etc.)
+[ ] Add RS232 -> Braun Master Control communication
+[ ] Add a "progress bar" for Playback
+[ ] Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
+[ ] Make versions for other displays? like ssd1306, ssd1309? Maybe...
 
 ## Allready Done:
 ---
-* Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
-* Automatic stop when playback is paused (value could be defined / declared)
-* display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
-* Scroll Text stops before shown completly -> text was defined as scrollText, which makes "black"-boxes arround the text
-* one rotary removed
-* 4 more Buttons via GPIO (needs some fine tuning)
-* MediaInformationScreen (volumio.local/api/v1/collectionstats)
-* Icons for the function of each button, depending on "state"
-* migration to Python 3.5.2
-* implemented an SIGTERM handler
-* implemented a new StandbyLED module
-* implemented a logic to select the active network card and display it`s IP
-* removed Volume Screen and Volume interactions completely
+[x] Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
+[x] Automatic stop when playback is paused (value could be defined / declared)
+[x] display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
+[x] Scroll Text stops before shown completly -> text was defined as scrollText, which makes "black"-boxes arround the text
+[x] one rotary removed
+[x] 4 more Buttons via GPIO (needs some fine tuning)
+[x] MediaInformationScreen (volumio.local/api/v1/collectionstats)
+[x] Icons for the function of each button, depending on "state"
+[x] migration to Python 3.5.2
+[x] implemented an SIGTERM handler
+[x] implemented a new StandbyLED module
+[x] implemented a logic to select the active network card and display it`s IP
+[x] removed Volume Screen and Volume interactions completely
 
 ## IMPORTANT!
 ---
