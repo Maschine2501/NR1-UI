@@ -68,12 +68,9 @@ crl = pycurl.Curl()
 
 STATE_NONE = -1
 STATE_PLAYER = 0
-STATE_PLAYLIST_MENU = 1
-STATE_QUEUE_MENU = 2
-STATE_SHOW_INFO = 3
-STATE_LIBRARY_MENU = 4
-STATE_LIBRARY_INFO = 5
-STATE_SPECTRUM_DISPLAY = 6
+STATE_QUEUE_MENU = 1
+STATE_LIBRARY_INFO = 2
+STATE_SPECTRUM_DISPLAY = 3
 
 UPDATE_INTERVAL = 0.034
 PIXEL_SHIFT_TIME = 120    #time between picture position shifts in sec.
@@ -92,7 +89,7 @@ oled.activeSong = ''
 oled.activeArtist = 'VOLuMIO'
 oled.playState = 'unknown'
 oled.playPosition = 0
-oled.seek = 0.5
+oled.seek = 1000
 oled.duration = 1.0
 oled.modal = False
 oled.playlistoptions = []
@@ -129,6 +126,7 @@ oled.AlbumIcon = '\uF2BB'
 oled.SongIcon = '\U0000F001'
 oled.PlaytimeIcon = '\U0000F1DA'
 SpectrumStamp = 0.0
+oled.selQueue = ''
 
 
 image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
@@ -171,7 +169,6 @@ def StandByWatcher():
             sleep(1)
 
 #I inverted the logic above, so GPIO26 does not need an external signal.
-
 
 #def sigterm_handler(signal, frame):
 #    oled.ShutdownFlag = True
@@ -258,23 +255,12 @@ def SetState(status):
     if oled.state == STATE_PLAYER:
         oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.time, oled.IP, oled.date, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, oled.libraryInfo, oled.duration, oled.seek, font, fontClock, fontDate, fontIP, font3, font4, iconfont, iconfontBottom)
         oled.modal.SetPlayingIcon(oled.playState, 0)
-    elif oled.state == STATE_PLAYLIST_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.playlistoptions, rows=3, label='\uE005')
     elif oled.state == STATE_QUEUE_MENU:
         oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.queue, rows=4, selected=oled.playPosition, showIndex=True, label='\u2630')
-    elif oled.state == STATE_LIBRARY_MENU:
-        oled.modal = MenuScreen(oled.HEIGHT, oled.WIDTH, font2, iconfontBottom, labelfont, oled.libraryNames, rows=3, label='\uE003')
     elif oled.state == STATE_LIBRARY_INFO:
-        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon, hugefontaw, font5, iconfontBottom, labelfont, labelfont2) #, mediaicon)
-#        oled.modal.SetMediaIcon(oled.playState, 0)
+        oled.modal = MediaLibrarayInfo(oled.HEIGHT, oled.WIDTH, oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon, hugefontaw, font5, iconfontBottom, labelfont, labelfont2, mediaicon)
     elif oled.state == STATE_SPECTRUM_DISPLAY:
         oled.modal = SpectrumScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, oled.activeFormat, oled.activeSamplerate, oled.activeBitdepth, font4)
-
-def LoadPlaylist(playlistname):
-    print ("loading playlist: " + playlistname.encode('ascii', 'ignore'))
-    oled.playPosition = 0
-    volumioIO.emit('playPlaylist', {'name':playlistname})
-    SetState(STATE_PLAYER)
 
 #In 'onPushState' the whole set of media-information is linked to the variables (eg. artist, song...)
 #On every change in the Playback (pause, other track, etc.) Volumio pushes a set of informations on port 3000.
@@ -333,6 +319,8 @@ def onPushState(data):
         
     if 'status' in data:
         newStatus = data['status']
+        specstatus1 = newStatus
+        spectstatus2 = oled.playState
         
 #    if 'channels' in data:
 #        channels = data['channels']
@@ -344,12 +332,14 @@ def onPushState(data):
     if 'duration' in data:
         oled.duration = data['duration']
     else:
-        oled.duration = 1.0
+        oled.duration = None
+    if oled.duration == int(0):
+        oled.duration = None
 
     if 'seek' in data:
         oled.seek = data['seek']
     else:
-        oled.seek = 0.5  
+        oled.seek = None
 
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
@@ -358,7 +348,6 @@ def onPushState(data):
     oled.activeSamplerate = newSamplerate
     oled.activeBitdepth = newBitdepth
 
-    #print(newSong.encode('ascii', 'ignore'))
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
         oled.activeSong = newSong
         oled.activeArtist = newArtist
@@ -369,20 +358,19 @@ def onPushState(data):
             SetState(STATE_PLAYER)
 #            PlayLEDon()
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.duration, oled.seek)     #here is defined which "data" should be displayed in the class
-            print(oled.state)
         if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
 #            PlayLEDoff()
             SpectrumStamp = 0.0
             SetState(STATE_PLAYER)
             oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryInfo)                                 #here is defined which "data" should be displayed in the class
-        if oled.state == 6 and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
+        if oled.state == 3 and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
             SpectrumStamp = 0.0
             oled.state = 0
             SetState(STATE_PLAYER)
 #            PlayLEDon()
             oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.duration, oled.seek)     #here is defined which "data" should be displayed in the class
-            print(oled.state)
-        if oled.state == 6 and newStatus == 'stop':                                          #this is the "Standby-Screen"
+#            print(oled.state)
+        if oled.state == 3 and newStatus == 'stop':                                          #this is the "Standby-Screen"
 #            PlayLEDoff()
             SpectrumStamp = 0.0
             oled.state = 0
@@ -396,11 +384,13 @@ def onPushState(data):
                 iconTime = 35
             else:
                 iconTime = 80
+            SetState(STATE_PLAYER)    
             oled.modal.SetPlayingIcon(oled.playState, iconTime)
 
 def onPushCollectionStats(data):
-    data = json.loads(data)             #data import from REST-API (is set when ButtonD short-pressed in Standby)
-            
+    data = json.loads(data.decode("utf-8"))             #data import from REST-API (is set when ButtonD short-pressed in Standby)
+#    data = data.decode("utf-8")
+
     if "artists" in data:               #used for Media-Library-Infoscreen
         newArtists = data["artists"]
     else:
@@ -435,50 +425,12 @@ def onPushCollectionStats(data):
     oled.activePlaytime = str(newPlaytime)
 	
     if oled.state == STATE_LIBRARY_INFO and oled.playState == 'info':                                   #this is the "Media-Library-Info-Screen"
-       oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryReturn)  
+       oled.modal.UpdateLibraryInfo(oled.activeArtists, oled.activeAlbums, oled.activeSongs, oled.activePlaytime, oled.Art, oled.Alb, oled.Son, oled.Pla, oled.libraryInfo, oled.libraryReturn, oled.ArtistIcon, oled.AlbumIcon, oled.SongIcon, oled.PlaytimeIcon)  #
+
+
 
 def onPushQueue(data):
     oled.queue = [track['name'] if 'name' in track else 'no track' for track in data]
-    print('Queue length is ' + str(len(oled.queue)))
-
-def onLibraryBrowse(data):
-    oled.libraryFull = data
-    itemList = oled.libraryFull['navigation']['lists'][0]['items']
-    oled.libraryNames = [item['title'] if 'title' in item else 'empty' for item in itemList]
-    SetState(STATE_LIBRARY_MENU)
-
-def EnterLibraryItem(itemNo):
-    selectedItem = oled.libraryFull['navigation']['lists'][0]['items'][itemNo]
-    print("Entering library item: " + oled.libraryNames[itemNo].encode('ascii', 'ignore'))
-    if selectedItem['type'][-8:] == 'category' or selectedItem['type'] == 'folder':
-        volumioIO.emit('browseLibrary',{'uri':selectedItem['uri']})
-    else:
-        print("Sending new Queue")
-        volumioIO.emit('clearQueue')        #clear queue and add whole list of items
-        oled.queue = []
-        volumioIO.emit('addToQueue', oled.libraryFull['navigation']['lists'][0]['items'])
-        oled.stateTimeout = 5.0       #maximum time to load new queue
-        while len(oled.queue) == 0 and oled.stateTimeout > 0.1:
-            sleep(0.1) 
-        oled.stateTimeout = 0.2
-        print("Play position = " + str(itemNo))
-        volumioIO.emit('play', {'value':itemNo})
-
-def LibraryReturn():        #go to parent category
-    if not 'prev' in oled.libraryFull['navigation']:
-        SetState(STATE_PLAYER)
-    else:
-        parentCategory = oled.libraryFull['navigation']['prev']['uri']
-        print ("Navigating to parent category in library: " + parentCategory.encode('ascii', 'ignore'))
-        if parentCategory != '' and parentCategory != '/': 
-            volumioIO.emit('browseLibrary',{'uri':parentCategory})
-        else:
-            SetState(STATE_PLAYER)
-
-def onPushListPlaylist(data):
-    global oled
-    if len(data) > 0:
-        oled.playlistoptions = data
 
 #if you wan't to add more textposition: double check if using STATIC or SCROLL text.
 #this needs to be declared two times, first in "self.playingText" AND under: "def UpdatePlayingInfo" or "def UpdateStandbyInfo"
@@ -496,9 +448,7 @@ class NowPlayingScreen():
         self.fontDate = fontDate
         self.fontIP = fontIP
         self.duration = row18
-        self.durationClear = str(timedelta(seconds=self.duration))
-        self.seek = row19
-        self.elapsed = str(timedelta(seconds=round(float(self.seek) / 1000)))
+
         self.playingText1 = ScrollText(self.height, self.width, row1, font)         	#Artist /center=True
         self.playingText2 = ScrollText(self.height, self.width, row2, font3)        	#Title
         self.playingText3 = StaticText(self.height, self.width, row6, font4)        	#format / flac,MP3...
@@ -543,7 +493,7 @@ class NowPlayingScreen():
 # "def DrawON(..." takes informations from above and creates a "picture" which then is transfered to your display	
 
     def DrawOn(self, image):
-        if self.playingIcon != self.icon['stop']:
+        if self.playingIcon != self.icon['stop'] and oled.duration != None:
             self.playingText1.DrawOn(image, self.text1Pos)    #Artist
             self.playingText2.DrawOn(image, self.text2Pos)    #Title
             self.playingText3.DrawOn(image, self.text6Pos)    #Format
@@ -554,16 +504,20 @@ class NowPlayingScreen():
             self.playbackPoint = oled.seek / oled.duration / 10
             self.barwidth = 156
             self.bar = 156 * self.playbackPoint / 100
-            print('seek: ', oled.seek)
-            print('duration: ', oled.duration)
-            print('bar: ', self.bar)
             drawalfa.text((1, 54), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=self.font4, fill='white')
             drawalfa.text((210, 54), str(timedelta(seconds=oled.duration)), font=self.font4, fill='white')
             drawalfa.rectangle((50 , 59, 206, 59), outline='white', fill='black')
             drawalfa.rectangle((50, 56, 50 + self.bar, 62), outline='white', fill='black')
             compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
             image.paste(compositeimage.convert('RGB'), (0, 0))
-	
+
+        if self.playingIcon != self.icon['stop'] and oled.duration == None:
+            self.playingText1.DrawOn(image, self.text1Pos)    #Artist
+            self.playingText2.DrawOn(image, self.text2Pos)    #Title
+            self.playingText3.DrawOn(image, self.text6Pos)    #Format
+            self.playingText4.DrawOn(image, self.text7Pos)    #Samplerate
+            self.playingText5.DrawOn(image, self.text8Pos)    #Bitdep
+           	
         if self.playingIcon == self.icon['stop']:
             self.standbyText1.DrawOn(image, self.text3Pos)    #Clock
             self.standbyText2.DrawOn(image, self.text4Pos)    #IP
@@ -586,7 +540,7 @@ class NowPlayingScreen():
         self.iconcountdown = time
 
 class MediaLibrarayInfo():
-    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14, fontaw, font5, iconfontBottom, labelfont, lablefont2) #, mediaicon): #this line references to oled.modal = NowPlayingScreen
+    def __init__(self, height, width, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, row14, fontaw, font5, iconfontBottom, labelfont, lablefont2, mediaicon): 
         self.height = height
         self.width = width
         self.font4 = font4
@@ -594,7 +548,7 @@ class MediaLibrarayInfo():
         self.iconfontBottom = iconfontBottom
         self.labelfont = labelfont
         self.labelfont2 = labelfont2
-#        self.mediaicon = mediaicon
+        self.mediaicon = mediaicon
         self.LibraryInfoText1 = StaticText(self.height, self.width, row5, font4)   	      #Text for Artists
         self.LibraryInfoText2 = StaticText(self.height, self.width, row1, font4)  	      #Number of Artists
         self.LibraryInfoText3 = StaticText(self.height, self.width, row6, font4)  	      #Text for Albums
@@ -609,8 +563,8 @@ class MediaLibrarayInfo():
         self.LibraryInfoText12 = StaticText(self.height, self.width, row12, mediaicon)        #icon for Albums
         self.LibraryInfoText13 = StaticText(self.height, self.width, row13, mediaicon)        #icon for Songs
         self.LibraryInfoText14 = StaticText(self.height, self.width, row14, mediaicon)        #icon for duration
-#        self.icon = {'info':'\F0CA'}
-#        self.mediaIcon = self.icon['info']
+        self.icon = {'info':'\F0CA'}
+        self.mediaIcon = self.icon['info']
         self.iconcountdown = 0
         self.text1Pos = (138, 2)        					   #Number of Artists
         self.text2Pos = (138, 15)      						   #Number of Albums4
@@ -662,20 +616,6 @@ class MediaLibrarayInfo():
             self.LibraryInfoText13.DrawOn(image, self.text13Pos)   #icon for Songs
             self.LibraryInfoText14.DrawOn(image, self.text14Pos)   #icon for duration
                     
-        if self.iconcountdown > 0:
-            compositeimage = Image.composite(self.alfaimage, image.convert('RGBA'), self.alfaimage)
-            image.paste(compositeimage.convert('RGB'), (0, 0))
-            self.iconcountdown -= 1
-            
-    def SetMediaIcon(self, state, time=0):
-        if state in self.icon:
-            self.mediaIcon = self.icon[state]
-        self.alfaimage.paste((0, 0, 0, 0), [0, 0, image.size[0], image.size[1]])
-        drawalfa = ImageDraw.Draw(self.alfaimage)
-        iconwidth, iconheight = drawalfa.textsize(self.mediaIcon, font=self.fontaw)
-        left = (self.width - iconwidth + 34) / 2 #here is defined where the play/pause/stop icons are displayed. 
-        drawalfa.text((left, 4), self.mediaIcon, font=self.fontaw, fill=(255, 255, 255, 96))
-        self.iconcountdown = time
 
 class SpectrumScreen():
     def __init__(self, height, width, row1, row2, row3, row4, row5, font4): #this line references to oled.modal = NowPlayingScreen
@@ -688,35 +628,60 @@ class SpectrumScreen():
         self.draw = ImageDraw.Draw(self.image)
 
     def DrawOn(self, image):
-        self.image.paste((0, 0, 0), [0, 0, image.size[0], image.size[1]])  
-        self.playbackPoint = oled.seek / oled.duration / 10
-        self.barwidth = 156
-        self.bar = 156 * self.playbackPoint / 100
-        self.draw.rectangle((50 , 59, 206, 59), outline='white', fill='black')
-        self.draw.rectangle((50, 56, 50 + self.bar, 62), outline='white', fill='black')
-        self.draw.text((1, 54), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=self.font4, fill='white')
-        self.draw.text((210, 54), str(timedelta(seconds=oled.duration)), font=self.font4, fill='white')
-        try: 
-            subprocess.check_output('pgrep -x cava', shell = True)
-        except:
-            subprocess.call("cava &", shell = True)
-        cava_fifo = open("/tmp/cava_fifo", 'r')
-        data = cava_fifo.readline().strip().split(';')
-        for i in range(0, len(data)-1):
-            try:
-                self.draw.rectangle((i*16, 50, i*16+8, 50-int(data[i])), outline = 'white', fill ='white')  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
-                image.paste(self.image, (0, 0))
-                if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):
-                     oled.activeSong = newSong
-                     oled.activeArtist = newArtist
-                     if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
-                        SetState(STATE_PLAYER)
-                        oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)
-                     if oled.state == STATE_PLAYER and newStatus == 'stop':                                          #this is the "Standby-Screen"
-                        SetState(STATE_PLAYER)
-                        oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                        
-            except:
-                pass
+        if oled.duration != None:
+          self.image.paste((0, 0, 0), [0, 0, image.size[0], image.size[1]])  
+          self.playbackPoint = oled.seek / oled.duration / 10
+          self.barwidth = 156
+          self.bar = 156 * self.playbackPoint / 100
+          self.draw.rectangle((50 , 59, 206, 59), outline='white', fill='black')
+          self.draw.rectangle((50, 56, 50 + self.bar, 62), outline='white', fill='black')
+          self.draw.text((1, 54), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=self.font4, fill='white')
+          self.draw.text((210, 54), str(timedelta(seconds=oled.duration)), font=self.font4, fill='white')
+          try: 
+              subprocess.check_output('pgrep -x cava', shell = True)
+          except:
+              subprocess.call("cava &", shell = True)
+          cava_fifo = open("/tmp/cava_fifo", 'r')
+          data = cava_fifo.readline().strip().split(';')
+          for i in range(0, len(data)-1):
+              try:
+                  self.draw.rectangle((i*16, 50, i*16+8, 50-int(data[i])), outline = 'white', fill ='white')  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                  image.paste(self.image, (0, 0))
+                  if specstatus1 != specstatus2:
+                       oled.activeSong = newSong
+                       oled.activeArtist = newArtist
+                       if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
+                          SetState(STATE_PLAYER)
+                          oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)
+                       if oled.state == STATE_PLAYER and newStatus == 'stop' or oled.playState == 'stop':                                          #this is the "Standby-Screen"
+                          SetState(STATE_PLAYER)
+                          oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                        
+              except:
+                  pass   
+
+        if oled.duration == None:
+          self.image.paste((0, 0, 0), [0, 0, image.size[0], image.size[1]])
+          try: 
+              subprocess.check_output('pgrep -x cava', shell = True)
+          except:
+              subprocess.call("cava &", shell = True)
+          cava_fifo = open("/tmp/cava_fifo", 'r')
+          data = cava_fifo.readline().strip().split(';')
+          for i in range(0, len(data)-1):
+              try:
+                  self.draw.rectangle((i*16, 50, i*16+8, 50-int(data[i])), outline = 'white', fill ='white')  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                  image.paste(self.image, (0, 0))
+                  if specstatus1 != specstatus2:
+                       oled.activeSong = newSong
+                       oled.activeArtist = newArtist
+                       if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
+                          SetState(STATE_PLAYER)
+                          oled.modal.UpdatePlayingInfo(newArtist, newSong, newFormat, newSamplerate, newBitdepth, oled.playIcon, oled.pauseIcon, oled.stopIcon, oled.prevIcon, oled.nextIcon)
+                       if oled.state == STATE_PLAYER and newStatus == 'stop' or oled.playState == 'stop':                                          #this is the "Standby-Screen"
+                          SetState(STATE_PLAYER)
+                          oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryIcon, oled.playlistIcon, oled.queueIcon, oled.libraryInfo)                         
+              except:
+                  pass   
      
 
 class MenuScreen():
@@ -770,7 +735,8 @@ class MenuScreen():
         self.MenuUpdate()
 
     def SelectedOption(self):
-        return self.selectedOption
+        print('selectedOption', self.selectedOption)
+        return self.selectedOption 
 
     def DrawOn(self, image):
         if self.hasLabel:
@@ -827,6 +793,7 @@ def ButtonD_PushEvent(hold_time):
             crl.perform()
             crl.close()
             get_body = b_obj.getvalue()
+            print('getBody',get_body)
             SetState(STATE_LIBRARY_INFO)
             oled.playState = 'info'
             onPushCollectionStats(get_body)
@@ -848,12 +815,16 @@ def RightKnob_RotaryEvent(dir):
     oled.stateTimeout = 6.0
     if oled.state != STATE_QUEUE_MENU:
         SetState(STATE_QUEUE_MENU)
-    if dir == RotaryEncoder.LEFT:
+    if oled.state == STATE_QUEUE_MENU and dir == RotaryEncoder.LEFT:
         oled.modal.PrevOption()
-    elif dir == RotaryEncoder.RIGHT:
+        oled.selQueue = oled.modal.SelectedOption()
+        emit_track = True
+        SpectrumStamp = 0.0 
+    elif oled.state == STATE_QUEUE_MENU and dir == RotaryEncoder.RIGHT:
         oled.modal.NextOption()
-    oled.playPosition = oled.modal.SelectedOption()
-    emit_track = True 
+        oled.selQueue = oled.modal.SelectedOption()
+        emit_track = True
+        SpectrumStamp = 0.0 
 
 
 def RightKnob_PushEvent(hold_time):
@@ -901,9 +872,7 @@ receive_thread.daemon = True
 receive_thread.start()
 
 volumioIO.on('pushState', onPushState)
-volumioIO.on('pushListPlaylist', onPushListPlaylist)
 volumioIO.on('pushQueue', onPushQueue)
-volumioIO.on('pushBrowseLibrary', onLibraryBrowse)
 
 # get list of Playlists and initial state
 volumioIO.emit('listPlaylist')
@@ -935,14 +904,32 @@ def PlaypositionHelper():
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
 PlayPosHelp.start()
 
+def printhelper():
+  while True:
+    print('oled.state: ', oled.state)
+    print('oled.playState: ', oled.playState)
+    print('SpectrumStamp: ', SpectrumStamp)
+    print('seek: ', oled.seek)
+    print('oled.playPosition', oled.playPosition)
+    sleep(1.0)
+
+Prints = threading.Thread(target=printhelper, daemon=True)
+Prints.start()
+
 while True:
+
     if emit_track and oled.stateTimeout < 4.5:
         emit_track = False
         try:
-            print('Track selected: ', oled.queue[oled.playPosition].encode('ascii', 'ignore'))
+            print('Track selected: ', oled.selQueue)
+            SpectrumStamp = 0.0
+            SetState(STATE_PLAYER)
+            InfoTag = 0
         except IndexError:
             pass
-        volumioIO.emit('play', {'value':oled.playPosition})
+        volumioIO.emit('stop')
+        sleep(0.2)
+        volumioIO.emit('play', {'value':oled.selQueue})
     sleep(0.1)
     
     if oled.state == STATE_PLAYER and InfoTag <= 3 and newStatus != 'stop':
@@ -966,11 +953,11 @@ while True:
         oled.modal.UpdateStandbyInfo(oled.time, oled.IP, oled.date, oled.libraryInfo)
 
 #if playback is paused, here is defined when the Player goes back to "Standby"/Stop		
-    if oled.state == 6 and newStatus == 'stop':
+    if oled.state == 3 and newStatus == 'stop':
        SpectrumStamp = 0.0
        SetState(STATE_PLAYER)
 
-    if oled.state == 6 and newStatus == 'pause':
+    if oled.state == 3 and newStatus == 'pause':
        SpectrumStamp = 0.0
        SetState(STATE_PLAYER)
 
@@ -983,5 +970,6 @@ while True:
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > 15:
          varcanc = True
          volumioIO.emit('stop')
+         secvar = 0.0
 
 sleep(0.1)
