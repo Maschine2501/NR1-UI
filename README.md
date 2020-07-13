@@ -36,7 +36,7 @@ The project is not finished yet... but close the the goal!
 
 ## To-Do: 
 ---
-[ ] Tune the whole UI (fonts, positions... etc.)
+[] Tune the whole UI (fonts, positions... etc.)
 [ ] Add RS232 -> Braun Master Control communication
 [ ] Add a "progress bar" for Playback
 [ ] Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
