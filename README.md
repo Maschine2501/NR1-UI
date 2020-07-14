@@ -16,6 +16,12 @@ So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
 
+![1](sudo cp ~/NR1-UI/nr1ui-main.service /lib/systemd/system/)
+
+![2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/Queue.gif)
+
+![3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/playback.gif)
+
 ## Features of Maschine2501/NR1-UI:
 ---
 * 4 Button Interface (Button function depends on "State" of the screen, e.g. playback, menu...)
