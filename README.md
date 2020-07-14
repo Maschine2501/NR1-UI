@@ -38,8 +38,6 @@ The project is not finished yet... but close the the goal!
 ---
 - [ ] Tune the whole UI (fonts, positions... etc.)
 - [ ] Add RS232 -> Braun Master Control communication
-- [ ] Add a "progress bar" for Playback
-- [ ] Maybe integrate "CAVA" to display a bargraph spectrum? (hot topic!!!)
 - [ ] Make versions for other displays? like ssd1306, ssd1309? Maybe...
 
 ## Allready Done:
@@ -57,6 +55,9 @@ The project is not finished yet... but close the the goal!
 - [x] implemented a new StandbyLED module
 - [x] implemented a logic to select the active network card and display it`s IP
 - [x] removed Volume Screen and Volume interactions completely
+- [x] Add a "progress bar" for Playback
+- [x] integrated "CAVA" to display a bargraph spectrum
+- [x] added a "config"-part att the beginning of the code, to configure the whole display for your needs
 
 ## IMPORTANT!
 ---
