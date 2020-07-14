@@ -16,7 +16,7 @@ So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
 
-![1](sudo cp ~/NR1-UI/nr1ui-main.service /lib/systemd/system/)
+![1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/StdBy-MLib.gif)
 
 ![2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/Queue.gif)
 
