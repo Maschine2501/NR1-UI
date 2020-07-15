@@ -111,13 +111,12 @@ The project is not finished yet... but close the the goal!
 ### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
 ---
 
-### [contact me](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
+## Your Display is not supported yet? You have an idea for a function/feature?
+
+### [contact me :-)](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
+
 ---
 
-### [Oled-UI-Remote Project](https://github.com/Maschine2501/RC2-UI)
-![Remote](https://i.ibb.co/qWpqB0M/20200405-124431.jpg)
-
-
-### [buy me a coffee ;-)](https://paypal.me/maschine2501)
+### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
