@@ -8,7 +8,7 @@ def show_logo(filename, device):
     logoImage = Image.new('RGB', (device.width, device.height))
     img_path = os.path.dirname(os.path.realpath(__file__)) + '/../img/'
     try:
-        logoImage = Image.open(img_path + filename) #.resize((device.width, device.height), Image.ANTIALIAS)
+        logoImage = Image.open(img_path + filename).convert('RGB') #.resize((device.width, device.height), Image.ANTIALIAS)
     except IOError:
         print("Cannot open file %s" % filename)
         pass
