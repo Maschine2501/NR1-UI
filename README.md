@@ -5,6 +5,7 @@ Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-Ole
 
 # NR1-UI
 Im building a Network Hifi Receiver from scratch.
+Main components are a RaspberryPi4 and an HiFi-Berry-Dac.
 An old Braun T2 Tuner serves as case for the player.
 To keep as much as possible from the look of the device i needed an Interface for Volumio.
 And especialy one that supports a 3,2" ssd1322 SPI Oled with 256x64Pixel.
