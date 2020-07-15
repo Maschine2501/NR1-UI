@@ -16,11 +16,17 @@ So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
 
-![1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/StdBy-MLib.gif)
+![ssd1322-1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/BootupAndPlayback1322.gif)
 
-![2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/Queue.gif)
+![ssd1322-2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/QueueWebradio1322.gif)
 
-![3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/playback.gif)
+![ssd1322-3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/StandbyMediaLibrayInfo1322.gif)
+
+![ssd1306-1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/BootPlayback1306.gif)
+
+![ssd1306-2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/QueueWebradio1306.gif)
+
+![ssd1306-3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/StandByMediaLibraryInfo1306.gif)
 
 ## Features of Maschine2501/NR1-UI:
 ---
@@ -36,6 +42,13 @@ The project is not finished yet... but close the the goal!
 * shutdown interaction with SIGNAL (SIGTERM)
 * 8 LED's controlled by an PCF8574T (i2c gpio-extender) -> Cpu-load on 5 LED's, power-, play- and stere-indicator.
 * IP adress is selected automaticaly (eth0 or wlan0)
+* Playback-"progress bar"
+* spectrum display -> "CAVA" is used to display a bargraph spectrum
+* easy customization -> realized by a "config"-part at the beginning of the code
+* compatible with ssd1306(i2c) and ssd1322(spi) oled displays
+* versions without spectrum for ssd1322 and ssd1306 displays
+* selectable if you use led's or not -> further selection: LED's by GPIO or i2c extender connected
+* selectable if you use external standby equipment -> if so: automatic shutdown!
 * maybe more features will come... ^^
 
 * Some bugs will (not often) happen. Will debug it soon.
@@ -63,46 +76,28 @@ The project is not finished yet... but close the the goal!
 - [x] removed Volume Screen and Volume interactions completely
 - [x] Add a "progress bar" for Playback
 - [x] integrated "CAVA" to display a bargraph spectrum
-- [x] added a "config"-part att the beginning of the code, to configure the whole display for your needs
-
-## IMPORTANT!
----
-* in the nightly script, the interaction with my Standby-Module is active 
-* if you don't put an "HIGH" Signal on GPIO 26 the pi will shutdown
-
-## Demo Video from nightly-build (05.03.2020):
----
-[![Video-Sample](http://img.youtube.com/vi/9TtgO0_KqNk/0.jpg)](http://www.youtube.com/watch?v=9TtgO0_KqNk "Video-Sample")
-
-### [Pictures of the assembled Network Receiver](https://github.com/Maschine2501/NR1-UI/wiki/Pictures-and-Videos)
-
-## Why is the first part of the display empty?
----
-The cutout in the front of the device is smaller as the ssd1322 display -> so the display actually don't use the first 42 pixels.
-
-![hifi-tuner case](https://i.ibb.co/WpsSd5z/Entwurfszeichnung-NR1-500px.jpg)
+- [x] added a "config"-part at the beginning of the code, to configure the whole display for your needs
+- [x] added a ssd1306 Version
+- [x] addes versions without spectrum for ssd1322 and ssd1306 displays
 
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
-## But you want it on the whole Display?
 ---
-Simply change the value's from "36" to "0" (self.text1Pos = (36, 2))... that's it! (Tutorials/Guides will follow...)
----
-## [installation steps (stable with spectrum and progressbar)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(spectrum-and-progressbar))
----
-## [installation steps (stable release)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(stable-release))
----
-## [installation steps (nightly build)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(nightly))
----
-## Check the logs
----
-#### for the stable build
 
-sudo journalctl -fu nr1ui.service
+## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
-#### for the nightly build:
+---
+## [Installation steps (ssd1322 with spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1322-with-spectrum))
+---
+## [Installation steps (ssd1322 without spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1322-without-spectrum))
+---
+## [Installation steps (ssd1306 with spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1306-with-spectrum))
+---
+## [Installation steps (ssd1306 without spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1306---without-spectrum))
+---
+## [Installation steps (Braun NR1 specific)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(Braun-NR1-specific))
+---
 
-sudo journalctl -fu nr1ui-nightly.service
 
 ### [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
 ---
