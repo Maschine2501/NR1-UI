@@ -58,7 +58,11 @@ The project is not finished yet... but close the the goal!
 ---
 - [ ] Tune the whole UI (fonts, positions... etc.)
 - [ ] Add RS232 -> Braun Master Control communication
-- [ ] Make versions for other displays? like ssd1306, ssd1309? Maybe...
+- [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
+- [ ] Combine all Versions to one Code (with configuration at the begining)
+- [ ] Make More Screen-Layouts -> selectable by config
+- [ ] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
+- [ ] A VU-Meter Screen?
 
 ## Allready Done:
 ---
