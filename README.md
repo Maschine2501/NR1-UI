@@ -17,17 +17,23 @@ So this ist the new version, now depending on python 3.5.2
 
 The project is not finished yet... but close the the goal!
 
-![ssd1322-1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/BootupAndPlayback1322.gif)
+## The Code is now modular:
 
-![ssd1322-2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/QueueWebradio1322.gif)
+### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L68) in nr1ui.py
+### To change the look just edit [line66](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L66) in nr1ui.py to the desired Screen:
 
-![ssd1322-3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/StandbyMediaLibrayInfo1322.gif)
-
-![ssd1306-1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/BootPlayback1306.gif)
-
-![ssd1306-2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/QueueWebradio1306.gif)
-
-![ssd1306-3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/StandByMediaLibraryInfo1306.gif)
+#### Screen1 (ssd1322):
+![ssd1322-Screen1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen1.gif)
+#### Screen2 (ssd1322):
+![ssd1322-Screen2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen2.gif)
+#### Screen3 (ssd1322):
+![ssd1322-Screen3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen3.gif)
+#### Screen4 (ssd1322):
+![ssd1322-Screen4](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen4.gif)
+#### Screen1 (ssd1306):
+![ssd1306-Screen1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1306-Screen1.gif)
+#### Screen4 (ssd1306):
+![ssd1306-Screen4](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1306-Screen4.gif)
 
 ## Features of Maschine2501/NR1-UI:
 ---
@@ -50,6 +56,10 @@ The project is not finished yet... but close the the goal!
 * versions without spectrum for ssd1322 and ssd1306 displays
 * selectable if you use led's or not -> further selection: LED's by GPIO or i2c extender connected
 * selectable if you use external standby equipment -> if so: automatic shutdown!
+* All-in-one Version (for both: ssd1306 and ssd1322)
+* Screen-Layouts -> selectable in line66 oledui.py
+* Added an "Playback-Indicator-Icon" to the NowPlayingScreen
+* moved all Layout related stuff to a config file, for more easy handling (./config/ScreenConfig.py)
 * maybe more features will come... ^^
 
 * Some bugs will (not often) happen. Will debug it soon.
@@ -59,9 +69,6 @@ The project is not finished yet... but close the the goal!
 - [ ] Tune the whole UI (fonts, positions... etc.)
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
-- [ ] Combine all Versions to one Code (with configuration at the begining)
-- [ ] Make More Screen-Layouts -> selectable by config
-- [ ] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
 - [ ] A VU-Meter Screen?
 
 ## Allready Done:
@@ -84,6 +91,9 @@ The project is not finished yet... but close the the goal!
 - [x] added a "config"-part at the beginning of the code, to configure the whole display for your needs
 - [x] added a ssd1306 Version
 - [x] addes versions without spectrum for ssd1322 and ssd1306 displays
+- [x] Combine all Versions to one Code (with configuration at the begining)
+- [x] Make More Screen-Layouts -> selectable by config
+- [x] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
 
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
@@ -92,15 +102,10 @@ The project is not finished yet... but close the the goal!
 ## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
 ---
-## [Installation steps (ssd1322 with spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1322-with-spectrum))
+## [Installation steps (NR1UI)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(Braun-NR1-specific))
 ---
-## [Installation steps (ssd1322 without spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1322-without-spectrum))
----
-## [Installation steps (ssd1306 with spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1306-with-spectrum))
----
-## [Installation steps (ssd1306 without spectrum)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(ssd1306---without-spectrum))
----
-## [Installation steps (Braun NR1 specific)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(Braun-NR1-specific))
+## Configuration Manual (will follow soon!)
+
 ---
 
 
