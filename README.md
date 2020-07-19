@@ -102,7 +102,7 @@ The project is not finished yet... but close the the goal!
 ## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
 ---
-## [Installation steps (NR1UI)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-steps-(Braun-NR1-specific))
+## [Installation steps (NR1UI)](https://github.com/Maschine2501/NR1-UI/wiki/Installatin-steps-(NR1UI))
 ---
 ## Configuration Manual (will follow soon!)
 
