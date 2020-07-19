@@ -59,7 +59,7 @@ The project is not finished yet... but close the the goal!
 * All-in-one Version (for both: ssd1306 and ssd1322)
 * Screen-Layouts -> selectable in line66 oledui.py
 * Added an "Playback-Indicator-Icon" to the NowPlayingScreen
-* moved all Layout related stuff to a config file, for more easy handling (./config/ScreenConfig.py)
+* moved all Layout related stuff to a config file, for more easy handling [(./config/ScreenConfig.py)](https://github.com/Maschine2501/NR1-UI/blob/master/config/ScreenConfig.py)
 * maybe more features will come... ^^
 
 * Some bugs will (not often) happen. Will debug it soon.
