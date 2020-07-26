@@ -22,6 +22,9 @@ The project is not finished yet... but close the the goal!
 ### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L68) in nr1ui.py
 ### To change the look just edit [line66](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L66) in nr1ui.py to the desired Screen:
 
+#### Base ssd1322 (on all Layouts the same:
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
+
 #### Screen1 (ssd1322):
 ![ssd1322-Screen1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen1.gif)
 #### Screen2 (ssd1322):
