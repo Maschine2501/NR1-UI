@@ -40,7 +40,7 @@ The project is not finished yet... but close the the goal!
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(2).png)
 
 #### Base ssd1306 (on all Layouts the same):
-![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(3).png)
 #### Screen1 (ssd1306):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(2).png)
 #### Screen2 (ssd1306):
