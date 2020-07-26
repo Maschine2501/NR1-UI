@@ -47,6 +47,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
+import uuid
 
 #from decimal import Decimal
 #________________________________________________________________________________________
@@ -63,9 +64,8 @@ from modules.rotaryencoder import RotaryEncoder
 StandbyActive = False          #False or True
 ledActive = False              #False or True
 ledTechnology = None           #None or 'GPIOusage' or 'pcf8574usage'
-NowPlayingLayout = 'Screen2'   #'Screen1' or 'Screen2' or 'Screen3' or 'Screen4'  
-#BraunNR1mode = False           #False or True
-DisplayTechnology = 'spi1322'  #'spi1322' or i2c1306 
+NowPlayingLayout = 'Screen1'   #'Screen1' or 'Screen2' or 'Screen3' or 'Screen4' or 'Screen5' or 'Screen6' or 'Screen7' or 'Screen8'
+DisplayTechnology = 'spi1322'  #'spi1322' or 'i2c1306' or 'Braun' 
 
 #config for Button and Rotary-Encoder GPIO-Usage:   !!! Use BCM-Pin-Nr. not the physical Pin-Nr. !!!
 oledBtnA = 4
@@ -77,7 +77,7 @@ oledRtrRight = 23
 oledRtrBtn = 27
 
 #config for Display:
-oledrotation = 2           # 2 = 180° rotation, 0 = 0° rotation
+oledrotation = 0           # 2 = 180° rotation, 0 = 0° rotation
 
 #config for timers:
 oledPause2StopTime = 15.0
@@ -101,6 +101,12 @@ if DisplayTechnology == 'spi1322':
    from luma.oled.device import ssd1322
    from modules.displayFull import*
    from config.ScreenConfig import*
+
+if DisplayTechnology == 'Braun':
+   from luma.core.interface.serial import spi
+   from luma.oled.device import ssd1322
+   from modules.displayBraun import*
+   from config.ScreenConfigBraun import*
 
 if DisplayTechnology == 'i2c1306':
     from luma.core.interface.serial import i2c
@@ -135,7 +141,7 @@ STATE_LIBRARY_INFO = 2
 
 UPDATE_INTERVAL = 0.034
 
-if DisplayTechnology == 'spi1322':
+if DisplayTechnology == 'spi1322' or DisplayTechnology == 'Braun':
     interface = spi(device=0, port=0)
     oled = ssd1322(interface, rotate=oledrotation) 
     oled.WIDTH = 256
@@ -165,8 +171,8 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-if DisplayTechnology == 'spi1322':
-    oled.date = now.strftime("%d.  %m.  %Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
+if DisplayTechnology != 'i2c1306':
+    oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
 if DisplayTechnology == 'i2c1306':
     oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
@@ -182,10 +188,14 @@ oled.activePlaytime = ''                   #makes oled.activePlaytime globaly us
 oled.randomTag = False                     #helper to detect if "Random/shuffle" is set
 oled.repeatTag = False                     #helper to detect if "repeat" is set
 oled.ShutdownFlag = False                  #helper to detect if "shutdown" is running. Prevents artifacts from Standby-Screen during shutdown
+varcanc = True                      #helper for pause -> stop timeout counter
+secvar = 0.0
+oled.volume = 100
+
 
 oled.selQueue = ''
 
-if DisplayTechnology == 'spi1322':
+if DisplayTechnology != 'i2c1306':
     image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
 if DisplayTechnology == 'i2c1306':
     image = Image.new('1', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4))  
@@ -199,18 +209,22 @@ oled.clear()
 # / __/ / /_/ / / / / /_(__  )  _   
 #/_/    \____/_/ /_/\__/____/  (_)  
 #
-if DisplayTechnology == 'spi1322':  
+if DisplayTechnology != 'i2c1306':  
     font = load_font('Oxanium-Bold.ttf', 18)                       #used for Artist ('Oxanium-Bold.ttf', 20)  
     font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all menus
     font3 = load_font('Oxanium-Regular.ttf', 16)                   #used for Song ('Oxanium-Regular.ttf', 18) 
     font4 = load_font('Oxanium-Medium.ttf', 12)                    #used for Format/Smplerate/Bitdepth
+    font5 = load_font('Oxanium-Medium.ttf', 12)                    #used for Artist / Screen5
+    font6 = load_font('Oxanium-Regular.ttf', 12)                   #used for Song / Screen5
+    font7 = load_font('Oxanium-Light.ttf', 10)                     #used for all other / Screen5
+    font8 = load_font('Oxanium-Regular.ttf', 10)                   #used for Song / Screen5
     mediaicon = load_font('fa-solid-900.ttf', 10)    	           #used for icon in Media-library info
     iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
     labelfont = load_font('entypo.ttf', 12)                        #used for Menu-icons
     iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
     fontClock = load_font('DSG.ttf', 30)                           #used for clock
-    fontDate = load_font('DSEG7Classic-Regular.ttf', 10)           #used for Date 
-    fontIP = load_font('DSEG7Classic-Regular.ttf', 10)             #used for IP  
+    fontDate = load_font('Oxanium-Light.ttf', 12)           #used for Date 'DSEG7Classic-Regular.ttf'
+    fontIP = load_font('Oxanium-Light.ttf', 12)             #used for IP 'DSEG7Classic-Regular.ttf'
 if DisplayTechnology == 'i2c1306':
     font = load_font('Oxanium-Bold.ttf', 16)                       #used for Artist
     font2 = load_font('Oxanium-Light.ttf', 12)                     #used for all menus
@@ -310,8 +324,8 @@ def GetWLANIP():
 #/_____/\____/\____/\__/      \____/ .___/  (_)  
 #                                 /_/            
 #
+signal.signal(signal.SIGTERM, sigterm_handler)
 if StandbyActive == True and firstStart == True:
-    signal.signal(signal.SIGTERM, sigterm_handler)
     StandByListen = threading.Thread(target=StandByWatcher, daemon=True)
     StandByListen.start()
     if ledActive != True:
@@ -321,7 +335,6 @@ GetIP()
 
 if ledActive == True and firstStart == True:
     SysStart()
-    sleep (6.0)
     Processor = threading.Thread(target=CPUload, daemon=True)
     Processor.start()
     firstStart = False
@@ -397,13 +410,17 @@ def onPushState(data):
         newSong = ''
     if newSong is None:
         newSong = ''
+    if newSong == 'HiFiBerry ADC':
+        newSong = 'Bluetooth-Audio'
         
     if 'artist' in data:
         newArtist = data['artist']
     else:
         newArtist = ''
-    if newArtist is None:   #volumio can push NoneType
+    if newArtist is None and newSong != 'HiFiBerry ADC':   #volumio can push NoneType
         newArtist = ''
+    if newArtist == '' and newSong == 'HiFiBerry ADC':
+        newArtist = 'Line-Input:'
 	
     if 'stream' in data:
         newFormat = data['stream']
@@ -411,8 +428,10 @@ def onPushState(data):
         newFormat = ''
     if newFormat is None:
         newFormat = ''
-    if newFormat == True:
+    if newFormat == True and newSong != 'HiFiBerry ADC':
        newFormat = 'WebRadio'
+    if newFormat == True and newSong == 'HiFiBerry ADC':
+        newFormat = 'Live-Stream'
 
 	#If a stream (like webradio) is playing, the data set for 'stream'/newFormat is a boolian (True)
 	#drawOn can't handle that and gives an error. 
@@ -456,6 +475,10 @@ def onPushState(data):
         oled.seek = data['seek']
     else:
         oled.seek = None
+    
+    if 'volume' in data:
+        volume = data['volume']
+        oled.volume = int(volume)/100
 
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
@@ -467,6 +490,8 @@ def onPushState(data):
     if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
         oled.activeSong = newSong
         oled.activeArtist = newArtist
+        varcanc = True                      #helper for pause -> stop timeout counter
+#        secvar = 0.0
         if oled.state == STATE_PLAYER and newStatus != 'stop':                                          #this is the "NowPlayingScreen"
             #SetState(STATE_PLAYER)
             if ledActive == True:
@@ -479,6 +504,8 @@ def onPushState(data):
 #            oled.modal.UpdateStandbyInfo()                                 #here is defined which "data" should be displayed in the class
         
     if newStatus != oled.playState:
+        varcanc = True                      #helper for pause -> stop timeout counter
+#        secvar = 0.0
         oled.playState = newStatus
         if oled.state == STATE_PLAYER:
             if oled.playState != 'stop':
@@ -551,7 +578,7 @@ class NowPlayingScreen():
           
 
     def UpdatePlayingInfo(self):
-        if DisplayTechnology == 'spi1322': 
+        if DisplayTechnology != 'i2c1306': 
             self.image = Image.new('RGB', (self.width, self.height))
             self.draw = ImageDraw.Draw(self.image)
         if DisplayTechnology == 'i2c1306':
@@ -560,7 +587,7 @@ class NowPlayingScreen():
         
 
     def UpdateStandbyInfo(self):
-        if DisplayTechnology == 'spi1322': 
+        if DisplayTechnology != 'i2c1306': 
             self.image = Image.new('RGB', (self.width, self.height))
             self.draw = ImageDraw.Draw(self.image)
         if DisplayTechnology == 'i2c1306':
@@ -568,20 +595,15 @@ class NowPlayingScreen():
             self.draw = ImageDraw.Draw(self.image)
 
     def DrawOn(self, image):
-        if NowPlayingLayout == 'Screen1' and newStatus != 'stop' and DisplayTechnology == 'spi1322':
+        if NowPlayingLayout == 'Screen1' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
-
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((i*Screen1specWide1, Screen1specYposTag, i*Screen1specWide1+Screen1specWide2, Screen1specYposTag-int(data[i])), outline = Screen1specBorder, fill =Screen1specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen1specDistance+i*Screen1specWide1, Screen1specYposTag, Screen1specDistance+i*Screen1specWide1+Screen1specWide2, Screen1specYposTag-int(data[i])), outline = Screen1specBorder, fill =Screen1specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.playbackPoint = oled.seek / oled.duration / 10
@@ -595,46 +617,32 @@ class NowPlayingScreen():
                 self.draw.text((Screen1ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
                 self.draw.text((Screen1DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
                 self.draw.rectangle((Screen1barLineX , Screen1barLineThick1, Screen1barLineX+Screen1barwidth, Screen1barLineThick2), outline=Screen1barLineBorder, fill=Screen1barLineFill)
-                self.draw.rectangle((Screen1barLineX, Screen1barThick1, Screen1barX+self.bar, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
+                self.draw.rectangle((self.bar+Screen1barLineX-Screen1barNibbleWidth, Screen1barThick1, Screen1barX+self.bar+Screen1barNibbleWidth, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
                 image.paste(self.image, (0, 0))
-
 
             if newStatus != 'stop' and oled.duration == None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((i*Screen1specWide1, Screen1specYposTag, i*Screen1specWide1+Screen1specWide2, Screen1specYposTag-int(data[i])), outline = Screen1specBorder, fill = Screen1specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen11specDistance+i*Screen11specWide1, Screen11specYposTag, Screen11specDistance+i*Screen11specWide1+Screen11specWide2, Screen11specYposTag-int(data[i])), outline = Screen11specBorder, fill = Screen11specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.draw.text((Screen1text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen1text02), oled.activeSong, font=font3, fill='white')
-                self.draw.text((Screen1text28), oled.playstateIcon, font=labelfont, fill='white')
-                self.draw.text((Screen1text06), oled.activeFormat, font=font4, fill='white')
-                self.draw.text((Screen1text07), oled.activeSamplerate, font=font4, fill='white')
-                self.draw.text((Screen1text08), oled.activeBitdepth, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
 
-
-        if NowPlayingLayout == 'Screen2' and newStatus != 'stop' and DisplayTechnology == 'spi1322':
+        if NowPlayingLayout == 'Screen2' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((i*Screen2specWide1, Screen2specYposTag, i*Screen2specWide1+Screen2specWide2, Screen2specYposTag-int(data[i])), outline = Screen2specBorder, fill =Screen2specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen2specDistance+i*Screen2specWide1, Screen2specYposTag, Screen2specDistance+i*Screen2specWide1+Screen2specWide2, Screen2specYposTag-int(data[i])), outline = Screen2specBorder, fill =Screen2specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.playbackPoint = oled.seek / oled.duration / 10
@@ -648,45 +656,32 @@ class NowPlayingScreen():
                 self.draw.text((Screen2ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
                 self.draw.text((Screen2DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
                 self.draw.rectangle((Screen2barLineX , Screen2barLineThick1, Screen2barLineX+Screen2barwidth, Screen2barLineThick2), outline=Screen2barLineBorder, fill=Screen2barLineFill)
-                self.draw.rectangle((Screen2barLineX, Screen2barThick1, Screen2barX+self.bar, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
+                self.draw.rectangle((self.bar+Screen2barLineX-Screen2barNibbleWidth, Screen2barThick1, Screen2barX+self.bar+Screen2barNibbleWidth, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((i*Screen2specWide1, Screen2specYposTag, i*Screen2specWide1+Screen2specWide2, Screen2specYposTag-int(data[i])), outline = Screen2specBorder, fill = Screen2specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen22specDistance+i*Screen22specWide1, Screen22specYposTag, Screen22specDistance+i*Screen22specWide1+Screen22specWide2, Screen22specYposTag-int(data[i])), outline = Screen22specBorder, fill = Screen22specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.draw.text((Screen2text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen2text02), oled.activeSong, font=font3, fill='white')
-                self.draw.text((Screen2text28), oled.playstateIcon, font=labelfont, fill='white')
-                self.draw.text((Screen2text06), oled.activeFormat, font=font4, fill='white')
-                self.draw.text((Screen2text07), oled.activeSamplerate, font=font4, fill='white')
-                self.draw.text((Screen2text08), oled.activeBitdepth, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
 
-        if NowPlayingLayout == 'Screen3' and newStatus != 'stop' and DisplayTechnology == 'spi1322':
+        if NowPlayingLayout == 'Screen3' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
-
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((255-i*Screen3specWide1, Screen3specYposTag, 255-i*Screen3specWide1+Screen3specWide2, Screen3specYposTag-int(data[i])), outline = (Screen3specBorder), fill = (Screen3specFill))  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen3specDistance-i*Screen3specWide1, Screen3specYposTag, Screen3specDistance-i*Screen3specWide1+Screen3specWide2, Screen3specYposTag-int(data[i])), outline = Screen3specBorder, fill =Screen3specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.playbackPoint = oled.seek / oled.duration / 10
@@ -700,36 +695,24 @@ class NowPlayingScreen():
                 self.draw.text((Screen3ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
                 self.draw.text((Screen3DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
                 self.draw.rectangle((Screen3barLineX , Screen3barLineThick1, Screen3barLineX+Screen3barwidth, Screen3barLineThick2), outline=Screen3barLineBorder, fill=Screen3barLineFill)
-                self.draw.rectangle((Screen3barLineX, Screen3barThick1, Screen3barX+self.bar, Screen3barThick2), outline=Screen3barBorder, fill= Screen3barFill)
+                self.draw.rectangle((self.bar+Screen3barLineX-Screen3barNibbleWidth, Screen3barThick1, Screen3barX+self.bar+Screen3barNibbleWidth, Screen3barThick2), outline=Screen3barBorder, fill=Screen3barFill)
                 image.paste(self.image, (0, 0))
-
-
 
             if newStatus != 'stop' and oled.duration == None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((255-i*Screen3specWide1, Screen3specYposTag, 255-i*Screen3specWide1+Screen3specWide2, Screen3specYposTag-int(data[i])), outline = Screen3specBorder, fill = Screen3specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen33specDistance+i*Screen33specWide1, Screen33specYposTag, Screen33specDistance+i*Screen33specWide1+Screen33specWide2, Screen33specYposTag-int(data[i])), outline = Screen33specBorder, fill = Screen33specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
                 self.draw.text((Screen3text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen3text02), oled.activeSong, font=font3, fill='white')
-                self.draw.text((Screen3text28), oled.playstateIcon, font=labelfont, fill='white')
-                self.draw.text((Screen3text06), oled.activeFormat, font=font4, fill='white')
-                self.draw.text((Screen3text07), oled.activeSamplerate, font=font4, fill='white')
-                self.draw.text((Screen3text08), oled.activeBitdepth, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
-                if newStatus == 'stop':
-                    oled.modal.UpdateStandbyInfo()  
 
-        if NowPlayingLayout == 'Screen4' and newStatus != 'stop' and DisplayTechnology == 'spi1322':
+        if NowPlayingLayout == 'Screen4' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
                 self.playbackPoint = oled.seek / oled.duration / 10
@@ -743,26 +726,589 @@ class NowPlayingScreen():
                 self.draw.text((Screen4ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
                 self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
                 self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
-                self.draw.rectangle((Screen4barLineX, Screen4barThick1, Screen4barX+self.bar, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
+                self.draw.rectangle((self.bar+Screen4barLineX-Screen4barNibbleWidth, Screen4barThick1, Screen4barX+self.bar+Screen4barNibbleWidth, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
                 image.paste(self.image, (0, 0))
-
 
             if newStatus != 'stop' and oled.duration == None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
                 self.draw.text((Screen4text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen4text02), oled.activeSong, font=font3, fill='white')
-                self.draw.text((Screen4text28), oled.playstateIcon, font=labelfont, fill='white')
-                self.draw.text((Screen4text06), oled.activeFormat, font=font4, fill='white')
-                self.draw.text((Screen4text07), oled.activeSamplerate, font=font4, fill='white')
-                self.draw.text((Screen4text08), oled.activeBitdepth, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
 
+        if NowPlayingLayout == 'Screen5' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+            if newStatus != 'stop' and oled.duration != None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                cava_fifo = open("/tmp/cava_fifo", 'r')
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data = cava_fifo.readline().strip().split(';')
+                data2 = cava2_fifo.readline().strip().split(';')
+                if len(data) >= 64 and newStatus != 'pause':
+                    for i in range(0, len(data)-1):
+                        try:
+                            self.draw.rectangle((Screen5specDistance+i*Screen5specWide1, Screen5specYposTag, Screen5specDistance+i*Screen5specWide1+Screen5specWide2, Screen5specYposTag-int(data[i])), outline = Screen5specBorder, fill =Screen5specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                        except:
+                            continue
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.rectangle((Screen5leftVUDistance+i*Screen5leftVUWide1, Screen5leftVUYpos1, i*Screen5leftVUWide1+Screen5leftVUWide2, Screen5leftVUYpos2), outline = Screen5leftVUBorder, fill = Screen5leftVUFill)
+                            except:
+                                continue
+                    if rightVU != '':
+                        rightVU2 = int(rightVU)        
+                        for i in range(rightVU2):
+                            try:
+                                self.draw.rectangle((Screen5rightVUDistance-i*Screen5rightVUWide1, Screen5rightVUYpos1, Screen5rightVUDistance-i*Screen5rightVUWide1+Screen5rightVUWide2, Screen5rightVUYpos2), outline = Screen5rightVUBorder, fill = Screen5rightVUFill)
+                            except:
+                                continue    
+                self.playbackPoint = oled.seek / oled.duration / 10
+                self.bar = Screen5barwidth * self.playbackPoint / 100
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                position = Screen5text01
+                if self.textwidth <= self.width:
+                    position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
+                self.draw.line((0, 36, 255, 36), fill='white', width=1)
+                self.draw.line((0, 47, 64, 47), fill='white', width=1)
+                self.draw.line((64, 47, 70, 36), fill='white', width=1)
+                self.draw.line((190, 47, 255, 47), fill='white', width=1)
+                self.draw.line((184, 36, 190, 47), fill='white', width=1)
+                self.draw.text((Screen5text28), oled.playstateIcon, font=labelfont, fill='white')
+                self.draw.text((Screen5text06), oled.activeFormat, font=font7, fill='white')
+                self.draw.text((Screen5text07), oled.activeSamplerate, font=font7, fill='white')
+                self.draw.text((Screen5text08), oled.activeBitdepth, font=font7, fill='white')
+                self.draw.text((Screen5ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
+                self.draw.text((Screen5DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                self.draw.rectangle((Screen5barLineX , Screen5barLineThick1, Screen5barLineX+Screen5barwidth, Screen5barLineThick2), outline=Screen5barLineBorder, fill=Screen5barLineFill)
+                self.draw.rectangle((self.bar+Screen5barLineX-Screen5barNibbleWidth, Screen5barThick1, Screen5barX+self.bar+Screen5barNibbleWidth, Screen5barThick2), outline=Screen5barBorder, fill=Screen5barFill)
+                image.paste(self.image, (0, 0))
+
+            if newStatus != 'stop' and oled.duration == None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                cava_fifo = open("/tmp/cava_fifo", 'r')
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data = cava_fifo.readline().strip().split(';')
+                data2 = cava2_fifo.readline().strip().split(';')
+                if len(data) >= 64 and newStatus != 'pause':
+                    for i in range(0, len(data)-1):
+                        try:
+                            self.draw.rectangle((Screen55specDistance+i*Screen55specWide1, Screen55specYposTag, Screen55specDistance+i*Screen55specWide1+Screen55specWide2, Screen55specYposTag-int(data[i])), outline = Screen55specBorder, fill =Screen55specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                        except:
+                            continue
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.rectangle((Screen55leftVUDistance+i*Screen55leftVUWide1, Screen55leftVUYpos1, i*Screen55leftVUWide1+Screen55leftVUWide2, Screen55leftVUYpos2), outline = Screen55leftVUBorder, fill = Screen55leftVUFill)
+                            except:
+                                continue
+                    if rightVU != '':
+                        rightVU2 = int(rightVU)
+   
+                        for i in range(rightVU2):
+                            try:
+                                self.draw.rectangle((Screen55rightVUDistance-i*Screen55rightVUWide1, Screen55rightVUYpos1, Screen55rightVUDistance-i*Screen55rightVUWide1+Screen55rightVUWide2, Screen55rightVUYpos2), outline = Screen55rightVUBorder, fill = Screen55rightVUFill)
+                            except:
+                                continue    
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                position = Screen5text01
+                if self.textwidth <= self.width:
+                    position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
+                self.draw.line((0, 36, 255, 36), fill='white', width=1)
+                self.draw.line((0, 47, 64, 47), fill='white', width=1)
+                self.draw.line((64, 47, 70, 36), fill='white', width=1)
+                self.draw.line((190, 47, 255, 47), fill='white', width=1)
+                self.draw.line((184, 36, 190, 47), fill='white', width=1)
+                self.textwidth1, self.textheight1 = self.draw.textsize(oled.activeFormat, font=font6)
+                position1 = Screen5text06
+                if self.textwidth1 < self.width:
+                    position1 = (int((8+self.width-self.textwidth1)/2), position1[1])
+                self.draw.text((position1), oled.activeFormat, font=font7, fill='white')
+                image.paste(self.image, (0, 0))
+
+        if NowPlayingLayout == 'Screen6' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+            self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+            logoImage = Image.open('/home/volumio/NR1-UI/img/vu.png').convert('RGB')
+            self.image.paste(logoImage, (0, 0))
+            cava2_fifo = open("/tmp/cava2_fifo", 'r')
+            data2 = cava2_fifo.readline().strip().split(';')
+            TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+            self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+            position = Screen6text01
+            if self.textwidth <= self.width:
+                position = (int((self.width-self.textwidth)/2), position[1])
+            self.draw.text((position), TextBaustein, font=font5, fill='white')
+            self.draw.text((Screen6text28), oled.playstateIcon, font=labelfont, fill='white')
+            if len(data2) >= 3:
+                leftVU = data2[0]
+                if leftVU != '':
+                    leftVU1 = int(leftVU)
+                    if leftVU1 == 0:
+                        self.draw.line((63, 160, 5, 47), fill='white', width=2)
+                    elif leftVU1 == 1:
+                        self.draw.line((63, 160, 8, 45), fill='white', width=2)
+                    elif leftVU1 == 2:
+                        self.draw.line((63, 160, 11, 43), fill='white', width=2)
+                    elif leftVU1 == 3:
+                        self.draw.line((63, 160, 14, 41), fill='white', width=2)
+                    elif leftVU1 == 4:
+                        self.draw.line((63, 160, 17, 40), fill='white', width=2)
+                    elif leftVU1 == 5:
+                        self.draw.line((63, 160, 20, 39), fill='white', width=2)
+                    elif leftVU1 == 6:
+                        self.draw.line((63, 160, 23, 37), fill='white', width=2)
+                    elif leftVU1 == 7:
+                        self.draw.line((63, 160, 26, 35), fill='white', width=2)
+                    elif leftVU1 == 8:
+                        self.draw.line((63, 160, 29, 34), fill='white', width=2)
+                    elif leftVU1 == 9:
+                        self.draw.line((63, 160, 32, 33), fill='white', width=2)
+                    elif leftVU1 == 10:
+                        self.draw.line((63, 160, 35, 32), fill='white', width=2)
+                    elif leftVU1 == 11:
+                        self.draw.line((63, 160, 38, 31), fill='white', width=2)
+                    elif leftVU1 == 12:
+                        self.draw.line((63, 160, 41, 31), fill='white', width=2)
+                    elif leftVU1 == 13:
+                        self.draw.line((63, 160, 44, 30), fill='white', width=2)
+                    elif leftVU1 == 14:
+                        self.draw.line((63, 160, 47, 30), fill='white', width=2)
+                    elif leftVU1 == 15:
+                        self.draw.line((63, 160, 50, 29), fill='white', width=2)        
+                    elif leftVU1 == 16:
+                        self.draw.line((63, 160, 53, 28), fill='white', width=2)
+                    elif leftVU1 == 17:
+                        self.draw.line((63, 160, 56, 28), fill='white', width=2)
+                    elif leftVU1 == 18:
+                        self.draw.line((63, 160, 59, 28), fill='white', width=2)
+                    elif leftVU1 == 19:
+                        self.draw.line((63, 160, 62, 28), fill='white', width=2)
+                    elif leftVU1 == 20:
+                        self.draw.line((63, 160, 65, 29), fill='white', width=2)
+                    elif leftVU1 == 21:
+                        self.draw.line((63, 160, 68, 29), fill='white', width=2)
+                    elif leftVU1 == 22:
+                        self.draw.line((63, 160, 71, 29), fill='white', width=2)
+                    elif leftVU1 == 23:
+                        self.draw.line((63, 160, 74, 29), fill='white', width=2)
+                    elif leftVU1 == 24:
+                        self.draw.line((63, 160, 77, 30), fill='white', width=2)
+                    elif leftVU1 == 25:
+                        self.draw.line((63, 160, 80, 30), fill='white', width=2)
+                    elif leftVU1 == 26:
+                        self.draw.line((63, 160, 83, 31), fill='white', width=2)
+                    elif leftVU1 == 27:
+                        self.draw.line((63, 160, 86, 31), fill='white', width=2)
+                    elif leftVU1 == 28:
+                        self.draw.line((63, 160, 89, 32), fill='white', width=2)
+                    elif leftVU1 == 29:
+                        self.draw.line((63, 160, 92, 32), fill='white', width=2)
+                    elif leftVU1 == 30:
+                        self.draw.line((63, 160, 95, 33), fill='white', width=2)
+                    elif leftVU1 == 31:
+                        self.draw.line((63, 160, 98, 33), fill='white', width=2)
+                    elif leftVU1 == 32:
+                        self.draw.line((63, 160, 101, 34), fill='white', width=2)      
+                rightVU = data2[1]
+                if rightVU != '':
+                    rightVU1 = int(rightVU)
+                    if rightVU1 == 0:
+                        self.draw.line((191, 160, 133, 47), fill='white', width=2)
+                    elif rightVU1 == 1:
+                        self.draw.line((191, 160, 136, 45), fill='white', width=2)
+                    elif rightVU1 == 2:
+                        self.draw.line((191, 160, 139, 43), fill='white', width=2)
+                    elif rightVU1 == 3:
+                        self.draw.line((191, 160, 142, 41), fill='white', width=2)
+                    elif rightVU1 == 4:
+                        self.draw.line((191, 160, 145, 40), fill='white', width=2)
+                    elif rightVU1 == 5:
+                        self.draw.line((191, 160, 148, 39), fill='white', width=2)
+                    elif rightVU1 == 6:
+                        self.draw.line((191, 160, 151, 37), fill='white', width=2)
+                    elif rightVU1 == 7:
+                        self.draw.line((191, 160, 154, 35), fill='white', width=2)
+                    elif rightVU1 == 8:
+                        self.draw.line((191, 160, 157, 34), fill='white', width=2)
+                    elif rightVU1 == 9:
+                        self.draw.line((191, 160, 160, 33), fill='white', width=2)
+                    elif rightVU1 == 10:
+                        self.draw.line((191, 160, 163, 32), fill='white', width=2)
+                    elif rightVU1 == 11:
+                        self.draw.line((191, 160, 166, 31), fill='white', width=2)
+                    elif rightVU1 == 12:
+                        self.draw.line((191, 160, 169, 31), fill='white', width=2)
+                    elif rightVU1 == 13:
+                        self.draw.line((191, 160, 172, 30), fill='white', width=2)
+                    elif rightVU1 == 14:
+                        self.draw.line((191, 160, 175, 30), fill='white', width=2)
+                    elif rightVU1 == 15:
+                        self.draw.line((191, 160, 178, 29), fill='white', width=2)        
+                    elif rightVU1 == 16:
+                        self.draw.line((191, 160, 181, 28), fill='white', width=2)
+                    elif rightVU1 == 17:
+                        self.draw.line((191, 160, 184, 28), fill='white', width=2)
+                    elif rightVU1 == 18:
+                        self.draw.line((191, 160, 187, 28), fill='white', width=2)
+                    elif rightVU1 == 19:
+                        self.draw.line((191, 160, 190, 28), fill='white', width=2)
+                    elif rightVU1 == 20:
+                        self.draw.line((191, 160, 193, 29), fill='white', width=2)
+                    elif rightVU1 == 21:
+                        self.draw.line((191, 160, 196, 29), fill='white', width=2)
+                    elif rightVU1 == 22:
+                        self.draw.line((191, 160, 199, 29), fill='white', width=2)
+                    elif rightVU1 == 23:
+                        self.draw.line((191, 160, 202, 29), fill='white', width=2)
+                    elif rightVU1 == 24:
+                        self.draw.line((191, 160, 205, 30), fill='white', width=2)
+                    elif rightVU1 == 25:
+                        self.draw.line((191, 160, 208, 30), fill='white', width=2)
+                    elif rightVU1 == 26:
+                        self.draw.line((191, 160, 211, 31), fill='white', width=2)
+                    elif rightVU1 == 27:
+                        self.draw.line((191, 160, 214, 31), fill='white', width=2)
+                    elif rightVU1 == 28:
+                        self.draw.line((191, 160, 217, 32), fill='white', width=2)
+                    elif rightVU1 == 29:
+                        self.draw.line((191, 160, 220, 32), fill='white', width=2)
+                    elif rightVU1 == 30:
+                        self.draw.line((191, 160, 223, 33), fill='white', width=2)
+                    elif rightVU1 == 31:
+                        self.draw.line((191, 160, 226, 33), fill='white', width=2)
+                    elif rightVU1 == 32:
+                        self.draw.line((191, 160, 229, 34), fill='white', width=2)                      
+            image.paste(self.image, (0, 0))
+
+        if NowPlayingLayout == 'Screen7' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+            if newStatus != 'stop' and oled.duration != None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vu2.png').convert('RGB')
+                self.image.paste(logoImage, (0, 0))
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data2 = cava2_fifo.readline().strip().split(';')
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                position = Screen7text01
+                if self.textwidth <= self.width:
+                    position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font5, fill='white')
+                self.playbackPoint = oled.seek / oled.duration / 10
+                self.bar = Screen7barwidth * self.playbackPoint / 100
+                self.draw.text((Screen7text28), oled.playstateIcon, font=labelfont, fill='white')
+                self.draw.text((Screen7text06), oled.activeFormat, font=font8, fill='white')
+                self.draw.text((Screen7text07), oled.activeSamplerate, font=font8, fill='white')
+                self.draw.text((Screen7text08), oled.activeBitdepth, font=font8, fill='white')
+                self.draw.text((Screen7ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
+                self.draw.text((Screen7DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                self.draw.rectangle((Screen7barLineX , Screen7barLineThick1, Screen7barLineX+Screen7barwidth, Screen7barLineThick2), outline=Screen7barLineBorder, fill=Screen7barLineFill)
+                self.draw.rectangle((self.bar+Screen7barLineX-Screen7barNibbleWidth, Screen7barThick1, Screen7barX+self.bar+Screen7barNibbleWidth, Screen7barThick2), outline=Screen7barBorder, fill=Screen7barFill)                
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        if leftVU1 == 0:
+                            self.draw.line((63, 160, 5, 59), fill='white', width=2)
+                        elif leftVU1 == 1:
+                            self.draw.line((63, 160, 8, 57), fill='white', width=2)
+                        elif leftVU1 == 2:
+                            self.draw.line((63, 160, 11, 55), fill='white', width=2)
+                        elif leftVU1 == 3:
+                            self.draw.line((63, 160, 14, 53), fill='white', width=2)
+                        elif leftVU1 == 4:
+                            self.draw.line((63, 160, 17, 52), fill='white', width=2)
+                        elif leftVU1 == 5:
+                            self.draw.line((63, 160, 20, 51), fill='white', width=2)
+                        elif leftVU1 == 6:
+                            self.draw.line((63, 160, 23, 49), fill='white', width=2)
+                        elif leftVU1 == 7:
+                            self.draw.line((63, 160, 26, 47), fill='white', width=2)
+                        elif leftVU1 == 8:
+                            self.draw.line((63, 160, 29, 46), fill='white', width=2)
+                        elif leftVU1 == 9:
+                            self.draw.line((63, 160, 32, 45), fill='white', width=2)
+                        elif leftVU1 == 10:
+                            self.draw.line((63, 160, 35, 44), fill='white', width=2)
+                        elif leftVU1 == 11:
+                            self.draw.line((63, 160, 38, 43), fill='white', width=2)
+                        elif leftVU1 == 12:
+                            self.draw.line((63, 160, 41, 43), fill='white', width=2)
+                        elif leftVU1 == 13:
+                            self.draw.line((63, 160, 44, 42), fill='white', width=2)
+                        elif leftVU1 == 14:
+                            self.draw.line((63, 160, 47, 42), fill='white', width=2)
+                        elif leftVU1 == 15:
+                            self.draw.line((63, 160, 50, 41), fill='white', width=2)        
+                        elif leftVU1 == 16:
+                            self.draw.line((63, 160, 53, 40), fill='white', width=2)
+                        elif leftVU1 == 17:
+                            self.draw.line((63, 160, 56, 40), fill='white', width=2)
+                        elif leftVU1 == 18:
+                            self.draw.line((63, 160, 59, 40), fill='white', width=2)
+                        elif leftVU1 == 19:
+                            self.draw.line((63, 160, 62, 40), fill='white', width=2)
+                        elif leftVU1 == 20:
+                            self.draw.line((63, 160, 65, 41), fill='white', width=2)
+                        elif leftVU1 == 21:
+                            self.draw.line((63, 160, 68, 41), fill='white', width=2)
+                        elif leftVU1 == 22:
+                            self.draw.line((63, 160, 71, 41), fill='white', width=2)
+                        elif leftVU1 == 23:
+                            self.draw.line((63, 160, 74, 41), fill='white', width=2)
+                        elif leftVU1 == 24:
+                            self.draw.line((63, 160, 77, 42), fill='white', width=2)
+                        elif leftVU1 == 25:
+                            self.draw.line((63, 160, 80, 42), fill='white', width=2)
+                        elif leftVU1 == 26:
+                            self.draw.line((63, 160, 83, 43), fill='white', width=2)
+                        elif leftVU1 == 27:
+                            self.draw.line((63, 160, 86, 43), fill='white', width=2)
+                        elif leftVU1 == 28:
+                            self.draw.line((63, 160, 89, 44), fill='white', width=2)
+                        elif leftVU1 == 29:
+                            self.draw.line((63, 160, 92, 44), fill='white', width=2)
+                        elif leftVU1 == 30:
+                            self.draw.line((63, 160, 95, 45), fill='white', width=2)
+                        elif leftVU1 == 31:
+                            self.draw.line((63, 160, 98, 45), fill='white', width=2)
+                        elif leftVU1 == 32:
+                            self.draw.line((63, 160, 101, 46), fill='white', width=2)      
+                    rightVU = data2[1]
+                    if rightVU != '':
+                        rightVU1 = int(rightVU)
+                        if rightVU1 == 0:
+                            self.draw.line((191, 160, 133, 59), fill='white', width=2)
+                        elif rightVU1 == 1:
+                            self.draw.line((191, 160, 136, 57), fill='white', width=2)
+                        elif rightVU1 == 2:
+                            self.draw.line((191, 160, 139, 55), fill='white', width=2)
+                        elif rightVU1 == 3:
+                            self.draw.line((191, 160, 142, 53), fill='white', width=2)
+                        elif rightVU1 == 4:
+                            self.draw.line((191, 160, 145, 52), fill='white', width=2)
+                        elif rightVU1 == 5:
+                            self.draw.line((191, 160, 148, 51), fill='white', width=2)
+                        elif rightVU1 == 6:
+                            self.draw.line((191, 160, 151, 49), fill='white', width=2)
+                        elif rightVU1 == 7:
+                            self.draw.line((191, 160, 154, 47), fill='white', width=2)
+                        elif rightVU1 == 8:
+                            self.draw.line((191, 160, 157, 46), fill='white', width=2)
+                        elif rightVU1 == 9:
+                            self.draw.line((191, 160, 160, 45), fill='white', width=2)
+                        elif rightVU1 == 10:
+                            self.draw.line((191, 160, 163, 44), fill='white', width=2)
+                        elif rightVU1 == 11:
+                            self.draw.line((191, 160, 166, 43), fill='white', width=2)
+                        elif rightVU1 == 12:
+                            self.draw.line((191, 160, 169, 43), fill='white', width=2)
+                        elif rightVU1 == 13:
+                            self.draw.line((191, 160, 172, 42), fill='white', width=2)
+                        elif rightVU1 == 14:
+                            self.draw.line((191, 160, 175, 42), fill='white', width=2)
+                        elif rightVU1 == 15:
+                            self.draw.line((191, 160, 178, 41), fill='white', width=2)        
+                        elif rightVU1 == 16:
+                            self.draw.line((191, 160, 181, 40), fill='white', width=2)
+                        elif rightVU1 == 17:
+                            self.draw.line((191, 160, 184, 40), fill='white', width=2)
+                        elif rightVU1 == 18:
+                            self.draw.line((191, 160, 187, 40), fill='white', width=2)
+                        elif rightVU1 == 19:
+                            self.draw.line((191, 160, 190, 40), fill='white', width=2)
+                        elif rightVU1 == 20:
+                            self.draw.line((191, 160, 193, 41), fill='white', width=2)
+                        elif rightVU1 == 21:
+                            self.draw.line((191, 160, 196, 41), fill='white', width=2)
+                        elif rightVU1 == 22:
+                            self.draw.line((191, 160, 199, 41), fill='white', width=2)
+                        elif rightVU1 == 23:
+                            self.draw.line((191, 160, 202, 41), fill='white', width=2)
+                        elif rightVU1 == 24:
+                            self.draw.line((191, 160, 205, 42), fill='white', width=2)
+                        elif rightVU1 == 25:
+                            self.draw.line((191, 160, 208, 42), fill='white', width=2)
+                        elif rightVU1 == 26:
+                            self.draw.line((191, 160, 211, 43), fill='white', width=2)
+                        elif rightVU1 == 27:
+                            self.draw.line((191, 160, 214, 43), fill='white', width=2)
+                        elif rightVU1 == 28:
+                            self.draw.line((191, 160, 217, 44), fill='white', width=2)
+                        elif rightVU1 == 29:
+                            self.draw.line((191, 160, 220, 44), fill='white', width=2)
+                        elif rightVU1 == 30:
+                            self.draw.line((191, 160, 223, 45), fill='white', width=2)
+                        elif rightVU1 == 31:
+                            self.draw.line((191, 160, 226, 45), fill='white', width=2)
+                        elif rightVU1 == 32:
+                            self.draw.line((191, 160, 229, 45), fill='white', width=2)                      
+                image.paste(self.image, (0, 0))
+
+            if newStatus != 'stop' and oled.duration == None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vu2.png').convert('RGB')
+                self.image.paste(logoImage, (0, 0))
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data2 = cava2_fifo.readline().strip().split(';')
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                position = Screen7text01
+                if self.textwidth <= self.width:
+                    position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')          
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        if leftVU1 == 0:
+                            self.draw.line((63, 160, 5, 59), fill='white', width=2)
+                        elif leftVU1 == 1:
+                            self.draw.line((63, 160, 8, 57), fill='white', width=2)
+                        elif leftVU1 == 2:
+                            self.draw.line((63, 160, 11, 55), fill='white', width=2)
+                        elif leftVU1 == 3:
+                            self.draw.line((63, 160, 14, 53), fill='white', width=2)
+                        elif leftVU1 == 4:
+                            self.draw.line((63, 160, 17, 52), fill='white', width=2)
+                        elif leftVU1 == 5:
+                            self.draw.line((63, 160, 20, 51), fill='white', width=2)
+                        elif leftVU1 == 6:
+                            self.draw.line((63, 160, 23, 49), fill='white', width=2)
+                        elif leftVU1 == 7:
+                            self.draw.line((63, 160, 26, 47), fill='white', width=2)
+                        elif leftVU1 == 8:
+                            self.draw.line((63, 160, 29, 46), fill='white', width=2)
+                        elif leftVU1 == 9:
+                            self.draw.line((63, 160, 32, 45), fill='white', width=2)
+                        elif leftVU1 == 10:
+                            self.draw.line((63, 160, 35, 44), fill='white', width=2)
+                        elif leftVU1 == 11:
+                            self.draw.line((63, 160, 38, 43), fill='white', width=2)
+                        elif leftVU1 == 12:
+                            self.draw.line((63, 160, 41, 43), fill='white', width=2)
+                        elif leftVU1 == 13:
+                            self.draw.line((63, 160, 44, 42), fill='white', width=2)
+                        elif leftVU1 == 14:
+                            self.draw.line((63, 160, 47, 42), fill='white', width=2)
+                        elif leftVU1 == 15:
+                            self.draw.line((63, 160, 50, 41), fill='white', width=2)        
+                        elif leftVU1 == 16:
+                            self.draw.line((63, 160, 53, 40), fill='white', width=2)
+                        elif leftVU1 == 17:
+                            self.draw.line((63, 160, 56, 40), fill='white', width=2)
+                        elif leftVU1 == 18:
+                            self.draw.line((63, 160, 59, 40), fill='white', width=2)
+                        elif leftVU1 == 19:
+                            self.draw.line((63, 160, 62, 40), fill='white', width=2)
+                        elif leftVU1 == 20:
+                            self.draw.line((63, 160, 65, 41), fill='white', width=2)
+                        elif leftVU1 == 21:
+                            self.draw.line((63, 160, 68, 41), fill='white', width=2)
+                        elif leftVU1 == 22:
+                            self.draw.line((63, 160, 71, 41), fill='white', width=2)
+                        elif leftVU1 == 23:
+                            self.draw.line((63, 160, 74, 41), fill='white', width=2)
+                        elif leftVU1 == 24:
+                            self.draw.line((63, 160, 77, 42), fill='white', width=2)
+                        elif leftVU1 == 25:
+                            self.draw.line((63, 160, 80, 42), fill='white', width=2)
+                        elif leftVU1 == 26:
+                            self.draw.line((63, 160, 83, 43), fill='white', width=2)
+                        elif leftVU1 == 27:
+                            self.draw.line((63, 160, 86, 43), fill='white', width=2)
+                        elif leftVU1 == 28:
+                            self.draw.line((63, 160, 89, 44), fill='white', width=2)
+                        elif leftVU1 == 29:
+                            self.draw.line((63, 160, 92, 44), fill='white', width=2)
+                        elif leftVU1 == 30:
+                            self.draw.line((63, 160, 95, 45), fill='white', width=2)
+                        elif leftVU1 == 31:
+                            self.draw.line((63, 160, 98, 45), fill='white', width=2)
+                        elif leftVU1 == 32:
+                            self.draw.line((63, 160, 101, 46), fill='white', width=2)      
+                    rightVU = data2[1]
+                    if rightVU != '':
+                        rightVU1 = int(rightVU)
+                        if rightVU1 == 0:
+                            self.draw.line((191, 160, 133, 59), fill='white', width=2)
+                        elif rightVU1 == 1:
+                            self.draw.line((191, 160, 136, 57), fill='white', width=2)
+                        elif rightVU1 == 2:
+                            self.draw.line((191, 160, 139, 55), fill='white', width=2)
+                        elif rightVU1 == 3:
+                            self.draw.line((191, 160, 142, 53), fill='white', width=2)
+                        elif rightVU1 == 4:
+                            self.draw.line((191, 160, 145, 52), fill='white', width=2)
+                        elif rightVU1 == 5:
+                            self.draw.line((191, 160, 148, 51), fill='white', width=2)
+                        elif rightVU1 == 6:
+                            self.draw.line((191, 160, 151, 49), fill='white', width=2)
+                        elif rightVU1 == 7:
+                            self.draw.line((191, 160, 154, 47), fill='white', width=2)
+                        elif rightVU1 == 8:
+                            self.draw.line((191, 160, 157, 46), fill='white', width=2)
+                        elif rightVU1 == 9:
+                            self.draw.line((191, 160, 160, 45), fill='white', width=2)
+                        elif rightVU1 == 10:
+                            self.draw.line((191, 160, 163, 44), fill='white', width=2)
+                        elif rightVU1 == 11:
+                            self.draw.line((191, 160, 166, 43), fill='white', width=2)
+                        elif rightVU1 == 12:
+                            self.draw.line((191, 160, 169, 43), fill='white', width=2)
+                        elif rightVU1 == 13:
+                            self.draw.line((191, 160, 172, 42), fill='white', width=2)
+                        elif rightVU1 == 14:
+                            self.draw.line((191, 160, 175, 42), fill='white', width=2)
+                        elif rightVU1 == 15:
+                            self.draw.line((191, 160, 178, 41), fill='white', width=2)        
+                        elif rightVU1 == 16:
+                            self.draw.line((191, 160, 181, 40), fill='white', width=2)
+                        elif rightVU1 == 17:
+                            self.draw.line((191, 160, 184, 40), fill='white', width=2)
+                        elif rightVU1 == 18:
+                            self.draw.line((191, 160, 187, 40), fill='white', width=2)
+                        elif rightVU1 == 19:
+                            self.draw.line((191, 160, 190, 40), fill='white', width=2)
+                        elif rightVU1 == 20:
+                            self.draw.line((191, 160, 193, 41), fill='white', width=2)
+                        elif rightVU1 == 21:
+                            self.draw.line((191, 160, 196, 41), fill='white', width=2)
+                        elif rightVU1 == 22:
+                            self.draw.line((191, 160, 199, 41), fill='white', width=2)
+                        elif rightVU1 == 23:
+                            self.draw.line((191, 160, 202, 41), fill='white', width=2)
+                        elif rightVU1 == 24:
+                            self.draw.line((191, 160, 205, 42), fill='white', width=2)
+                        elif rightVU1 == 25:
+                            self.draw.line((191, 160, 208, 42), fill='white', width=2)
+                        elif rightVU1 == 26:
+                            self.draw.line((191, 160, 211, 43), fill='white', width=2)
+                        elif rightVU1 == 27:
+                            self.draw.line((191, 160, 214, 43), fill='white', width=2)
+                        elif rightVU1 == 28:
+                            self.draw.line((191, 160, 217, 44), fill='white', width=2)
+                        elif rightVU1 == 29:
+                            self.draw.line((191, 160, 220, 44), fill='white', width=2)
+                        elif rightVU1 == 30:
+                            self.draw.line((191, 160, 223, 45), fill='white', width=2)
+                        elif rightVU1 == 31:
+                            self.draw.line((191, 160, 226, 45), fill='white', width=2)
+                        elif rightVU1 == 32:
+                            self.draw.line((191, 160, 229, 45), fill='white', width=2)                      
+                image.paste(self.image, (0, 0))
+              
         if NowPlayingLayout == 'Screen1' and newStatus != 'stop' and DisplayTechnology == 'i2c1306':
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                try: 
-                    subprocess.check_output('pgrep -x cava', shell = True)
-                except:
-                    subprocess.call("cava &", shell = True)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
 
@@ -801,20 +1347,15 @@ class NowPlayingScreen():
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
                 self.draw.text((Screen4text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen4text02), oled.activeSong, font=font3, fill='white')
-                self.draw.text((Screen4text28), oled.playstateIcon, font=labelfont, fill='white')
-                self.draw.text((Screen4text06), oled.activeFormat, font=font4, fill='white')
-                self.draw.text((Screen4text07), oled.activeSamplerate, font=font4, fill='white')
-                self.draw.text((Screen4text08), oled.activeBitdepth, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
 
-        elif newStatus == 'stop': 
+        elif oled.playState == 'stop':
             self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
             self.draw.text((oledtext03), oled.time, font=fontClock, fill='white')
             self.draw.text((oledtext04), oled.IP, font=fontIP, fill='white')
             self.draw.text((oledtext05), oled.date, font=fontDate, fill='white')
             self.draw.text((oledtext09), oledlibraryInfo, font=iconfontBottom, fill='white')
-            image.paste(self.image, (0, 0))                 
-
+            image.paste(self.image, (0, 0))
 
 class MediaLibrarayInfo():
     def __init__(self, height, width): 
@@ -828,7 +1369,7 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, oled.activeSongs, font4)        	#Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, oledPla, font4)   	                #Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, oled.activePlaytime, font4)   	    #Summary of duration
-        self.LibraryInfoText9 = StaticText(self.height, self.width, oledlibraryInfo, labelfont)  	            #Menu-label Icon
+#        self.LibraryInfoText9 = StaticText(self.height, self.width, oledlibraryInfo, labelfont)  	            #Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, oledlibraryReturn, iconfontBottom) #LibraryInfo Return
         self.LibraryInfoText11 = StaticText(self.height, self.width, oledArtistIcon, mediaicon)         #icon for Artists
         self.LibraryInfoText12 = StaticText(self.height, self.width, oledAlbumIcon, mediaicon)          #icon for Albums
@@ -845,7 +1386,7 @@ class MediaLibrarayInfo():
         self.text6Pos = oledtext15     						   #Text for Albums
         self.text7Pos = oledtext16     						   #Text for Songs
         self.text8Pos = oledtext17    						   #Text for duration
-        self.text9Pos = oledtext18     						   #Menu-Label Icon
+#        self.text9Pos = oledtext18     						   #Menu-Label Icon
         self.text10Pos = oledtext19    						   #LibraryInfoIcon
         self.text11Pos = oledtext20     					   #icon for Artists
         self.text12Pos = oledtext21     					   #icon for Albums
@@ -863,7 +1404,7 @@ class MediaLibrarayInfo():
         self.LibraryInfoText6 = StaticText(self.height, self.width, oled.activeSongs, font4)        	#Number of Songs
         self.LibraryInfoText7 = StaticText(self.height, self.width, oledPla, font4)   	                #Text for duration
         self.LibraryInfoText8 = StaticText(self.height, self.width, oled.activePlaytime, font4)   	    #Summary of duration
-        self.LibraryInfoText9 = StaticText(self.height, self.width, oledlibraryInfo, labelfont)  	    #Menu-label Icon
+#        self.LibraryInfoText9 = StaticText(self.height, self.width, oledlibraryInfo, labelfont)  	    #Menu-label Icon
         self.LibraryInfoText10 = StaticText(self.height, self.width, oledlibraryReturn, iconfontBottom) #LibraryInfo Return
         self.LibraryInfoText11 = StaticText(self.height, self.width, oledArtistIcon, mediaicon)         #icon for Artists
         self.LibraryInfoText12 = StaticText(self.height, self.width, oledAlbumIcon, mediaicon)          #icon for Albums
@@ -881,7 +1422,7 @@ class MediaLibrarayInfo():
             self.LibraryInfoText6.DrawOn(image, self.text3Pos)     #Number of Songs
             self.LibraryInfoText7.DrawOn(image, self.text8Pos)     #Text for duration
             self.LibraryInfoText8.DrawOn(image, self.text4Pos) 	   #Number of durati
-            self.LibraryInfoText9.DrawOn(image, self.text9Pos)     #menulabelIcon
+#           self.LibraryInfoText9.DrawOn(image, self.text9Pos)     #menulabelIcon
             self.LibraryInfoText10.DrawOn(image, self.text10Pos)   #LibraryInfo Return
             self.LibraryInfoText11.DrawOn(image, self.text11Pos)   #icon for Artists
             self.LibraryInfoText12.DrawOn(image, self.text12Pos)   #icon for Albums
@@ -966,6 +1507,9 @@ def ButtonB_PushEvent(hold_time):
 
 def ButtonC_PushEvent(hold_time):
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
+#        date_string = str(uuid.uuid1())
+#        print(date_string)
+#        image.save('/home/volumio/'+date_string+'.png')
 #shortpress functions below
         print('ButtonC short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
@@ -1108,7 +1652,7 @@ else:
 if oled.playState != 'play':
     volumioIO.emit('play', {'value':oled.playPosition})
 
-varcanc = True                      #helper for pause -> stop timeout counter
+
 InfoTag = 0                         #helper for missing Artist/Song when changing sources
 GetIP()
 
@@ -1131,6 +1675,8 @@ PlayPosHelp.start()
 while True:
 #    print('State: ', oled.state)
 #    print('palyState: ', oled.playState)
+#    print('newStatus: ', newStatus)
+#    print(oled.modal)
     if emit_track and oled.stateTimeout < 4.5:
         emit_track = False
         try:
@@ -1153,7 +1699,6 @@ while True:
 
 
 
-
 #this is the loop to push the actual time every 0.1sec to the "Standby-Screen"
 
     if oled.state == STATE_PLAYER and newStatus == 'stop' and oled.ShutdownFlag == False:
@@ -1167,7 +1712,6 @@ while True:
 #if playback is paused, here is defined when the Player goes back to "Standby"/Stop		
 
     if oled.state == STATE_PLAYER and newStatus == 'pause' and varcanc == True:
-
        secvar = int(round(time()))
        oled.state = 0
        SetState(STATE_PLAYER)
@@ -1175,6 +1719,9 @@ while True:
     elif oled.state == STATE_PLAYER and newStatus == 'pause' and int(round(time())) - secvar > oledPause2StopTime:
          varcanc = True
          volumioIO.emit('stop')
+         SetState(STATE_PLAYER)
+         oled.modal.UpdateStandbyInfo()
+
          secvar = 0.0
 
 sleep(0.02)
