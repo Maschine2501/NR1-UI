@@ -22,22 +22,29 @@ The project is not finished yet... but close the the goal!
 ### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L68) in nr1ui.py
 ### To change the look just edit [line66](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L66) in nr1ui.py to the desired Screen:
 
-#### Base ssd1322 (on all Layouts the same:
+#### Base ssd1322 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
-
 #### Screen1 (ssd1322):
-![ssd1322-Screen1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen1.gif)
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen1%20(2).png)
 #### Screen2 (ssd1322):
-![ssd1322-Screen2](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen2.gif)
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen2%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen2%20(2).png)
 #### Screen3 (ssd1322):
-![ssd1322-Screen3](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen3.gif)
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen3%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen3%20(2).png)
 #### Screen4 (ssd1322):
-![ssd1322-Screen4](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1322-Screen4.gif)
-#### Screen1 (ssd1306):
-![ssd1306-Screen1](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1306-Screen1.gif)
-#### Screen4 (ssd1306):
-![ssd1306-Screen4](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/gif/ssd1306-Screen4.gif)
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen4%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen4%20(2).png)
+#### Screen5 (ssd1322):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen5%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen5%20(2).png)
+#### Screen6 (ssd1322):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen6%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen6%20(2).png)
+#### Screen7 (ssd1322):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(2).png)
 
+#### Base ssd1306 (on all Layouts the same):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
+#### Screen1 (ssd1306):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(2).png)
+#### Screen2 (ssd1306):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(2).png)
 ## Features of Maschine2501/NR1-UI:
 ---
 * 4 Button Interface (Button function depends on "State" of the screen, e.g. playback, menu...)
