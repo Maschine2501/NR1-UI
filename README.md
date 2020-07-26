@@ -19,8 +19,11 @@ The project is not finished yet... but close the the goal!
 
 ## The Code is now modular:
 
-### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L68) in nr1ui.py
-### To change the look just edit [line66](https://github.com/Maschine2501/NR1-UI/blob/4d433d40e5b2f0adb7ab96d051b265fadb3e26c7/nr1ui.py#L66) in nr1ui.py to the desired Screen:
+### To modify your Layout use the [config files](https://github.com/Maschine2501/NR1-UI/tree/master/config)
+
+### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L68) in nr1ui.py
+
+### To change the look/layout just edit [line67](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L67) in nr1ui.py to the desired Screen:
 
 #### Base ssd1322 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
