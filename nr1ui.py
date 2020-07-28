@@ -477,8 +477,9 @@ def onPushState(data):
         oled.seek = None
     
     if 'volume' in data:
-        volume = data['volume']
-        oled.volume = int(volume)/100
+        volume = int(data['volume'])
+    if volume != 0:
+        oled.volume = round(volume/100)
 
     if newArtist is None:   #volumio can push NoneType
         newArtist = ''
