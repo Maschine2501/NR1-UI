@@ -83,6 +83,7 @@ The project is not finished yet... but close the the goal!
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
 - [ ] A VU-Meter Screen?
+- [ ] Screen selection Menu (in progress!)
 
 ## Allready Done:
 ---
