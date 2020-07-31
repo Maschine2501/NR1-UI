@@ -107,8 +107,8 @@ The project is not finished yet... but close the the goal!
 - [x] Combine all Versions to one Code (with configuration at the begining)
 - [x] Make More Screen-Layouts -> selectable by config
 - [x] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
-- [x] A VU-Meter Screen?
-- [x] Screen selection Menu (in progress!)
+- [x] A VU-Meter Screen
+- [x] Screen selection Menu (Aviable in Stand-ByScreen (clock) by pressing button-C)
 
 
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
