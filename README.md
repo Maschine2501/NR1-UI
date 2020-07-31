@@ -82,8 +82,7 @@ The project is not finished yet... but close the the goal!
 - [ ] Tune the whole UI (fonts, positions... etc.)
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
-- [ ] A VU-Meter Screen?
-- [ ] Screen selection Menu (in progress!)
+
 
 ## Allready Done:
 ---
@@ -108,6 +107,9 @@ The project is not finished yet... but close the the goal!
 - [x] Combine all Versions to one Code (with configuration at the begining)
 - [x] Make More Screen-Layouts -> selectable by config
 - [x] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
+- [x] A VU-Meter Screen?
+- [x] Screen selection Menu (in progress!)
+
 
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
 
