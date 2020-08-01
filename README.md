@@ -119,7 +119,7 @@ The project is not finished yet... but close the the goal!
 - [x] Peak-Hold enabled in VU-Meter-Bar-Layout -> Thanks [almajiro](https://github.com/almajiro) for providing a sample! <3
 
 
-## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
+## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
 ---
 
