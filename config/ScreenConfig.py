@@ -12,7 +12,7 @@ oledtext04 = 0, 52      #IP
 oledtext05 = 176, 52     #Date
 oledtext09 = 244, 51   #LibraryInfoIcon
 
-#_______Screen1_____________________________________________________
+#_______'Spectrum-Left'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen1text01 = 0, 0        #Artist
 Screen1text02 = 0, 19       #Title
@@ -57,7 +57,7 @@ Screen11specWide2 = 0
 Screen11specYposTag = 63
 Screen11specYposNoTag = 63
 
-#_______Screen2_____________________________________________________
+#_______'Spectrum-Center'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen2text01 = 0, 0        #Artist
 Screen2text02 = 0, 19       #Title
@@ -102,7 +102,7 @@ Screen22specWide2 = 0
 Screen22specYposTag = 63
 Screen22specYposNoTag = 63
 
-#_______Screen3_____________________________________________________
+#_______'Spectrum-Right'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen3text01 = 0, 0        #Artist
 Screen3text02 = 0, 19       #Title
@@ -148,7 +148,7 @@ Screen33specYposTag = 63
 Screen33specYposNoTag = 63
 
 
-#_______Screen4_____________________________________________________
+#_______'No-Spectrum'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen4text01 = 0, 0        #Artist
 Screen4text02 = 0, 19       #Title
@@ -175,7 +175,7 @@ Screen4barThick1 = 57         #difference between both = thickness
 Screen4barThick2 = 61         # 56 and 62 = 6 Pixel thick
 Screen4barNibbleWidth =2
 
-#_______Screen5_____________________________________________________
+#_______'Modern'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen5text01 = 0, 51        #Artist
 Screen5text02 = 0, 51       #Title
@@ -258,7 +258,7 @@ Screen55rightVUWide2 = 0
 Screen55rightVUYpos1 = 38
 Screen55rightVUYpos2 = 45
 
-#_______Screen6_____________________________________________________
+#_______'VU-Meter-1'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen6text01 = 0, 2        #Artist
 Screen6text28 = 1, 14       #Play/Pause Indicator
@@ -267,7 +267,7 @@ Screen6text28 = 1, 14       #Play/Pause Indicator
 Screen6ActualPlaytimeText = 1, 0
 Screen6DurationText = 220, 0
 
-#_______Screen7_____________________________________________________
+#_______'VU-Meter-2'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen7text01 = 0, 0        #Artist
 Screen7text02 = 0, 14       #Title
@@ -295,6 +295,58 @@ Screen7barX = 0
 Screen7barThick1 = 24         #difference between both = thickness 
 Screen7barThick2 = 28         # 56 and 62 = 6 Pixel thick
 Screen7barNibbleWidth = 2
+
+#_______'VU-Meter-Bar'_____________________________________________________
+#Config TextPositions NowPlaying-/StandBy-Screen:
+Screen8text01 = 60, 0        #Artist
+Screen8text02 = 60, 16       #Title
+Screen8text012 = 0, 0       #Artist
+Screen8text022 = 0, 19       #Title
+Screen8text06 = 0, 2       #format
+Screen8text07 = 10, 16     #samplerate
+Screen8text08 = 22, 2     #bitdepth
+Screen8text28 = 1, 14       #Play/Pause Indicator
+
+#configuration of the duration and playtime (textbox-) positions
+Screen8ActualPlaytimeText = 0, 29
+Screen8DurationText = 219, 29
+
+#config for Progress-Bar
+Screen8barwidth = 172
+Screen8barLineBorder = 'white'
+Screen8barLineFill = 'white'
+Screen8barLineX = 40
+Screen8barLineThick1 = 34     #difference between both = thickness 
+Screen8barLineThick2 = 34     # 59 and 59 = 1 Pixel thick
+Screen8barBorder = 'white'
+Screen8barFill = 'black'
+Screen8barX = 40
+Screen8barThick1 = 32         #difference between both = thickness 
+Screen8barThick2 = 36         # 56 and 62 = 6 Pixel thick
+Screen8barNibbleWidth = 2
+
+#config for leftVU
+Screen8leftVUDistance = 22  #startpoint oft the VU from the left side of the screen
+Screen8leftVUWide1 = 7      #spacing/width of each value -> 32max value from cava * 7 = 224pixels width
+Screen8leftVUWide2 = 4      #width of each Value from cava ->   Value <= Screen8leftVUWide1 -> results in Spaces between / Value >= Screen8leftVUWide1 -> continous Bar 
+Screen8leftVUYpos1 = 40
+Screen8leftVUYpos2 = 46
+
+#config for rightVU
+Screen8rightVUDistance = 22
+Screen8rightVUWide1 = 7
+Screen8rightVUWide2 = 4
+Screen8rightVUYpos1 = 56
+Screen8rightVUYpos2 = 62
+
+#config for "Peak-Hold"
+Screen8fallingTime = 0.3      # lower = faster drop / higher = longer hold time
+Screen8PeakWidth = 2          # wdith of the peak indicator in pixels
+
+#config for gradient color of the VU
+Screen8specGradstart = 80
+Screen8specGradstop = 210
+Screen8specGradSamples = 32
 
 #___________________________________________________________________
 #Config TextPositions Media-Library-Info-Screen:

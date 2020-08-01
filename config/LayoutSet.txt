@@ -1,1 +1,1 @@
-Spectrum-Center
+VU-Meter-Bar
