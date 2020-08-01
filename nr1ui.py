@@ -48,6 +48,7 @@ from PIL import ImageFont
 from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
 import uuid
+import numpy as np
 
 #from decimal import Decimal
 #________________________________________________________________________________________
@@ -72,7 +73,7 @@ NowPlayingLayout = ReadScreenLayout.read()
 ReadScreenLayout.close()
 
 if DisplayTechnology != 'ssd1306':
-    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2']
+    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar']
 if DisplayTechnology == 'ssd1306':
     ScreenList = ['Progress-Bar', 'Spectrum-Screen']
 
@@ -217,6 +218,11 @@ secvar = 0.0
 oled.volume = 100
 oled.SelectedScreen = NowPlayingLayout
 
+oled.fallingL = False
+oled.fallingR = False
+oled.prevFallingTimerL = 0
+oled.prevFallingTimerR = 0
+
 oled.selQueue = ''
 
 if DisplayTechnology != 'i2c1306':
@@ -242,6 +248,8 @@ if DisplayTechnology != 'i2c1306':
     font6 = load_font('Oxanium-Regular.ttf', 12)                   #used for Song / Screen5
     font7 = load_font('Oxanium-Light.ttf', 10)                     #used for all other / Screen5
     font8 = load_font('Oxanium-Regular.ttf', 10)                   #used for Song / Screen5
+    font9 = load_font('Oxanium-Bold.ttf', 16)                       #used for Artist ('Oxanium-Bold.ttf', 20)  
+    font10 = load_font('Oxanium-Regular.ttf', 14)                       #used for Artist ('Oxanium-Bold.ttf', 20)  
     mediaicon = load_font('fa-solid-900.ttf', 10)    	           #used for icon in Media-library info
     iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
     labelfont = load_font('entypo.ttf', 12)                        #used for Menu-icons
@@ -1334,6 +1342,155 @@ class NowPlayingScreen():
                             self.draw.line((191, 160, 229, 45), fill='white', width=2)                      
                 image.paste(self.image, (0, 0))
 
+        if NowPlayingLayout == 'VU-Meter-Bar' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+            global spectrumPeaksL
+            global spectrumPeaksR
+            if newStatus != 'stop' and oled.duration != None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vudig.png').convert('RGB')
+                self.image.paste(logoImage, (0, 0))
+                spec_gradient = np.linspace(Screen8specGradstart, Screen8specGradstop, Screen8specGradSamples)
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data2 = cava2_fifo.readline().strip().split(';')
+                self.playbackPoint = oled.seek / oled.duration / 10
+                self.bar = Screen8barwidth * self.playbackPoint / 100
+                self.draw.text((Screen8text01), oled.activeArtist, font=font9, fill='white')
+                self.draw.text((Screen8text02), oled.activeSong, font=font10, fill='white')
+                self.draw.text((Screen8text28), oled.playstateIcon, font=labelfont, fill='white')
+                self.draw.text((Screen8text06), oled.activeFormat, font=font8, fill='white')
+                self.draw.text((Screen8text07), oled.activeSamplerate, font=font8, fill='white')
+                self.draw.text((Screen8text08), oled.activeBitdepth, font=font8, fill='white')
+                self.draw.text((Screen8ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
+                self.draw.text((Screen8DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                self.draw.rectangle((Screen8barLineX , Screen8barLineThick1, Screen8barLineX+Screen8barwidth, Screen8barLineThick2), outline=Screen8barLineBorder, fill=Screen8barLineFill)
+                self.draw.rectangle((self.bar+Screen8barLineX-Screen8barNibbleWidth, Screen8barThick1, Screen8barX+self.bar+Screen8barNibbleWidth, Screen8barThick2), outline=Screen8barBorder, fill=Screen8barFill)
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        topL = leftVU1
+                        if oled.prevFallingTimerL == 0:
+                            spectrumPeaksL = leftVU1
+                        if ((time() - oled.prevFallingTimerL) > Screen8fallingTime):
+                            spectrumPeaksL = topL
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.line(((Screen8leftVUDistance+i*Screen8leftVUWide1, Screen8leftVUYpos1), (Screen8leftVUDistance+i*Screen8leftVUWide1, Screen8leftVUYpos2)), fill=(int(spec_gradient[i]), int(spec_gradient[i]), int(spec_gradient[i])), width=Screen8leftVUWide2)
+                            except:
+                                continue
+                        if oled.prevFallingTimerL == 0:
+                            oled.prevFallingTimerL = time()
+                        if topL > spectrumPeaksL:
+                            spectrumPeaksL = topL
+                        if ((time() - oled.prevFallingTimerL) > Screen8fallingTime):
+                            oled.fallingL = True
+                            if spectrumPeaksL > topL:
+                                spectrumPeaksL = topL
+                                if oled.fallingL:
+                                    oled.prevFallingTimerL = time()
+                            oled.prevFallingTimerL = time()
+                        self.draw.line(((Screen8leftVUDistance+spectrumPeaksL*Screen8leftVUWide1, Screen8leftVUYpos1), (Screen8leftVUDistance+spectrumPeaksL*Screen8leftVUWide1, Screen8leftVUYpos2)), fill='white', width=2)
+                    if rightVU != '':
+                        rightVU1 = int(rightVU)
+                        topR = rightVU1
+                        if oled.prevFallingTimerR == 0:
+                            spectrumPeaksR = rightVU1
+                        if ((time() - oled.prevFallingTimerR) > Screen8fallingTime):
+                            spectrumPeaksR = topR
+                        for i in range(rightVU1):
+                            try:
+                                self.draw.line(((Screen8rightVUDistance+i*Screen8rightVUWide1, Screen8rightVUYpos1), (Screen8rightVUDistance+i*Screen8rightVUWide1, Screen8rightVUYpos2)), fill=(int(spec_gradient[i]), int(spec_gradient[i]), int(spec_gradient[i])), width=Screen8rightVUWide2)
+                            except:
+                                continue
+                        if oled.prevFallingTimerR == 0:
+                            oled.prevFallingTimerR = time()
+                        if topR > spectrumPeaksR:
+                            spectrumPeaksR = topR
+                        if ((time() - oled.prevFallingTimerR) > Screen8fallingTime):
+                            oled.fallingR = True
+                            if spectrumPeaksR > topR:
+                                spectrumPeaksR = topR
+                                if oled.fallingRL:
+                                    oled.prevFallingTimerR = time()
+                            oled.prevFallingTimerR = time()
+                        self.draw.line(((Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos1), (Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos2)), fill='white', width=Screen8PeakWidth)
+                image.paste(self.image, (0, 0))
+            if newStatus != 'stop' and oled.duration == None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vudig.png').convert('RGB')
+                self.image.paste(logoImage, (0, 0))
+                spec_gradient = np.linspace(Screen8specGradstart, Screen8specGradstop, Screen8specGradSamples)
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data2 = cava2_fifo.readline().strip().split(';')
+                if True:
+                    self.textwidth, self.textheight = self.draw.textsize(oled.activeArtist, font=font)
+                    self.ARTwidth = self.textwidth
+                if True:
+                    self.textwidth, self.textheight = self.draw.textsize(oled.activeSong, font=font3)
+                    self.SONwidth = self.textwidth
+                self.ARTpos = Screen8text012
+                self.SONpos = Screen8text022
+                if self.ARTwidth <= self.width:
+                    self.ARTpos = (int((self.width-self.ARTwidth)/2), self.ARTpos[1])
+                if self.SONwidth <= self.width:
+                    self.SONpos = (int((self.width-self.SONwidth)/2), self.SONpos[1])
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        topL = leftVU1
+                        if oled.prevFallingTimerL == 0:
+                            spectrumPeaksL = leftVU1
+                        if ((time() - oled.prevFallingTimerL) > Screen8fallingTime):
+                            spectrumPeaksL = topL
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.line(((Screen8leftVUDistance+i*Screen8leftVUWide1, Screen8leftVUYpos1), (Screen8leftVUDistance+i*Screen8leftVUWide1, Screen8leftVUYpos2)), fill=(int(spec_gradient[i]), int(spec_gradient[i]), int(spec_gradient[i])), width=Screen8leftVUWide2)
+                            except:
+                                continue
+                        if oled.prevFallingTimerL == 0:
+                            oled.prevFallingTimerL = time()
+                        if topL > spectrumPeaksL:
+                            spectrumPeaksL = topL
+                        if ((time() - oled.prevFallingTimerL) > Screen8fallingTime):
+                            oled.fallingL = True
+                            if spectrumPeaksL > topL:
+                                spectrumPeaksL = topL
+                                if oled.fallingL:
+                                    oled.prevFallingTimerL = time()
+                            oled.prevFallingTimerL = time()
+                        self.draw.line(((Screen8leftVUDistance+spectrumPeaksL*Screen8leftVUWide1, Screen8leftVUYpos1), (Screen8leftVUDistance+spectrumPeaksL*Screen8leftVUWide1, Screen8leftVUYpos2)), fill='white', width=Screen8PeakWidth)
+                    if rightVU != '':
+                        rightVU1 = int(rightVU)
+                        topR = rightVU1
+                        if oled.prevFallingTimerR == 0:
+                            spectrumPeaksR = rightVU1
+                        if ((time() - oled.prevFallingTimerR) > Screen8fallingTime):
+                            spectrumPeaksR = topR
+                        for i in range(rightVU1):
+                            try:
+                                self.draw.line(((Screen8rightVUDistance+i*Screen8rightVUWide1, Screen8rightVUYpos1), (Screen8rightVUDistance+i*Screen8rightVUWide1, Screen8rightVUYpos2)), fill=(int(spec_gradient[i]), int(spec_gradient[i]), int(spec_gradient[i])), width=Screen8rightVUWide2)
+                            except:
+                                continue
+                        if oled.prevFallingTimerR == 0:
+                            oled.prevFallingTimerR = time()
+                        if topR > spectrumPeaksR:
+                            spectrumPeaksR = topR
+                        if ((time() - oled.prevFallingTimerR) > Screen8fallingTime):
+                            oled.fallingR = True
+                            if spectrumPeaksR > topR:
+                                spectrumPeaksR = topR
+                                if oled.fallingRL:
+                                    oled.prevFallingTimerR = time()
+                            oled.prevFallingTimerR = time()
+                        self.draw.line(((Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos1), (Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos2)), fill='white', width=2)
+                self.draw.text((self.ARTpos), oled.activeArtist, font=font, fill='white')
+                self.draw.text((self.SONpos), oled.activeSong, font=font3, fill='white')
+                image.paste(self.image, (0, 0))
+
+
         if NowPlayingLayout == 'Spectrum-Screen' and newStatus != 'stop' and DisplayTechnology == 'i2c1306':
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
                 cava_fifo = open("/tmp/cava_fifo", 'r')
@@ -1574,8 +1731,11 @@ def ButtonB_PushEvent(hold_time):
             oled.modal.UpdateStandbyInfo()  
 
 def ButtonC_PushEvent(hold_time):
-    if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
+    if hold_time < 2:
         print('ButtonC short press event')
+        #date_string = str(uuid.uuid1())
+        #print(date_string)
+        #image.save('/home/volumio/'+date_string+'.png')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
         if oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -1801,7 +1961,3 @@ while True:
         secvar = 0.0
 
 sleep(0.02)
-
-#        date_string = str(uuid.uuid1())
-#        print(date_string)
-#        image.save('/home/volumio/'+date_string+'.png')
