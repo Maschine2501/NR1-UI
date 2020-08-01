@@ -23,24 +23,26 @@ The project is not finished yet... but close the the goal!
 
 ### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L68) in nr1ui.py
 
-### To change the look/layout just edit [line67](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L67) in nr1ui.py to the desired Screen:
+### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> ![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
 
 #### Base ssd1322 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
-#### Screen1 (ssd1322):
+#### Spectrum-Left (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen1%20(2).png)
-#### Screen2 (ssd1322):
+#### Spectrum-Center (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen2%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen2%20(2).png)
-#### Screen3 (ssd1322):
+#### Spectrum-Right (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen3%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen3%20(2).png)
-#### Screen4 (ssd1322):
+#### No-Spectrum (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen4%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen4%20(2).png)
-#### Screen5 (ssd1322):
+#### Modern (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen5%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen5%20(2).png)
-#### Screen6 (ssd1322):
+#### VU-Meter-1 (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen6%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen6%20(2).png)
-#### Screen7 (ssd1322):
+#### VU-Meter-2 (ssd1322):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen7%20(2).png)
+#### VU-Meter-Bar (ssd1322):
+![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen8%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screen8%20(2).png)
 
 #### Base ssd1306 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(3).png)
@@ -73,6 +75,8 @@ The project is not finished yet... but close the the goal!
 * Screen-Layouts -> selectable in line66 oledui.py
 * Added an "Playback-Indicator-Icon" to the NowPlayingScreen
 * moved all Layout related stuff to a config file, for more easy handling [(./config/ScreenConfig.py)](https://github.com/Maschine2501/NR1-UI/blob/master/config/ScreenConfig.py)
+* Screen-Layouts are aviable
+* Screen-Layouts are conviniently selectable in a dedicated Menu
 * maybe more features will come... ^^
 
 * Some bugs will (not often) happen. Will debug it soon.
@@ -82,6 +86,7 @@ The project is not finished yet... but close the the goal!
 - [ ] Tune the whole UI (fonts, positions... etc.)
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
+- [ ] More Layouts and redesigning the existing ones
 
 
 ## Allready Done:
@@ -109,6 +114,8 @@ The project is not finished yet... but close the the goal!
 - [x] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
 - [x] A VU-Meter Screen
 - [x] Screen selection Menu (Aviable in Stand-ByScreen (clock) by pressing button-C)
+- [x] VU-Meter-Bar-Layout -> Thanks Mihai for the Background Image! <3
+- [x] Peak-Hold enabled in VU-Meter-Bar-Layout -> Thanks [almajiro](https://github.com/almajiro) for providing a sample! <3
 
 
 ## [Project on Volumio-Forum](https://forum.volumio.org/256x64-oled-ssd1322-spi-buttons-rotary-interface-t14098.html#p72945)
