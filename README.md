@@ -23,7 +23,8 @@ The project is not finished yet... but close the the goal!
 
 ### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L68) in nr1ui.py
 
-### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> ![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
+### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
+![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
 
 #### Base ssd1322 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322%20(3).png)
