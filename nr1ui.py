@@ -196,10 +196,10 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-if DisplayTechnology != 'i2c1306':
-    oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
-if DisplayTechnology == 'i2c1306':
-    oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
+#if DisplayTechnology != 'i2c1306':
+#    oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
+#if DisplayTechnology == 'i2c1306':
+oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
 emit_track = False
 newStatus = 0              				   #makes newStatus usable outside of onPushState
@@ -532,11 +532,10 @@ def onPushState(data):
                 if ledActive == True:
                    PlayLEDoff()
                    StereoLEDoff()
-
             
         if newStatus != oled.playState:
             varcanc = True                      #helper for pause -> stop timeout counter
-    #        secvar = 0.0
+            secvar = 0.0
             oled.playState = newStatus
             if oled.state == STATE_PLAYER:
                 if oled.playState != 'stop':
@@ -548,7 +547,6 @@ def onPushState(data):
                         if ledActive == True:
                             PlayLEDon()
                         oled.playstateIcon = oledplayIcon
-                    #SetState(STATE_PLAYER)
                     oled.modal.UpdatePlayingInfo()
                 else:
                     if ledActive == True:
@@ -1315,73 +1313,34 @@ class NowPlayingScreen():
             image.paste(self.image, (0, 0))
 
 class MediaLibrarayInfo():
-    def __init__(self, height, width): 
+    def __init__(self, height, width):
         self.height = height
         self.width = width
-        self.LibraryInfoText1 = StaticText(self.height, self.width, oledArt, font4)   	                #Text for Artists
-        self.LibraryInfoText2 = StaticText(self.height, self.width, oled.activeArtists, font4)          #Number of Artists
-        self.LibraryInfoText3 = StaticText(self.height, self.width, oledAlb, font4)  	                #Text for Albums
-        self.LibraryInfoText4 = StaticText(self.height, self.width, oled.activeAlbums, font4)           #Number of Albums
-        self.LibraryInfoText5 = StaticText(self.height, self.width, oledSon, font4)   	                #Text for Songs
-        self.LibraryInfoText6 = StaticText(self.height, self.width, oled.activeSongs, font4)        	#Number of Songs
-        self.LibraryInfoText7 = StaticText(self.height, self.width, oledPla, font4)   	                #Text for duration
-        self.LibraryInfoText8 = StaticText(self.height, self.width, oled.activePlaytime, font4)   	    #Summary of duration
-        self.LibraryInfoText10 = StaticText(self.height, self.width, oledlibraryReturn, iconfontBottom) #LibraryInfo Return
-        self.LibraryInfoText11 = StaticText(self.height, self.width, oledArtistIcon, mediaicon)         #icon for Artists
-        self.LibraryInfoText12 = StaticText(self.height, self.width, oledAlbumIcon, mediaicon)          #icon for Albums
-        self.LibraryInfoText13 = StaticText(self.height, self.width, oledSongIcon, mediaicon)           #icon for Songs
-        self.LibraryInfoText14 = StaticText(self.height, self.width, oledPlaytimeIcon, mediaicon)       #icon for duration
-        self.icon = {'info':'\F0CA'}
-        self.mediaIcon = self.icon['info']
-        self.iconcountdown = 0
-        self.text1Pos = oledtext10      					   #Number of Artists
-        self.text2Pos = oledtext11      					   #Number of Albums4
-        self.text3Pos = oledtext12      					   #Number of Songs
-        self.text4Pos = oledtext13      					   #Summary of duration
-        self.text5Pos = oledtext14     						   #Text for Artists
-        self.text6Pos = oledtext15     						   #Text for Albums
-        self.text7Pos = oledtext16     						   #Text for Songs
-        self.text8Pos = oledtext17    						   #Text for duration
-        self.text10Pos = oledtext19    						   #LibraryInfoIcon
-        self.text11Pos = oledtext20     					   #icon for Artists
-        self.text12Pos = oledtext21     					   #icon for Albums
-        self.text13Pos = oledtext22    						   #icon for Songs
-        self.text14Pos = oledtext23    						   #icon for duration
-        if DisplayTechnology == 'spi1322': 
-            self.alfaimage = Image.new('RGBA', image.size, (0, 0, 0, 0))
 
     def UpdateLibraryInfo(self):
-        self.LibraryInfoText1 = StaticText(self.height, self.width, oledArt, font4)   	                #Text for Artists
-        self.LibraryInfoText2 = StaticText(self.height, self.width, oled.activeArtists, font4)          #Number of Artists
-        self.LibraryInfoText3 = StaticText(self.height, self.width, oledAlb, font4)  	                #Text for Albums
-        self.LibraryInfoText4 = StaticText(self.height, self.width, oled.activeAlbums, font4)           #Number of Albums
-        self.LibraryInfoText5 = StaticText(self.height, self.width, oledSon, font4)   	                #Text for Songs
-        self.LibraryInfoText6 = StaticText(self.height, self.width, oled.activeSongs, font4)        	#Number of Songs
-        self.LibraryInfoText7 = StaticText(self.height, self.width, oledPla, font4)   	                #Text for duration
-        self.LibraryInfoText8 = StaticText(self.height, self.width, oled.activePlaytime, font4)   	    #Summary of duration
-        self.LibraryInfoText10 = StaticText(self.height, self.width, oledlibraryReturn, iconfontBottom) #LibraryInfo Return
-        self.LibraryInfoText11 = StaticText(self.height, self.width, oledArtistIcon, mediaicon)         #icon for Artists
-        self.LibraryInfoText12 = StaticText(self.height, self.width, oledAlbumIcon, mediaicon)          #icon for Albums
-        self.LibraryInfoText13 = StaticText(self.height, self.width, oledSongIcon, mediaicon)           #icon for Songs
-        self.LibraryInfoText14 = StaticText(self.height, self.width, oledPlaytimeIcon, mediaicon)       #icon for duration
-
+        if DisplayTechnology != 'i2c1306': 
+            self.image = Image.new('RGB', (self.width, self.height))
+            self.draw = ImageDraw.Draw(self.image)
+        if DisplayTechnology == 'i2c1306':
+            self.image = Image.new('1', (self.width, self.height))
+            self.draw = ImageDraw.Draw(self.image)
 
     def DrawOn(self, image):
-        if self.mediaIcon == self.icon['info']:
-            self.LibraryInfoText1.DrawOn(image, self.text5Pos)     #Text for Artists
-            self.LibraryInfoText2.DrawOn(image, self.text1Pos)     #Number of Artists
-            self.LibraryInfoText3.DrawOn(image, self.text6Pos)     #Text for Albums
-            self.LibraryInfoText4.DrawOn(image, self.text2Pos)     #Number of Albums
-            self.LibraryInfoText5.DrawOn(image, self.text7Pos)     #Text for Songs
-            self.LibraryInfoText6.DrawOn(image, self.text3Pos)     #Number of Songs
-            self.LibraryInfoText7.DrawOn(image, self.text8Pos)     #Text for duration
-            self.LibraryInfoText8.DrawOn(image, self.text4Pos) 	   #Number of durati
-            self.LibraryInfoText10.DrawOn(image, self.text10Pos)   #LibraryInfo Return
-            self.LibraryInfoText11.DrawOn(image, self.text11Pos)   #icon for Artists
-            self.LibraryInfoText12.DrawOn(image, self.text12Pos)   #icon for Albums
-            self.LibraryInfoText13.DrawOn(image, self.text13Pos)   #icon for Songs
-            self.LibraryInfoText14.DrawOn(image, self.text14Pos)   #icon for duration
-                  
+        self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+        self.draw.text((oledtext10), oled.activeArtists, font=font4, fill='white')
+        self.draw.text((oledtext11), oled.activeAlbums, font=font4, fill='white')
+        self.draw.text((oledtext12), oled.activeSongs, font=font4, fill='white')
+        self.draw.text((oledtext13), oled.activePlaytime, font=font4, fill='white')
+        self.draw.text((oledtext14), oledArt, font=font4, fill='white')
+        self.draw.text((oledtext15), oledAlb, font=font4, fill='white')
+        self.draw.text((oledtext16), oledSon, font=font4, fill='white')
+        self.draw.text((oledtext17), oledPla, font=font4, fill='white')
+        self.draw.text((oledtext19), oledlibraryReturn, font=iconfontBottom, fill='white')
+        self.draw.text((oledtext20), oledArtistIcon, font=mediaicon, fill='white')
+        self.draw.text((oledtext21), oledAlbumIcon, font=mediaicon, fill='white')            
+        self.draw.text((oledtext22), oledSongIcon, font=mediaicon, fill='white')
+        self.draw.text((oledtext23), oledPlaytimeIcon, font=mediaicon, fill='white')
+        image.paste(self.image, (0, 0))
 
 class MenuScreen():
     def __init__(self, height, width):
