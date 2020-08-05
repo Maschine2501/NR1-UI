@@ -73,7 +73,7 @@ NowPlayingLayout = ReadScreenLayout.read()
 ReadScreenLayout.close()
 
 if DisplayTechnology != 'ssd1306':
-    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar']
+    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-without-format-samplerate-bitdepth']
 if DisplayTechnology == 'ssd1306':
     ScreenList = ['Progress-Bar', 'Spectrum-Screen']
 
@@ -790,7 +790,7 @@ class NowPlayingScreen():
                         leftVU1 = int(leftVU)
                         for i in range(leftVU1):
                             try:
-                                self.draw.rectangle((Screen5leftVUDistance+i*Screen5leftVUWide1, Screen5leftVUYpos1, i*Screen5leftVUWide1+Screen5leftVUWide2, Screen5leftVUYpos2), outline = Screen5leftVUBorder, fill = Screen5leftVUFill)
+                                self.draw.rectangle((Screen5leftVUDistance+i*Screen5leftVUWide1, Screen5leftVUYpos1, Screen5leftVUDistance+i*Screen5leftVUWide1+Screen5leftVUWide2, Screen5leftVUYpos2), outline = Screen5leftVUBorder, fill = Screen5leftVUFill)
                             except:
                                 continue
                     if rightVU != '':
@@ -805,14 +805,25 @@ class NowPlayingScreen():
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen5text01
-                if self.textwidth <= self.width:
-                    position = (int((self.width-self.textwidth)/2), position[1])
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
                 self.draw.text((position), TextBaustein, font=font6, fill='white')
-                self.draw.line((0, 36, 255, 36), fill='white', width=1)
-                self.draw.line((0, 47, 64, 47), fill='white', width=1)
-                self.draw.line((64, 47, 70, 36), fill='white', width=1)
-                self.draw.line((190, 47, 255, 47), fill='white', width=1)
-                self.draw.line((184, 36, 190, 47), fill='white', width=1)
+                if DisplayTechnology == 'Braun':
+                    self.draw.line((34, 36, 242, 36), fill='white', width=1)
+                    self.draw.line((34, 47, 83, 47), fill='white', width=1)
+                    self.draw.line((83, 47, 90, 36), fill='white', width=1)
+                    self.draw.line((195, 47, 242, 47), fill='white', width=1)
+                    self.draw.line((188, 36, 195, 47), fill='white', width=1)
+                else:
+                    self.draw.line((0, 36, 255, 36), fill='white', width=1)
+                    self.draw.line((0, 47, 64, 47), fill='white', width=1)
+                    self.draw.line((64, 47, 70, 36), fill='white', width=1)
+                    self.draw.line((190, 47, 255, 47), fill='white', width=1)
+                    self.draw.line((184, 36, 190, 47), fill='white', width=1)
                 self.draw.text((Screen5text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen5text06), oled.activeFormat, font=font7, fill='white')
                 self.draw.text((Screen5text07), oled.activeSamplerate, font=font7, fill='white')
@@ -842,7 +853,7 @@ class NowPlayingScreen():
                         leftVU1 = int(leftVU)
                         for i in range(leftVU1):
                             try:
-                                self.draw.rectangle((Screen55leftVUDistance+i*Screen55leftVUWide1, Screen55leftVUYpos1, i*Screen55leftVUWide1+Screen55leftVUWide2, Screen55leftVUYpos2), outline = Screen55leftVUBorder, fill = Screen55leftVUFill)
+                                self.draw.rectangle((Screen5leftVUDistance+i*Screen55leftVUWide1, Screen55leftVUYpos1, i*Screen55leftVUWide1+Screen55leftVUWide2, Screen55leftVUYpos2), outline = Screen55leftVUBorder, fill = Screen55leftVUFill)
                             except:
                                 continue
                     if rightVU != '':
@@ -856,33 +867,57 @@ class NowPlayingScreen():
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen5text01
-                if self.textwidth <= self.width:
-                    position = (int((self.width-self.textwidth)/2), position[1])
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
                 self.draw.text((position), TextBaustein, font=font6, fill='white')
-                self.draw.line((0, 36, 255, 36), fill='white', width=1)
-                self.draw.line((0, 47, 64, 47), fill='white', width=1)
-                self.draw.line((64, 47, 70, 36), fill='white', width=1)
-                self.draw.line((190, 47, 255, 47), fill='white', width=1)
-                self.draw.line((184, 36, 190, 47), fill='white', width=1)
+                if DisplayTechnology == 'Braun':
+                    self.draw.line((34, 36, 242, 36), fill='white', width=1)
+                    self.draw.line((34, 47, 82, 47), fill='white', width=1)
+                    self.draw.line((82, 47, 89, 36), fill='white', width=1)
+                    self.draw.line((198, 47, 242, 47), fill='white', width=1)
+                    self.draw.line((192, 36, 198, 47), fill='white', width=1)
+                else:
+                    self.draw.line((0, 36, 255, 36), fill='white', width=1)
+                    self.draw.line((0, 47, 64, 47), fill='white', width=1)
+                    self.draw.line((64, 47, 70, 36), fill='white', width=1)
+                    self.draw.line((190, 47, 255, 47), fill='white', width=1)
+                    self.draw.line((184, 36, 190, 47), fill='white', width=1)
                 self.textwidth1, self.textheight1 = self.draw.textsize(oled.activeFormat, font=font6)
                 position1 = Screen5text06
-                if self.textwidth1 < self.width:
-                    position1 = (int((8+self.width-self.textwidth1)/2), position1[1])
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
                 self.draw.text((position1), oled.activeFormat, font=font7, fill='white')
                 image.paste(self.image, (0, 0))
 
         if NowPlayingLayout == 'VU-Meter-1' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-            logoImage = Image.open('/home/volumio/NR1-UI/img/vu.png').convert('RGB')
-            self.image.paste(logoImage, (0, 0))
+            if DisplayTechnology == 'Braun':
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vu0.png').convert('RGB')
+                self.image.paste(logoImage, (34, 0))
+            else:
+                logoImage = Image.open('/home/volumio/NR1-UI/img/vu.png').convert('RGB')
+                self.image.paste(logoImage, (0, 0))
             cava2_fifo = open("/tmp/cava2_fifo", 'r')
             data2 = cava2_fifo.readline().strip().split(';')
             TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
             self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
             position = Screen6text01
-            if self.textwidth <= self.width:
-                position = (int((self.width-self.textwidth)/2), position[1])
-            self.draw.text((position), TextBaustein, font=font5, fill='white')
+            if DisplayTechnology == 'Braun':
+                if self.textwidth <= self.width-48:
+                    position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+            else:
+                if self.textwidth <= self.width:
+                    position = (int((self.width-self.textwidth)/2), position[1])
+            self.draw.text((position), TextBaustein, font=font6, fill='white')
             self.draw.text((Screen6text28), oled.playstateIcon, font=labelfont, fill='white')
             if len(data2) >= 3:
                 leftVU = data2[0]
@@ -905,8 +940,13 @@ class NowPlayingScreen():
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen7text01
-                if self.textwidth <= self.width:
-                    position = (int((self.width-self.textwidth)/2), position[1])
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
                 self.draw.text((position), TextBaustein, font=font5, fill='white')
                 self.playbackPoint = oled.seek / oled.duration / 10
                 self.bar = Screen7barwidth * self.playbackPoint / 100
@@ -938,8 +978,13 @@ class NowPlayingScreen():
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen7text01
-                if self.textwidth <= self.width:
-                    position = (int((self.width-self.textwidth)/2), position[1])
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
                 self.draw.text((position), TextBaustein, font=font6, fill='white')          
                 if len(data2) >= 3:
                     leftVU = data2[0]
@@ -1098,6 +1143,124 @@ class NowPlayingScreen():
                         self.draw.line(((Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos1), (Screen8rightVUDistance+spectrumPeaksR*Screen8rightVUWide1, Screen8rightVUYpos2)), fill='white', width=2)
                 self.draw.text((self.ARTpos), oled.activeArtist, font=font, fill='white')
                 self.draw.text((self.SONpos), oled.activeSong, font=font3, fill='white')
+                image.paste(self.image, (0, 0))
+
+
+        if NowPlayingLayout == 'Modern-without-format-samplerate-bitdepth' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+            if newStatus != 'stop' and oled.duration != None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                cava_fifo = open("/tmp/cava_fifo", 'r')
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data = cava_fifo.readline().strip().split(';')
+                data2 = cava2_fifo.readline().strip().split(';')
+                if len(data) >= 64 and newStatus != 'pause':
+                    for i in range(0, len(data)-1):
+                        try:
+                            self.draw.rectangle((Screen9specDistance+i*Screen9specWide1, Screen9specYposTag, Screen9specDistance+i*Screen9specWide1+Screen9specWide2, (Screen9specYposTag-int(data[i])*Screen9specHigh)), outline = Screen9specBorder, fill =Screen9specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                        except:
+                            continue
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.rectangle((Screen9leftVUDistance+i*Screen9leftVUWide1, Screen9leftVUYpos1, Screen9leftVUDistance+i*Screen9leftVUWide1+Screen9leftVUWide2, Screen9leftVUYpos2), outline = Screen9leftVUBorder, fill = Screen9leftVUFill)
+                            except:
+                                continue
+                    if rightVU != '':
+                        rightVU2 = int(rightVU)        
+                        for i in range(rightVU2):
+                            try:
+                                self.draw.rectangle((Screen9rightVUDistance-i*Screen9rightVUWide1, Screen9rightVUYpos1, Screen9rightVUDistance-i*Screen9rightVUWide1+Screen9rightVUWide2, Screen9rightVUYpos2), outline = Screen9rightVUBorder, fill = Screen9rightVUFill)
+                            except:
+                                continue    
+                self.playbackPoint = oled.seek / oled.duration / 10
+                self.bar = Screen9barwidth * self.playbackPoint / 100
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                #print(self.textwidth)
+                position = Screen9text01
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-(self.textwidth-self.textwidth+98))/2)+36), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein[:19], font=font6, fill='white')
+                if DisplayTechnology == 'Braun':
+                    self.draw.line((34, 51, 242, 51), fill='white', width=1)
+                    self.draw.line((34, 60, 83, 60), fill='white', width=1)
+                    self.draw.line((83, 60, 90, 51), fill='white', width=1)
+                    self.draw.line((195, 60, 242, 60), fill='white', width=1)
+                    self.draw.line((188, 51, 195, 60), fill='white', width=1)
+                else:
+                    self.draw.line((0, 51, 255, 51), fill='white', width=1)
+                    self.draw.line((0, 60, 64, 60), fill='white', width=1)
+                    self.draw.line((64, 60, 70, 51), fill='white', width=1)
+                    self.draw.line((190, 60, 255, 60), fill='white', width=1)
+                    self.draw.line((184, 51, 190, 60), fill='white', width=1)
+                self.draw.text((Screen9ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
+                self.draw.text((Screen9DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                self.draw.rectangle((Screen9barLineX , Screen9barLineThick1, Screen9barLineX+Screen9barwidth, Screen9barLineThick2), outline=Screen9barLineBorder, fill=Screen9barLineFill)
+                self.draw.rectangle((self.bar+Screen9barLineX-Screen9barNibbleWidth, Screen9barThick1, Screen9barX+self.bar+Screen9barNibbleWidth, Screen9barThick2), outline=Screen9barBorder, fill=Screen9barFill)
+                image.paste(self.image, (0, 0))
+
+            if newStatus != 'stop' and oled.duration == None:
+                self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                cava_fifo = open("/tmp/cava_fifo", 'r')
+                cava2_fifo = open("/tmp/cava2_fifo", 'r')
+                data = cava_fifo.readline().strip().split(';')
+                data2 = cava2_fifo.readline().strip().split(';')
+                if len(data) >= 64 and newStatus != 'pause':
+                    for i in range(0, len(data)-1):
+                        try:
+                            self.draw.rectangle((Screen99specDistance+i*Screen99specWide1, Screen99specYposTag, Screen99specDistance+i*Screen99specWide1+Screen99specWide2, Screen99specYposTag-int(data[i])), outline = Screen99specBorder, fill =Screen99specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                        except:
+                            continue
+                if len(data2) >= 3:
+                    leftVU = data2[0]
+                    rightVU = data2[1]
+                    if leftVU != '':
+                        leftVU1 = int(leftVU)
+                        for i in range(leftVU1):
+                            try:
+                                self.draw.rectangle((Screen9leftVUDistance+i*Screen99leftVUWide1, Screen99leftVUYpos1, i*Screen99leftVUWide1+Screen99leftVUWide2, Screen99leftVUYpos2), outline = Screen99leftVUBorder, fill = Screen99leftVUFill)
+                            except:
+                                continue
+                    if rightVU != '':
+                        rightVU2 = int(rightVU)
+   
+                        for i in range(rightVU2):
+                            try:
+                                self.draw.rectangle((Screen99rightVUDistance-i*Screen99rightVUWide1, Screen99rightVUYpos1, Screen99rightVUDistance-i*Screen99rightVUWide1+Screen99rightVUWide2, Screen99rightVUYpos2), outline = Screen99rightVUBorder, fill = Screen99rightVUFill)
+                            except:
+                                continue    
+                TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
+                self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
+                position = Screen9text01
+                if DisplayTechnology == 'Braun':
+                    if self.textwidth <= self.width-48:
+                        position = (int(((self.width-48-self.textwidth)/2)+34), position[1])
+                else:
+                    if self.textwidth <= self.width:
+                        position = (int((self.width-self.textwidth)/2), position[1])
+                self.draw.text((position), TextBaustein, font=font6, fill='white')
+                if DisplayTechnology == 'Braun':
+                    self.draw.line((34, 51, 242, 51), fill='white', width=1)
+                    self.draw.line((34, 60, 83, 60), fill='white', width=1)
+                    self.draw.line((83, 60, 90, 51), fill='white', width=1)
+                    self.draw.line((195, 60, 242, 60), fill='white', width=1)
+                    self.draw.line((188, 51, 195, 60), fill='white', width=1)
+                else:
+                    self.draw.line((0, 51, 255, 51), fill='white', width=1)
+                    self.draw.line((0, 60, 64, 60), fill='white', width=1)
+                    self.draw.line((64, 60, 70, 51), fill='white', width=1)
+                    self.draw.line((190, 60, 255, 60), fill='white', width=1)
+                    self.draw.line((184, 51, 190, 60), fill='white', width=1)
+                self.textwidth1, self.textheight1 = self.draw.textsize(oled.activeFormat, font=font6)
+
                 image.paste(self.image, (0, 0))
 
 
