@@ -223,12 +223,12 @@ Screen55specYposTag = 33
 Screen55specYposNoTag = 33
 
 #config for leftVU
-Screen5leftVUDistance = 1
+Screen5leftVUDistance = 0
 Screen5leftVUBorder = (80, 80, 80)
 Screen5leftVUFill = (80, 80, 80)
 Screen5leftVUWide1 = 2
-Screen5leftVUWide2 = 1
-Screen5leftVUYpos1 = 38
+Screen5leftVUWide2 = 0
+Screen5leftVUYpos1 = 39
 Screen5leftVUYpos2 = 45
 
 #config for leftVU NoProgress
@@ -236,26 +236,26 @@ Screen55leftVUDistance = 0
 Screen55leftVUBorder = (80, 80, 80)
 Screen55leftVUFill = (80, 80, 80)
 Screen55leftVUWide1 = 2
-Screen55leftVUWide2 = 1
-Screen55leftVUYpos1 = 38
+Screen55leftVUWide2 = 0
+Screen55leftVUYpos1 = 39
 Screen55leftVUYpos2 = 45
 
 #config for rightVU
-Screen5rightVUDistance = 253
+Screen5rightVUDistance = 255
 Screen5rightVUBorder = (80, 80, 80)
 Screen5rightVUFill = (80, 80, 80)
 Screen5rightVUWide1 = 2
 Screen5rightVUWide2 = 0
-Screen5rightVUYpos1 = 38
+Screen5rightVUYpos1 = 39
 Screen5rightVUYpos2 = 45
 
 #config for rightVU NoProgress
-Screen55rightVUDistance = 253
+Screen55rightVUDistance = 255
 Screen55rightVUBorder = (80, 80, 80)
 Screen55rightVUFill = (80, 80, 80)
 Screen55rightVUWide1 = 2
 Screen55rightVUWide2 = 0
-Screen55rightVUYpos1 = 38
+Screen55rightVUYpos1 = 39
 Screen55rightVUYpos2 = 45
 
 #_______'VU-Meter-1'_____________________________________________________
@@ -355,6 +355,95 @@ Screen8PeakWidth = 2          # wdith of the peak indicator in pixels
 Screen8specGradstart = 80
 Screen8specGradstop = 210
 Screen8specGradSamples = 32
+
+#_______'Modern-simplistic'_____________________________________________________
+#Config TextPositions NowPlaying-/StandBy-Screen:
+Screen9text01 = 110, 53        #Artist
+Screen9text02 = 92, 53       #Title
+Screen9text012 = 92, 53       #Artist
+Screen9text022 = 92, 53       #Title
+Screen9text06 = 91, 39       #format
+Screen9text07 = 123, 39     #samplerate
+Screen9text08 = 163, 39     #bitdepth
+Screen9text28 = 113, 37       #Play/Pause Indicator
+
+#configuration of the duration and playtime (textbox-) positions
+Screen9ActualPlaytimeText = 1, 41
+Screen9DurationText = 220, 41
+
+#config for Progress-Bar
+Screen9barwidth = 162
+Screen9barLineBorder = 'white'
+Screen9barLineFill = 'white'
+Screen9barLineX = 50
+Screen9barLineThick1 = 44     #difference between both = thickness 
+Screen9barLineThick2 = 44     # 59 and 59 = 1 Pixel thick
+Screen9barBorder = 'white'
+Screen9barFill = 'black'
+Screen9barX = 50
+Screen9barThick1 = 42         #difference between both = thickness 
+Screen9barThick2 = 46         # 56 and 62 = 6 Pixel thick
+Screen9barNibbleWidth = 2
+
+#config for Spectrum
+Screen9specDistance = 1
+Screen9specBorder = (130, 130, 130)
+Screen9specFill = (130, 130, 130)
+Screen9specWide1 = 4
+Screen9specWide2 = 1
+Screen9specYposTag = 38
+Screen9specYposNoTag = 38
+Screen9specHigh = 1.5
+
+#config for Spectrum2 NoProgress
+Screen99specDistance = 1
+Screen99specBorder = (130, 130, 130)
+Screen99specFill = (130, 130, 130)
+Screen99specWide1 = 4
+Screen99specWide2 = 1
+Screen99specYposTag = 43
+Screen99specYposNoTag = 43
+
+#config for leftVU
+Screen9leftVUDistance = 0
+Screen9leftVUBorder = (80, 80, 80)
+Screen9leftVUFill = (80, 80, 80)
+Screen9leftVUWide1 = 2
+Screen9leftVUWide2 = 0
+Screen9leftVUYpos1 = 53
+Screen9leftVUYpos2 = 58
+
+#config for leftVU NoProgress
+Screen99leftVUDistance = 0
+Screen99leftVUBorder = (80, 80, 80)
+Screen99leftVUFill = (80, 80, 80)
+Screen99leftVUWide1 = 2
+Screen99leftVUWide2 = 0
+Screen99leftVUYpos1 = 53
+Screen99leftVUYpos2 = 58
+
+#config for rightVU
+Screen9rightVUDistance = 255
+Screen9rightVUBorder = (80, 80, 80)
+Screen9rightVUFill = (80, 80, 80)
+Screen9rightVUWide1 = 2
+Screen9rightVUWide2 = 0
+Screen9rightVUYpos1 = 53
+Screen9rightVUYpos2 = 58
+
+#config for rightVU NoProgress
+Screen99rightVUDistance = 255
+Screen99rightVUBorder = (80, 80, 80)
+Screen99rightVUFill = (80, 80, 80)
+Screen99rightVUWide1 = 2
+Screen99rightVUWide2 = 0
+Screen99rightVUYpos1 = 53
+Screen99rightVUYpos2 = 58
+
+#config for gradient color of the VU
+Screen9specGradstart = 80
+Screen9specGradstop = 255
+Screen9specGradSamples = 32
 
 #___________________________________________________________________
 #Config TextPositions Media-Library-Info-Screen:

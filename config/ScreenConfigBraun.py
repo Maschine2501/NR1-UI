@@ -356,7 +356,7 @@ Screen8specGradstart = 80
 Screen8specGradstop = 210
 Screen8specGradSamples = 32
 
-#_______'Modern-without-format-samplerate-bitdepth'_____________________________________________________
+#_______'Modern-simplistic'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen9text01 = 92, 53        #Artist
 Screen9text02 = 92, 53       #Title
@@ -439,6 +439,11 @@ Screen99rightVUWide1 = 1.5
 Screen99rightVUWide2 = 0
 Screen99rightVUYpos1 = 53
 Screen99rightVUYpos2 = 58
+
+#config for gradient color of the VU
+Screen9specGradstart = 80
+Screen9specGradstop = 255
+Screen9specGradSamples = 32
 
 #___________________________________________________________________
 #Config TextPositions Media-Library-Info-Screen:
