@@ -73,7 +73,7 @@ NowPlayingLayout = ReadScreenLayout.read()
 ReadScreenLayout.close()
 
 if DisplayTechnology != 'ssd1306':
-    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-without-format-samplerate-bitdepth']
+    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
 if DisplayTechnology == 'ssd1306':
     ScreenList = ['Progress-Bar', 'Spectrum-Screen']
 
@@ -1144,9 +1144,10 @@ class NowPlayingScreen():
                 image.paste(self.image, (0, 0))
 
 
-        if NowPlayingLayout == 'Modern-without-format-samplerate-bitdepth' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
+        if NowPlayingLayout == 'Modern-simplistic' and newStatus != 'stop' and DisplayTechnology != 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
+                spec_gradient = np.linspace(Screen9specGradstart, Screen9specGradstop, Screen9specGradSamples)
                 cava_fifo = open("/tmp/cava_fifo", 'r')
                 cava2_fifo = open("/tmp/cava2_fifo", 'r')
                 data = cava_fifo.readline().strip().split(';')
@@ -1154,7 +1155,7 @@ class NowPlayingScreen():
                 if len(data) >= 64 and newStatus != 'pause':
                     for i in range(0, len(data)-1):
                         try:
-                            self.draw.rectangle((Screen9specDistance+i*Screen9specWide1, Screen9specYposTag, Screen9specDistance+i*Screen9specWide1+Screen9specWide2, (Screen9specYposTag-int(data[i])*Screen9specHigh)), outline = Screen9specBorder, fill =Screen9specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
+                            self.draw.rectangle((Screen9specDistance+i*Screen9specWide1, Screen9specYposTag, Screen9specDistance+i*Screen9specWide1+Screen9specWide2, (Screen9specYposTag-int(data[i])*Screen9specHigh)), outline = Screen9specBorder, fill =Screen9specFill)  
                         except:
                             continue
                 if len(data2) >= 3:
@@ -1186,7 +1187,7 @@ class NowPlayingScreen():
                 else:
                     if self.textwidth <= self.width:
                         position = (int((self.width-self.textwidth)/2), position[1])
-                self.draw.text((position), TextBaustein[:19], font=font6, fill='white')
+                self.draw.text((position), TextBaustein[:25], font=font6, fill='white')
                 if DisplayTechnology == 'Braun':
                     self.draw.line((34, 51, 242, 51), fill='white', width=1)
                     self.draw.line((34, 60, 83, 60), fill='white', width=1)
