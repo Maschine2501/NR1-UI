@@ -123,8 +123,8 @@ firstStart = True
 if DisplayTechnology == 'spi1322':
    from luma.core.interface.serial import spi
    from luma.oled.device import ssd1322
-   from modules.displayFull import*
-   from config.ScreenConfig import*
+   from modules.display1322 import*
+   from config.ScreenConfig1322 import*
 
 if DisplayTechnology == 'Braun':
    from luma.core.interface.serial import spi
