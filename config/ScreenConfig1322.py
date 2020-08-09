@@ -487,3 +487,10 @@ oledSongIcon = '\U0000F001'
 oledPlaytimeIcon = '\U0000F1DA'
 oledplayIcon = '\u25B6'
 oledpauseIcon = '\u2389'
+
+#____________________________________________________________________
+#config for Scrolling Text
+ArtistScrollSpeed = 1
+ArtistEndScrollMargin = 2
+SongScrollSpeed = 1
+SongEndScrollMargin = 2
