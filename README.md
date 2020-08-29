@@ -152,7 +152,7 @@ The project is not finished yet... but close the the goal!
 
 ---
 
-## Discord Server foor direct contact:
+## Discord Server for direct contact:
 ### [Click here to join...](https://discord.gg/GJ4ED3F)
 
 ---
