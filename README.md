@@ -152,6 +152,11 @@ The project is not finished yet... but close the the goal!
 
 ---
 
+## Discord Server foor direct contact:
+### [Click here to join...](https://discord.gg/GJ4ED3F)
+
+---
+
 ### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
