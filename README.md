@@ -23,7 +23,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ## The Code is now modular:
 
-### To modify your Layout use the [config files](https://github.com/Maschine2501/NR1-UI/tree/master/config) -> [here](https://github.com/Maschine2501/NR1-UI/wiki/Styling-Modification-Basics) is a litttle instruction about it.
+### To modify your Layout use the [config files](https://github.com/Maschine2501/NR1-UI/tree/master/config) -> [here](https://github.com/Maschine2501/NR1-UI/wiki/Styling-Modification-Basics) is a little instruction about it.
 
 ### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L68) in nr1ui.py
 
