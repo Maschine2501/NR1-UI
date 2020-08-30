@@ -196,9 +196,6 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-#if DisplayTechnology != 'i2c1306':
-#    oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
-#if DisplayTechnology == 'i2c1306':
 oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
 emit_track = False
@@ -217,22 +214,18 @@ varcanc = True                      #helper for pause -> stop timeout counter
 secvar = 0.0
 oled.volume = 100
 oled.SelectedScreen = NowPlayingLayout
-
 oled.fallingL = False
 oled.fallingR = False
 oled.prevFallingTimerL = 0
 oled.prevFallingTimerR = 0
-
 ScrollArtistTag = 0
 ScrollArtistNext = 0
 ScrollArtistFirstRound = True
 ScrollArtistNextRound = False
-
 ScrollSongTag = 0
 ScrollSongNext = 0
 ScrollSongFirstRound = True
 ScrollSongNextRound = False
-
 oled.selQueue = ''
 
 if DisplayTechnology != 'i2c1306':
@@ -315,7 +308,6 @@ def sigterm_handler(signal, frame):
     GPIO.output(13, GPIO.LOW)
     oled.clear()
     show_logo("shutdown.ppm", oled)
-    print('booyah! bye bye')
 #________________________________________________________________________________________
 #________________________________________________________________________________________
 #
@@ -327,19 +319,15 @@ def sigterm_handler(signal, frame):
 #   
 def GetIP():
     lanip = GetLANIP()
-    print(lanip)
     LANip = str(lanip.decode('ascii'))
-    print('LANip: ', LANip)
+    print('LAN IP: ', LANip)
     wanip = GetWLANIP()
-    print(wanip)
     WLANip = str(wanip.decode('ascii'))
-    print('WLANip: ', WLANip)
+    print('Wifi IP: ', WLANip)
     if LANip != '':
        ip = LANip
-       print('LanIP: ', ip)
     elif WLANip != '':
        ip = WLANip
-       print('WlanIP: ', ip)
     else:
        ip = "no ip"
     oled.IP = ip
@@ -1704,8 +1692,6 @@ class NowPlayingScreen():
                             self.SongPosition = (Screen8text02[0] + 60, Screen8text02[1])
                 if self.SongWidth <= self.width - 60:                  # center text
                     self.SongPosition = (int(((self.width-59-self.SongWidth)/2) + 60), Screen8text02[1])  
-                print('ScrollSongTag', ScrollSongTag)
-                print('ScrollSongNext', ScrollSongNext)
                 self.draw.text((self.SongPosition), oled.activeSong, font=font10, fill='white')
                 self.draw.rectangle((0, 0, 59, 34), fill = 'black', outline = 'black')
                 self.draw.text((Screen8text28), oled.playstateIcon, font=labelfont, fill='white')
@@ -1932,7 +1918,6 @@ class NowPlayingScreen():
                 self.bar = Screen9barwidth * self.playbackPoint / 100
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
-                #print(self.textwidth)
                 position = Screen9text01
                 if DisplayTechnology == 'Braun':
                     if self.textwidth <= self.width-48:
@@ -2151,7 +2136,6 @@ class ScreenSelectMenu():
         self.menuText = [None for i in range(self.menurows)]
         self.menuList = ScreenList
         self.totaloptions = len(ScreenList)
-        print(self.totaloptions)
         self.onscreenoptions = min(self.menurows, self.totaloptions)
         self.firstrowindex = 0
         self.MenuUpdate()
