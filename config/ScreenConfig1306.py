@@ -2,8 +2,8 @@
 
 #___________________________________________________________________
 #config for boot- and shutdown-logo
-oledBootLogo = "1306boot.bmp"
-oledShutdownLogo = "1306shutdown.bmp"
+oledBootLogo = "StartScreen1306.bmp"
+oledShutdownLogo = "ShutdownScreen1306.bmp"
 
 #___________________________________________________________________
 #config for Clock/Standby:
