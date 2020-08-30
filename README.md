@@ -161,6 +161,11 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ---
 
+## You want to use a display which is not supported yet?
+### If you're willing to sponsor me the specific Display, I will implement it.
+
+---
+
 ### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
