@@ -468,8 +468,10 @@ def onPushState(data):
     	
         if 'stream' in data:
             newFormat = data['stream']
-        else:
-            newFormat = ''
+        if 'trackType' in data:
+            newTrackType = data['trackType']
+        if newFormat == False:
+            newFormat = newTrackType
         if newFormat is None:
             newFormat = ''
         if newFormat == True and newSong != 'HiFiBerry ADC':
