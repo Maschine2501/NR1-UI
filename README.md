@@ -122,6 +122,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [x] VU-Meter-Bar-Layout -> Thanks Mihai for the Background Image! <3
 - [x] Peak-Hold enabled in VU-Meter-Bar-Layout -> Thanks [almajiro](https://github.com/almajiro) for providing a sample! <3
 - [x] Scrolling-Text is back!
+- [x] Tidal Playback is functional now
 
 
 ## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
