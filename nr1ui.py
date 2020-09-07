@@ -50,6 +50,38 @@ from modules.rotaryencoder import RotaryEncoder
 import uuid
 import numpy as np
 
+service1 = "cava1"
+service2 = "cava2"
+
+p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
+(output1, err) = p1.communicate()
+output1 = output1.decode('utf-8')
+p2 =  subprocess.Popen(["systemctl", "is-active",  service2], stdout=subprocess.PIPE)
+(output2, err) = p2.communicate()
+output2 = output2.decode('utf-8')
+print('output1: ', output1)
+print('output2: ', output2)
+
+#Write1 = open('/home/volumio/NR1-UI/write1.txt', 'w')
+#Write1.write(output1)
+#Write1.close
+
+
+if output1 != "active" and output2 != "active":
+    print('while')
+    p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
+    (output1, err) = p1.communicate()
+    output1 = output1.decode('utf-8')
+    p2 =  subprocess.Popen(["systemctl", "is-active",  service2], stdout=subprocess.PIPE)
+    (output2, err) = p2.communicate()
+    output2 = output2.decode('utf-8')
+    if output1 == "active" and output2 == "active":
+        print("Cava is running") 
+    else:
+        sleep(1.0)
+        print('else')
+
+
 #from decimal import Decimal
 #________________________________________________________________________________________
 #________________________________________________________________________________________
@@ -430,6 +462,7 @@ def SetState(status):
 #   
 def onPushState(data):
     if oled.state is not 3:
+#        data = json.loads(data.decode("utf-8"))
         global OPDsave	
         global newStatus #global definition for newStatus, used at the end-loop to update standby
         global newSong
@@ -446,7 +479,7 @@ def onPushState(data):
         global ScrollSongFirstRound
         global ScrollSongNextRound
         OPDsave = data
-        #print('data: ', data)    
+#        print('data: ', str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
@@ -465,37 +498,55 @@ def onPushState(data):
             newArtist = ''
         if newArtist == '' and newSong == 'HiFiBerry ADC':
             newArtist = 'Line-Input:'
-    	
-        if 'stream' in data:
-            newFormat = data['stream']
+
         if 'trackType' in data:
-            newTrackType = data['trackType']
-        if newFormat == False:
-            newFormat = newTrackType
-        if newFormat is None:
-            newFormat = ''
-        if newFormat == True and newSong != 'HiFiBerry ADC':
-           newFormat = 'WebRadio'
-        if newFormat == True and newSong == 'HiFiBerry ADC':
-            newFormat = 'Live-Stream'
-    
+            newFormat = data['trackType']
+            oled.activeFormat = newFormat
+            if newFormat == True and newSong != 'HiFiBerry ADC':
+                newFormat = 'WebRadio'
+                oled.activeFormat = newFormat
+            if newFormat == True and newSong == 'HiFiBerry ADC':
+                newFormat = 'Live-Stream'
+                oled.activeFormat = newFormat
+               	
+#        if 'stream' in data:
+#            newFormat = data['stream']
+#            if newFormat == False:
+#                newFormat = newTrackType
+#                oled.activeFormat = newFormat
+#            if newFormat is None:
+#                newFormat = ''
+#                oled.activeFormat = newFormat
+#            if newFormat == True and newSong != 'HiFiBerry ADC':
+#                newFormat = 'WebRadio'
+#                oled.activeFormat = newFormat
+#            if newFormat == True and newSong == 'HiFiBerry ADC':
+#                newFormat = 'Live-Stream'
+#                oled.activeFormat = newFormat
+                
     	#If a stream (like webradio) is playing, the data set for 'stream'/newFormat is a boolian (True)
     	#drawOn can't handle that and gives an error. 
     	#therefore we use "if newFormat == True:" and define a placeholder Word, you can change it.
     
         if 'samplerate' in data:
             newSamplerate = data['samplerate']
+            oled.activeSamplerate = newSamplerate
         else:
             newSamplerate = ' '
+            oled.activeSamplerate = newSamplerate
         if newSamplerate is None:
             newSamplerate = ' '
+            oled.activeSamplerate = newSamplerate
     
         if 'bitdepth' in data:
             newBitdepth = data['bitdepth']
+            oled.activeBitdepth = newBitdepth
         else:
             newBitdepth = ' '
+            oled.activeBitdepth = newBitdepth
         if newBitdepth is None:
-            newBitdepth = ' '  
+            newBitdepth = ' '
+            oled.activeBitdepth = newBitdepth  
             
         if 'position' in data:                      # current position in queue
             oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
@@ -525,9 +576,9 @@ def onPushState(data):
         if newArtist is None:   #volumio can push NoneType
             newArtist = ''
         
-        oled.activeFormat = newFormat
-        oled.activeSamplerate = newSamplerate
-        oled.activeBitdepth = newBitdepth
+        #oled.activeFormat = newFormat
+        #oled.activeSamplerate = newSamplerate
+        #oled.activeBitdepth = newBitdepth
     
         if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
             oled.activeSong = newSong
@@ -1634,6 +1685,7 @@ class NowPlayingScreen():
                 spec_gradient = np.linspace(Screen8specGradstart, Screen8specGradstop, Screen8specGradSamples)
                 cava2_fifo = open("/tmp/cava2_fifo", 'r')
                 data2 = cava2_fifo.readline().strip().split(';')
+#                print(data2)
                 self.playbackPoint = oled.seek / oled.duration / 10
                 self.bar = Screen8barwidth * self.playbackPoint / 100
                 self.ArtistWidth, self.ArtistHeight = self.draw.textsize(oled.activeArtist, font=font9)
@@ -2363,8 +2415,8 @@ except IOError:
 else:
     oled.playPosition = config['track']
     
-if oled.playState != 'play':
-    volumioIO.emit('play', {'value':oled.playPosition})
+#if oled.playState != 'play':
+#    volumioIO.emit('play', {'value':oled.playPosition})
 
 InfoTag = 0                         #helper for missing Artist/Song when changing sources
 GetIP()
