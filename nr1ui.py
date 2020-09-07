@@ -62,7 +62,9 @@ output2 = output2.decode('utf-8')
 print('Cava-1: ', output1)
 print('Cava-2: ', output2)
 
-if output1 != "active" and output2 != "active":
+while output1 != "active" and output2 != "active":
+    global output1
+    global output2
     p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
     (output1, err) = p1.communicate()
     output1 = output1.decode('utf-8')
