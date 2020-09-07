@@ -49,33 +49,7 @@ from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
 import uuid
 import numpy as np
-
-service1 = "cava1"
-service2 = "cava2"
-
-p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
-(output1, err) = p1.communicate()
-output1 = output1.decode('utf-8')
-p2 =  subprocess.Popen(["systemctl", "is-active",  service2], stdout=subprocess.PIPE)
-(output2, err) = p2.communicate()
-output2 = output2.decode('utf-8')
-print('Cava-1: ', output1)
-print('Cava-2: ', output2)
-
-if output1 != "active" and output2 != "active":
-    p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
-    (output1, err) = p1.communicate()
-    output1 = output1.decode('utf-8')
-    p2 =  subprocess.Popen(["systemctl", "is-active",  service2], stdout=subprocess.PIPE)
-    (output2, err) = p2.communicate()
-    output2 = output2.decode('utf-8')
-    if output1 == "active" and output2 == "active":
-        print("Cava is running") 
-    else:
-        sleep(1.0)
-        print('waiting for cava')
-
-
+sleep(5.0)
 #from decimal import Decimal
 #________________________________________________________________________________________
 #________________________________________________________________________________________
