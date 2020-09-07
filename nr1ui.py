@@ -59,13 +59,8 @@ output1 = output1.decode('utf-8')
 p2 =  subprocess.Popen(["systemctl", "is-active",  service2], stdout=subprocess.PIPE)
 (output2, err) = p2.communicate()
 output2 = output2.decode('utf-8')
-print('output1: ', output1)
-print('output2: ', output2)
-
-#Write1 = open('/home/volumio/NR1-UI/write1.txt', 'w')
-#Write1.write(output1)
-#Write1.close
-
+print('Cava-1: ', output1)
+print('Cava-2: ', output2)
 
 if output1 != "active" and output2 != "active":
     p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
