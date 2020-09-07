@@ -68,7 +68,6 @@ print('output2: ', output2)
 
 
 if output1 != "active" and output2 != "active":
-    print('while')
     p1 =  subprocess.Popen(["systemctl", "is-active",  service1], stdout=subprocess.PIPE)
     (output1, err) = p1.communicate()
     output1 = output1.decode('utf-8')
@@ -79,7 +78,7 @@ if output1 != "active" and output2 != "active":
         print("Cava is running") 
     else:
         sleep(1.0)
-        print('else')
+        print('waiting for cava')
 
 
 #from decimal import Decimal
