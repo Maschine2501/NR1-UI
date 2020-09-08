@@ -1,7 +1,6 @@
 #!/bin/bash
 set +e #
-cd #
-echo "Europe/Berlin" > /etc/timezone #
+sudo dpkg-reconfigure tzdata #
 cd #
 echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
