@@ -1,6 +1,8 @@
 #!/bin/bash
 set +e #
 cd #
+echo "Europe/Berlin" > /etc/timezone #
+cd #
 echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
 echo "Installing Python 3.5.2 and dependencies"
