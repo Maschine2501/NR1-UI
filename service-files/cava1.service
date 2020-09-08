@@ -4,7 +4,7 @@ Description=cava1
 [Service]
 Type=simple
 WorkingDirectory=/home/volumio
-ExecStart=/usr/local/bin/cava -p /home/volumio/NR1-UI-Plugin/config/cava1/config/usr/local/bin/cava -p /home/volumio/NR1-UI-Plugin/config/cava1/config
+ExecStart=/usr/local/bin/cava -p /home/volumio/NR1-UI/config/cava1/config
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=cava1
