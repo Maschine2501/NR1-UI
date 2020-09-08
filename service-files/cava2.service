@@ -1,0 +1,15 @@
+[Unit]
+Description=cava2
+ 
+[Service]
+Type=simple
+WorkingDirectory=/home/volumio
+ExecStart=/home/volumio/CAVA2/bin/cava -p /home/volumio/NR1-UI-Plugin/config/cava2/config
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=cava2
+User=volumio
+Group=volumio
+ 
+[Install]
+WantedBy=multi-user.target
