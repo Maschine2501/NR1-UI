@@ -46,8 +46,6 @@ sudo systemctl daemon-reload #
 sudo systemctl enable nr1ui.service #
 sudo systemctl enable cava1.service #
 sudo systemctl enable cava2.service #
-#sudo chmod 777 /home/volumio/NR1-UI-Plugin
-#sudo chmod 777 /home/volumio/NR1-UI
 echo " "
 echo " "
 echo "Installation has finished, congratulations!"
