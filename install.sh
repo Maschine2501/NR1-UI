@@ -42,10 +42,7 @@ sudo bash ./autogen.sh #
 ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
 cd #
 echo "installing NR1-UI..."
-#git clone https://github.com/Maschine2501/NR1-UI.git /home/volumio/NR1-UI #
 chmod +x /home/volumio/NR1-UI/nr1ui.py #
-#sudo chmod 777 /home/volumio/NR1-UI-Plugin
-#sudo chmod 777 /home/volumio/NR1-UI/
 sudo cp /home/volumio/NR1-UI/service-files/nr1ui.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
