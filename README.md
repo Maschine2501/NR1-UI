@@ -132,7 +132,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 ## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
 ---
-## [Installation steps (NR1UI)](https://github.com/Maschine2501/NR1-UI/wiki/Installatin-steps-(NR1UI))
+## [Installation steps (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(Bash-Script))
 ---
 ## Configuration Manual (will follow soon!)
 
