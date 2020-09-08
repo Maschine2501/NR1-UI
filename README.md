@@ -92,6 +92,8 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
 - [ ] More Layouts and redesigning the existing ones
+- [ ] Python 3.5 (Support ends 13. september 2020) -> Upgrade to latest posssible version 
+- [ ] PIP 21.0 (Support ends January 2021) -> Upgrade to latest posssible version
 
 
 ## Allready Done:
