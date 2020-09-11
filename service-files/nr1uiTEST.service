@@ -1,0 +1,15 @@
+[Unit]
+Description=NR1-UI-TEST
+ 
+[Service]
+Type=simple
+WorkingDirectory=/home/volumio
+ExecStart=/usr/local/bin/python3.8 -u /home/volumio/NR1-UI/nr1ui.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nr1uiTEST
+User=volumio
+Group=volumio
+ 
+[Install]
+WantedBy=multi-user.target
