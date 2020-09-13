@@ -39,8 +39,6 @@ cd cava #
 sudo bash autogen.sh #
 ./configure && make -j4 && sudo make install #
 cd #
-#sudo cp /home/volumio/NR1-UI/config/mpd.conf /etc/ #
-#sudo chmod 777 /etc/mpd.conf #
 git clone https://github.com/Maschine2501/cava.git /home/volumio/CAVAinstall #
 cd /home/volumio/CAVAinstall #
 sudo bash ./autogen.sh #
