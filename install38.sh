@@ -4,7 +4,7 @@ sudo dpkg-reconfigure tzdata #
 cd #
 echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
-echo "Installing OpenSSL 1.1.1b Python 3.8.5 and dependencies"
+echo "Installing OpenSSL 1.1.1b"
 mkdir src #
 cd ~/src && mkdir openssl && cd openssl #
 wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
@@ -14,6 +14,7 @@ cd #
 sudo cp /home/volumio/NR1-UI/config/ldconf/libc.conf /etc/ld.so.conf.d #
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
+echo "Installing OpenSSL 1.1.1b Python 3.8.5 and dependencies"
 cd ~/src && mkdir python && cd python #
 wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
 tar xf Python-3.8.5.tar.xz #
