@@ -1,5 +1,7 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 
+## 13.09.2020 Upgrade to Python3.8.5
+
 ### This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 ---
 
@@ -126,6 +128,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [x] Scrolling-Text is back!
 - [x] Tidal Playback is functional now
 - [x] Simplyfied installation routine by using a bassh-script
+- [x] Upgrade to latest Python (3.8.5) -> Alternative installation!
 
 ## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
@@ -134,10 +137,12 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 ## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
 ---
-## [Installation steps (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(Bash-Script))
----
-## Configuration Manual (will follow soon!)
+## [Main-Installation steps (Python 3.5.2) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(Bash-Script))
 
+# [Main-Installation steps (Python 3.8.5) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script))
+---
+
+## Configuration Manual (will follow soon!)
 ---
 
 
