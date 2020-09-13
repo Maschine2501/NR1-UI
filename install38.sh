@@ -6,7 +6,7 @@ echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b"
 mkdir src #
-cd ~/src && mkdir openssl && cd openssl #
+cd /home/volumio/src && mkdir openssl && cd openssl #
 wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
 tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
 ./configure --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
@@ -15,7 +15,7 @@ sudo cp /home/volumio/NR1-UI/config/ldconf/libc.conf /etc/ld.so.conf.d #
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
 echo "Installing 3.8.5 and related modules"
-cd ~/src && mkdir python && cd python #
+cd /home/volumio/src && mkdir python && cd python #
 wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
 tar xf Python-3.8.5.tar.xz #
 cd Python-3.8.5 #
@@ -23,12 +23,12 @@ sudo cp /home/volumio/NR1-UI/config/python/Setup /home/volumio/src/python/Python
 ./configure --prefix=/home/volumio/src/Python-3.8.5 --with-openssl=/home/volumio/src/openssl-1.1.1b && make -j4 && sudo make altinstall #
 export PATH=~/home/volumio/src/Python-3.8.5/bin:$PATH #
 export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
-sudo ~/src/Python-3.8.5/bin/pip3 install -U pip #
-sudo ~/src/Python-3.8.5/bin/pip3 install -U setuptools #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3 install -U pip #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3 install -U setuptools #
 sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio libffi-dev libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
-sudo ~/src/Python-3.8.5/bin/pip3 install --upgrade setuptools pip wheel #
-sudo ~/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
-sudo ~/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
+sudo /home/volumio/Python-3.8.5/bin/pip3 install --upgrade setuptools pip wheel #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
 echo "all Python related modules arre installed..."
 echo "Installing Cava..."
 git clone https://github.com/Maschine2501/cava.git #
