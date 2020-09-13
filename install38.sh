@@ -31,7 +31,7 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
 echo "all Python related modules arre installed..."
 echo "Installing Cava..."
-cdd #
+cd #
 git clone https://github.com/Maschine2501/cava.git #
 cd cava #
 sudo bash autogen.sh #
