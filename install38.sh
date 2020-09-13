@@ -5,7 +5,7 @@ cd #
 echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b"
-mkdir src #
+mkdir /home/volumio/src #
 cd /home/volumio/src && mkdir openssl && cd openssl #
 wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
 tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
@@ -31,6 +31,7 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
 echo "all Python related modules arre installed..."
 echo "Installing Cava..."
+cdd #
 git clone https://github.com/Maschine2501/cava.git #
 cd cava #
 sudo bash autogen.sh #
