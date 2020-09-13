@@ -9,7 +9,7 @@ mkdir src #
 cd /home/volumio/src && mkdir openssl && cd openssl #
 wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
 tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
-./configure --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
+./config --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
 cd #
 sudo cp /home/volumio/NR1-UI/config/ldconf/libc.conf /etc/ld.so.conf.d #
 sudo ldconfig #
