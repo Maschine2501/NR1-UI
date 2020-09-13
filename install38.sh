@@ -1,7 +1,7 @@
 #!/bin/bash
 set +e #
 sudo apt-get update #
-sudo apt-get install -y build-essential #
+sudo apt-get install -y build-essential libffi-dev#
 sudo dpkg-reconfigure tzdata #                                                                               
 cd #
 echo "configuring Config.txt"
@@ -27,7 +27,7 @@ export PATH=~/home/volumio/src/Python-3.8.5/bin:$PATH #
 export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install -U pip #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install -U setuptools #
-sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio libffi-dev libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
+sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libjpeg-dev build-essential python-rpi.gpio libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
 sudo /home/volumio/Python-3.8.5/bin/pip3 install --upgrade setuptools pip wheel #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
