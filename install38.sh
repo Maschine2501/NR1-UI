@@ -1,7 +1,7 @@
 #!/bin/bash
 set +e #
 sudo apt-get update #
-sudo apt-get install build-essential #
+sudo apt-get install -y build-essential #
 sudo dpkg-reconfigure tzdata #                                                                               
 cd #
 echo "configuring Config.txt"
