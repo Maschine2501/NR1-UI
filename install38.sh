@@ -14,7 +14,7 @@ cd #
 sudo cp /home/volumio/NR1-UI/config/ldconf/libc.conf /etc/ld.so.conf.d #
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
-echo "Installing OpenSSL 1.1.1b Python 3.8.5 and dependencies"
+echo "Installing 3.8.5 and related modules"
 cd ~/src && mkdir python && cd python #
 wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
 tar xf Python-3.8.5.tar.xz #
@@ -29,6 +29,8 @@ sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-
 sudo ~/src/Python-3.8.5/bin/pip3 install --upgrade setuptools pip wheel #
 sudo ~/src/Python-3.8.5/bin/pip3 install --upgrade luma.oled #
 sudo ~/src/Python-3.8.5/bin/pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
+echo "all Python related modules arre installed..."
+echo "Installing Cava..."
 git clone https://github.com/Maschine2501/cava.git #
 cd cava #
 sudo bash autogen.sh #
@@ -41,6 +43,7 @@ cd /home/volumio/CAVAinstall #
 sudo bash ./autogen.sh #
 ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
 cd #
+echo "Installing NR1-UI..."
 chmod +x /home/volumio/NR1-UI/nr1ui38.py #
 sudo cp /home/volumio/NR1-UI/service-files/nr1ui38.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
@@ -54,6 +57,8 @@ echo " "
 echo "Installation has finished, congratulations!"
 echo " "
 echo " "
-echo "Please reboot to finish setup."                                                                                                                         
+echo "Please have a look in the Installation instructions to finish setup."                                                                                                                         
+echo " "
+echo "https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script)"
 echo " "
 exit 0
