@@ -4,6 +4,8 @@ sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
 sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
 cd #
+sudo chmod +x NR1-UI/mpd-buffertime.sh
+sudo chmod +x NR1-UI/mpd.sh
 echo "configuring Config.txt"
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b"
