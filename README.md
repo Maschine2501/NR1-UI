@@ -94,8 +94,6 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [ ] Add RS232 -> Braun Master Control communication
 - [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
 - [ ] More Layouts and redesigning the existing ones
-- [ ] Python 3.5 (Support ends 13. september 2020) -> Upgrade to latest posssible version 
-- [ ] PIP 21.0 (Support ends January 2021) -> Upgrade to latest posssible version
 
 
 ## Allready Done:
@@ -129,6 +127,9 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [x] Tidal Playback is functional now
 - [x] Simplyfied installation routine by using a bassh-script
 - [x] Upgrade to latest Python (3.8.5) -> Alternative installation!
+- [x] added a configuration script to [installer](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Autoconfig-Bash-Script))
+- [x] Python 3.5 (Support ends 13. september 2020) -> Upgrade to latest posssible version 
+- [x] PIP 21.0 (Support ends January 2021) -> Upgrade to latest posssible version
 
 ## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
