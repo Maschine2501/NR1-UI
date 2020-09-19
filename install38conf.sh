@@ -50,7 +50,7 @@ sudo cp /home/volumio/NR1-UI/service-files/nr1ui38-conf.service /lib/systemd/sys
 sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
-sudo systemctl enable nr1ui38.service #
+sudo systemctl enable nr1ui38-conf.service #
 sudo systemctl enable cava1.service #
 sudo systemctl enable cava2.service #
 echo "audio_output {" >> /etc/mpd.conf
