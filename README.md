@@ -53,9 +53,9 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 #### Base ssd1306 (on all Layouts the same):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(2).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306%20(3).png)
-#### Screen1 (ssd1306):
+#### Spectrum-Screen (ssd1306):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(2).png)
-#### Screen2 (ssd1306):
+#### Progress-Bar (ssd1306):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(2).png)
 ## Features of Maschine2501/NR1-UI:
 ---
