@@ -45,8 +45,8 @@ sudo bash ./autogen.sh #
 ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
 cd #
 echo "Installing NR1-UI..."
-chmod +x /home/volumio/NR1-UI/nr1ui38.py #
-sudo cp /home/volumio/NR1-UI/service-files/nr1ui38.service /lib/systemd/system/ #
+chmod +x /home/volumio/NR1-UI/nr1ui38-conf.py #
+sudo cp /home/volumio/NR1-UI/service-files/nr1ui38-conf.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
 sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
