@@ -6,6 +6,7 @@ sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat
 cd #
 sudo chmod +x NR1-UI/mpd-buffertime.sh #
 sudo chmod +x NR1-UI/mpd.sh #
+sudo chmod +x NR1-UI/PreConfiguration.sh #
 echo "configuring Config.txt" #
 sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b" #
