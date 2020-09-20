@@ -584,7 +584,7 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
-sudo cp /home/volumio/NR1-UI/PreConfiguration.py /home/volumio/NR1-UI/modules
+sudo cp /home/volumio/NR1-UI/PreConfiguration.py /home/volumio/NR1-UI/modules #
 echo " " #
 echo " " #
 echo " " #
