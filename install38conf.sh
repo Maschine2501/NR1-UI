@@ -587,6 +587,10 @@ getPlay2PauseTime() { #
 until getPlay2PauseTime; do : ; done #
 echo " " #
 echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
 echo "Installation has finished, congratulations!" #
 echo " " #
 echo " " #
@@ -594,4 +598,5 @@ echo "Please have a look in the Installation instructions to finish setup." #
 echo " " #
 echo "https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script)" #
 echo " " #
-exit 0 #
+echo " " #
+echo " " #
