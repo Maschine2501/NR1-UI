@@ -25,7 +25,7 @@ tar xf Python-3.8.5.tar.xz #
 cd Python-3.8.5 #
 sudo cp /home/volumio/NR1-UI/config/python/Setup /home/volumio/src/python/Python-3.8.5/Modules #
 ./configure --prefix=/home/volumio/src/Python-3.8.5 --with-openssl=/home/volumio/src/openssl-1.1.1b && make -j4 && sudo make altinstall #
-export PATH=~/home/volumio/src/Python-3.8.5/bin:$PATH #
+export PATH=/home/volumio/src/Python-3.8.5/bin:$PATH #
 export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install -U pip #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install -U setuptools #
@@ -584,6 +584,7 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
+sudo cp /home/volumio/NR1-UI/PreConfiguration.py /home/volumio/NR1-UI/modules
 echo " " #
 echo " " #
 echo " " #
