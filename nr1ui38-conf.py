@@ -49,7 +49,7 @@ from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
 import uuid
 import numpy as np
-import PreConfiguration.py
+import modules.PreConfiguration import PreConfiguration
 sleep(5.0)
 #from decimal import Decimal
 #________________________________________________________________________________________
