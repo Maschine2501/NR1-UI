@@ -49,7 +49,7 @@ from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
 import uuid
 import numpy as np
-import modules.PreConfiguration import*
+from ConfigurationFiles.PreConfiguration import*
 sleep(5.0)
 #from decimal import Decimal
 #________________________________________________________________________________________
@@ -100,19 +100,19 @@ if DisplayTechnology == 'spi1322':
    from luma.core.interface.serial import spi
    from luma.oled.device import ssd1322
    from modules.display1322 import*
-   from config.ScreenConfig1322 import*
+   from ConfigurationFiles.ScreenConfig1322 import*
 
 if DisplayTechnology == 'Braun':
    from luma.core.interface.serial import spi
    from luma.oled.device import ssd1322
    from modules.displayBraun import*
-   from config.ScreenConfigBraun import*
+   from ConfigurationFiles.ScreenConfigBraun import*
 
 if DisplayTechnology == 'i2c1306':
     from luma.core.interface.serial import i2c
     from luma.oled.device import ssd1306
     from modules.display1306 import*
-    from config.ScreenConfig1306 import*
+    from ConfigurationFiles.ScreenConfig1306 import*
 
 if firstStart == True:
     if ledTechnology == None:
@@ -2301,7 +2301,7 @@ volumioIO.emit('getQueue')
 sleep(0.1)
 
 try:
-    with open('oledconfig.json', 'r') as f:   #load last playing track number
+    with open('oledConfigurationFiles.json', 'r') as f:   #load last playing track number
         config = json.load(f)
 except IOError:
     pass

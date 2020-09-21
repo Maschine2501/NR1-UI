@@ -8,7 +8,7 @@ sudo chmod +x NR1-UI/mpd-buffertime.sh #
 sudo chmod +x NR1-UI/mpd.sh #
 sudo chmod +x NR1-UI/PreConfiguration.sh #
 echo "configuring Config.txt" #
-sudo cp /home/volumio/NR1-UI/config/config.txt /boot/ #
+sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b" #
 mkdir /home/volumio/src #
 cd /home/volumio/src && mkdir openssl && cd openssl #
@@ -16,7 +16,8 @@ wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
 tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
 ./config --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
 cd #
-sudo cp /home/volumio/NR1-UI/config/ldconf/libc.conf /etc/ld.so.conf.d #
+sudo cp /home/volumio/NR1-UI/ConfigurationFiles/ldconf/libc.conf /etc/ld.so.conf.d #
+#echo "/home/volumio/src/openssl-1.1.1b/lib" >> /etc/ld.so.conf.d
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
 echo "Installing 3.8.5 and related modules" #
@@ -24,7 +25,7 @@ cd /home/volumio/src && mkdir python && cd python #
 wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
 tar xf Python-3.8.5.tar.xz #
 cd Python-3.8.5 #
-sudo cp /home/volumio/NR1-UI/config/python/Setup /home/volumio/src/python/Python-3.8.5/Modules #
+sudo cp /home/volumio/NR1-UI/ConfigurationFiles/python/Setup /home/volumio/src/python/Python-3.8.5/Modules #
 ./configure --prefix=/home/volumio/src/Python-3.8.5 --with-openssl=/home/volumio/src/openssl-1.1.1b && make -j4 && sudo make altinstall #
 export PATH=/home/volumio/src/Python-3.8.5/bin:$PATH #
 export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
@@ -33,7 +34,7 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install -U setuptools #
 sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libjpeg-dev python-rpi.gpio libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade setuptools pip wheel #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
-sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
 echo "all Python related modules arre installed..." #
 echo "Installing Cava..." #
 cd #
@@ -111,19 +112,19 @@ getDisplayType() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #
-      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"i2c1306"'"/' PreConfiguration.py # 
+      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"i2c1306"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Display-Type as ssd1306" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"spi1322"'"/' PreConfiguration.py #
+      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"spi1322"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Display-Type as ssd1322" #
       return 0 #
       ;; #         
     3) #
-      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"Braun"'"/' PreConfiguration.py #
+      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"Braun"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Display-Type as Braun-Specific" #
       return 0 #
@@ -143,13 +144,13 @@ getScreenLayout1306() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #    
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Screen"'"/' PreConfiguration.py # 
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Screen"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Display-Type as ssd1306" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Display-Type as ssd1322" #
       return 0 #
@@ -164,55 +165,55 @@ getScreenLayout1322() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #    
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Left"'"/' PreConfiguration.py # 
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Left"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Screen Layout as Spetrum-Left" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as Spetrum-Center" #
       return 0 #
       ;; #         
     3) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Right"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Right"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as Spetrum-Right" #
       return 0 #
       ;; #  
     4) #    
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' PreConfiguration.py # 
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Screen Layout as No-Spetrum" #
       return 0 #
       ;; #
     5) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as Modern" #
       return 0 #
       ;; #         
     6) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-1"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-1"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as VU-Meter-1" #
       return 0 #
       ;; #        
     7) #    
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' PreConfiguration.py # 
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Screen Layout as VU-Meter-2" #
       return 0 #
       ;; #
     8) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as VU-Meter-Bar" #
       return 0 #
       ;; #         
     9) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern-simplistic"'"/' PreConfiguration.py #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern-simplistic"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Screen Layout as Modern-simplistic" #
       return 0 #
@@ -268,13 +269,13 @@ getDisplayRotation() { #
   read -p "Enter your decision: " RotationNumber #
   case "$RotationNumber" in #
     1) #    
-      sed -i 's/\(oledrotation = \)\(.*\)/\10/' PreConfiguration.py # 
+      sed -i 's/\(oledrotation = \)\(.*\)/\10/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Set Display-Rotation to zero Rotation." #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(oledrotation = \)\(.*\)/\12/' PreConfiguration.py #
+      sed -i 's/\(oledrotation = \)\(.*\)/\12/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Set Display-Rotation to 180 degrees Rotation" #
       return 0 #
@@ -305,14 +306,14 @@ getLEDUsage() { #
   read -p "Enter your decision: " LEDUsageNumber #
   case "$LEDUsageNumber" in #
     1) #    
-      sed -i 's/\(ledActive = \)\(.*\)/\1True/' PreConfiguration.py # 
+      sed -i 's/\(ledActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Activated LED-Option" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(ledActive = \)\(.*\)/\1False/' PreConfiguration.py #
-      sed -i 's/\(ledTechnology = \)\(.*\)/\1None/' PreConfiguration.py # 
+      sed -i 's/\(ledActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      sed -i 's/\(ledTechnology = \)\(.*\)/\1None/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Deactivated LED-Option" #
       return 0 #
@@ -328,12 +329,12 @@ getLEDType() { #
   read -p "Enter your decision: " LEDTypeNumber #
   case "$LEDTypeNumber" in #
     1) #    
-      sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"GPIOusage"'"/' PreConfiguration.py # 
+      sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"GPIOusage"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo "Activated LED-Type: GPIO" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"pcf8574usage"'"/' PreConfiguration.py #
+      sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"pcf8574usage"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "Activated LED-Type: PCF8574" #
       return 0 #
       ;; #        
@@ -382,13 +383,13 @@ StandbyUsage() { #
   read -p "Enter your decision: " StandbyNumber #
   case "$StandbyNumber" in #
     1) #   
-      sed -i 's/\(StandbyActive = \)\(.*\)/\1True/' PreConfiguration.py # 
+      sed -i 's/\(StandbyActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
       echo "Activated Standby-Function" #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(StandbyActive = \)\(.*\)/\1False/' PreConfiguration.py #
+      sed -i 's/\(StandbyActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "Deactivated Standby-Function" #
       return 0 #
@@ -419,7 +420,7 @@ getGPIONumberA() { #
   read -p "Please enter the BCM Number for Button A :" ANumber #
   case "$ANumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledBtnA = \)\(.*\)/\1$ANumber/" PreConfiguration.py #
+      sed -i "s/\(oledBtnA = \)\(.*\)/\1$ANumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -433,7 +434,7 @@ getGPIONumberB() { #
   read -p "Please enter the BCM Number for Button B :" BNumber #
   case "$BNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledBtnB = \)\(.*\)/\1$BNumber/" PreConfiguration.py #
+      sed -i "s/\(oledBtnB = \)\(.*\)/\1$BNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -447,7 +448,7 @@ getGPIONumberC() { #
   read -p "Please enter the BCM Number for Button C :" CNumber #
   case "$CNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledBtnC = \)\(.*\)/\1$CNumber/" PreConfiguration.py #
+      sed -i "s/\(oledBtnC = \)\(.*\)/\1$CNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -461,7 +462,7 @@ getGPIONumberD() { #
   read -p "Please enter the BCM Number for Button D :" DNumber #
   case "$DNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledBtnD = \)\(.*\)/\1$DNumber/" PreConfiguration.py #
+      sed -i "s/\(oledBtnD = \)\(.*\)/\1$DNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -475,7 +476,7 @@ getGPIONumberL() { #
   read -p "Please enter the BCM Number for Rotary-Left :" LNumber #
   case "$LNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledRtrLeft = \)\(.*\)/\1$LNumber/" PreConfiguration.py #
+      sed -i "s/\(oledRtrLeft = \)\(.*\)/\1$LNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -489,7 +490,7 @@ getGPIONumberR() { #
   read -p "Please enter the BCM Number for Rotary-Right :" RNumber #
   case "$RNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledRtrRight = \)\(.*\)/\1$RNumber/" PreConfiguration.py #
+      sed -i "s/\(oledRtrRight = \)\(.*\)/\1$RNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -503,7 +504,7 @@ getGPIONumberRB() { #
   read -p "Please enter the BCM Number for Rotary-Button :" RBNumber #
   case "$RBNumber" in #
     0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
-      sed -i "s/\(oledRtrBtn = \)\(.*\)/\1$RBNumber/" PreConfiguration.py #
+      sed -i "s/\(oledRtrBtn = \)\(.*\)/\1$RBNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
       ;; #
@@ -517,13 +518,13 @@ getButtonLayout() { #
   read -p "Enter your decision: " ButonNumber #
   case "$ButonNumber" in #
     1) #    
-      sed -i 's/\(oledBtn = \)\(.*\)/\14/' PreConfiguration.py #
-      sed -i 's/\(oledBtn = \)\(.*\)/\117/' PreConfiguration.py # 
-      sed -i 's/\(oledBtn = \)\(.*\)/\15/' PreConfiguration.py # 
-      sed -i 's/\(oledBtn = \)\(.*\)/\16/' PreConfiguration.py # 
-      sed -i 's/\(oledRtrLeft = \)\(.*\)/\122/' PreConfiguration.py # 
-      sed -i 's/\(oledRtrRight = \)\(.*\)/\123/' PreConfiguration.py # 
-      sed -i 's/\(oledRtrBtn = \)\(.*\)/\127/' PreConfiguration.py #  
+      sed -i 's/\(oledBtn = \)\(.*\)/\14/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      sed -i 's/\(oledBtn = \)\(.*\)/\117/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(oledBtn = \)\(.*\)/\15/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(oledBtn = \)\(.*\)/\16/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(oledRtrLeft = \)\(.*\)/\122/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(oledRtrRight = \)\(.*\)/\123/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(oledRtrBtn = \)\(.*\)/\127/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #  
       echo " " #
       echo "Set standard-buttonlayout" #
       return 0 #
@@ -573,7 +574,7 @@ getPlay2PauseTime() { #
   read -p "Enter a Time (in seconds): " Play2PauseT #
   case "$Play2PauseT" in #
     [1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|[1-8][0-6][0-3][0-9][0-9]|86400) #     
-      sed -i "s/\(oledPause2StopTime = \)\(.*\)/\1$Play2PauseT.0/" PreConfiguration.py #
+      sed -i "s/\(oledPause2StopTime = \)\(.*\)/\1$Play2PauseT.0/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo -n "Set Play-to-Pause timer to "; echo -n "${Play2PauseT} "; echo -n "seconds" #
       return 0 #
@@ -585,7 +586,6 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
-sudo cp /home/volumio/NR1-UI/PreConfiguration.py /home/volumio/NR1-UI/modules #
 echo " " #
 echo " " #
 echo " " #
