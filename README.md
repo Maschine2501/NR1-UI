@@ -96,6 +96,8 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [ ] More Layouts and redesigning the existing ones
 - [ ] Make an un-installer Script...
 - [ ] Make an Volumio-Plugin for NR1-UI
+- [ ] Split the Versions (3.5.2 an 3.8.5) to separate Repositorys
+- [ ] Re-implement a second Rotary for Volume Control (selectable in Installation Config Menu)
 
 
 ## Allready Done:
