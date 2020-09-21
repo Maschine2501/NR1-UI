@@ -3,7 +3,7 @@ StandbyActive = False
 
 #config for LED
 ledActive = False
-ledTechnology = None          
+ledTechnology = None
 
 #config for GPIO Buttons
 oledBtnA = 4
@@ -15,9 +15,9 @@ oledRtrRight = 23
 oledRtrBtn = 27
 
 #config for Display:
-DisplayTechnology = 'spi1322' 
+DisplayTechnology = "spi1322"
 NowPlayingLayout ='Spectrum-Left'
-oledrotation = 0    
+oledrotation = 0
 
 #config for timers:
-oledPause2StopTime = 600.0
+oledPause2StopTime = 15.0
