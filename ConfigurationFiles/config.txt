@@ -1,0 +1,24 @@
+initramfs volumio.initrd
+gpu_mem=32
+max_usb_current=1
+dtparam=audio=on
+audio_pwm_mode=2
+dtparam=i2c_arm=on
+disable_splash=1
+hdmi_force_hotplug=1
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt=800 480 60 6 0 0 0
+hdmi_drive=1
+display_rotate=2
+dtparam=spi=on
+dtparam=i2c=on
+#dtoverlay=pi3-disable-bt
+#dtoverlay=pi3-disable-wifi
+#dtoverlay=gpio-poweroff,active_low,gpiopin=13
+#enable_uart=1
+
+dtoverlay=gpio-shutdown
+
+include userconfig.txt
+
