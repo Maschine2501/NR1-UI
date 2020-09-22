@@ -16,7 +16,7 @@ oledRtrBtn = 27
 
 #config for Display:
 DisplayTechnology = "spi1322"
-NowPlayingLayout ='Spectrum-Left'
+NowPlayingLayout = 'Spectrum-Left'
 oledrotation = 0
 
 #config for timers:
