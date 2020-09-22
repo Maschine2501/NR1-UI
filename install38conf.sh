@@ -262,7 +262,7 @@ echo "_______________________________"
 echo " " #
 echo "_____________________ " #
 echo "Valid selections are:" #
-echo "1 -> Display not rotaded" #
+echo "1 -> Display not rotated" #
 echo "2 -> Display rotated 180 degrees " #
 echo "---> " #
 getDisplayRotation() { #
