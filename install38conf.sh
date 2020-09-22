@@ -419,7 +419,7 @@ echo "--->" #
 getGPIONumberA() { #
   read -p "Please enter the BCM Number for Button A :" ANumber #
   case "$ANumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledBtnA = \)\(.*\)/\1$ANumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -433,7 +433,7 @@ getGPIONumberA() { #
 getGPIONumberB() { #
   read -p "Please enter the BCM Number for Button B :" BNumber #
   case "$BNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledBtnB = \)\(.*\)/\1$BNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -447,7 +447,7 @@ getGPIONumberB() { #
 getGPIONumberC() { #
   read -p "Please enter the BCM Number for Button C :" CNumber #
   case "$CNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledBtnC = \)\(.*\)/\1$CNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -461,7 +461,7 @@ getGPIONumberC() { #
 getGPIONumberD() { #
   read -p "Please enter the BCM Number for Button D :" DNumber #
   case "$DNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledBtnD = \)\(.*\)/\1$DNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -475,7 +475,7 @@ getGPIONumberD() { #
 getGPIONumberL() { #
   read -p "Please enter the BCM Number for Rotary-Left :" LNumber #
   case "$LNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledRtrLeft = \)\(.*\)/\1$LNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -489,7 +489,7 @@ getGPIONumberL() { #
 getGPIONumberR() { #
   read -p "Please enter the BCM Number for Rotary-Right :" RNumber #
   case "$RNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledRtrRight = \)\(.*\)/\1$RNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
@@ -503,7 +503,7 @@ getGPIONumberR() { #
 getGPIONumberRB() { #
   read -p "Please enter the BCM Number for Rotary-Button :" RBNumber #
   case "$RBNumber" in #
-    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26) #    
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27) #    
       sed -i "s/\(oledRtrBtn = \)\(.*\)/\1$RBNumber/" /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       return 0 #
