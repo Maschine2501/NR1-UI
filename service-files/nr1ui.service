@@ -1,5 +1,5 @@
 [Unit]
-Description=NR1-UI38-conf
+Description=NR1-UI
  
 [Service]
 Type=simple
@@ -7,7 +7,7 @@ WorkingDirectory=/home/volumio
 ExecStart=/home/volumio/src/Python-3.8.5/bin/python3.8 -u /home/volumio/NR1-UI/nr1ui38-conf.py
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=nr1ui38-conf
+SyslogIdentifier=nr1ui
 User=volumio
 Group=volumio
  
