@@ -55,36 +55,8 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen1%20(2).png)
 #### Progress-Bar (ssd1306):
 ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(1).png) ![](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1306Screen2%20(2).png)
-## Features of Maschine2501/NR1-UI:
----
-* 4 Button Interface (Button function depends on "State" of the screen, e.g. playback, menu...)
-* 1 Rotary with button (function also depends on "State")
-* Playback Screen with Artist, Song, file-format, samplerate and bitdepth
-* Standby-Screen with Time, Date and IP-Adress
-* 3 Menu Screens (Media-Library, Playlists, Queue)
-* Button-Layout-Icons on each Screen (depending on "State")
-* Media-Library-Information Screen (Statistics about your Media-Library -> Artists, Albums, Songs, total Playtime)
-* Boot and Shutdown Logo
-* interaction with standby module ([hardware](https://github.com/Maschine2501/NR1-UI/wiki/Standby-Module)
-* shutdown interaction with SIGNAL (SIGTERM)
-* 8 LED's controlled by an PCF8574T (i2c gpio-extender) -> Cpu-load on 5 LED's, power-, play- and stere-indicator.
-* IP adress is selected automaticaly (eth0 or wlan0)
-* Playback-"progress bar"
-* spectrum display -> "CAVA" is used to display a bargraph spectrum
-* easy customization -> realized by a "config"-part at the beginning of the code
-* compatible with ssd1306(i2c) and ssd1322(spi) oled displays
-* versions without spectrum for ssd1322 and ssd1306 displays
-* selectable if you use led's or not -> further selection: LED's by GPIO or i2c extender connected
-* selectable if you use external standby equipment -> if so: automatic shutdown!
-* All-in-one Version (for both: ssd1306 and ssd1322)
-* Screen-Layouts -> selectable in line66 oledui.py
-* Added an "Playback-Indicator-Icon" to the NowPlayingScreen
-* moved all Layout related stuff to a config file, for more easy handling [(./config/ScreenConfig.py)](https://github.com/Maschine2501/NR1-UI/blob/master/config/ScreenConfig.py)
-* Screen-Layouts are aviable
-* Screen-Layouts are conviniently selectable in a dedicated Menu
-* maybe more features will come... ^^
 
-* Some bugs will (not often) happen. Will debug it soon.
+## [Features](https://github.com/Maschine2501/NR1-UI/wiki/Features)
 
 ## To-Do: 
 ---
@@ -97,42 +69,8 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [ ] Split the Versions (3.5.2 an 3.8.5) to separate Repositorys
 - [ ] Re-implement a second Rotary for Volume Control (selectable in Installation Config Menu)
 
+## [Allready Done](https://github.com/Maschine2501/NR1-UI/wiki/Allready-Done)
 
-## Allready Done:
----
-- [x] Standby-Screen (when Playback is stoped, Time, Date and IP is Displayed)
-- [x] Automatic stop when playback is paused (value could be defined / declared)
-- [x] display Fileformat/Samplerate/Bitdepth in the NowPlayingScreen
-- [x] Scroll Text stops before shown completly -> text was defined as scrollText, which makes "black"-boxes arround the text
-- [x] one rotary removed
-- [x] 4 more Buttons via GPIO (needs some fine tuning)
-- [x] MediaInformationScreen (volumio.local/api/v1/collectionstats)
-- [x] Icons for the function of each button, depending on "state"
-- [x] migration to Python 3.5.2
-- [x] implemented an SIGTERM handler
-- [x] implemented a new StandbyLED module
-- [x] implemented a logic to select the active network card and display it`s IP
-- [x] removed Volume Screen and Volume interactions completely
-- [x] Add a "progress bar" for Playback
-- [x] integrated "CAVA" to display a bargraph spectrum
-- [x] added a "config"-part at the beginning of the code, to configure the whole display for your needs
-- [x] added a ssd1306 Version
-- [x] addes versions without spectrum for ssd1322 and ssd1306 displays
-- [x] Combine all Versions to one Code (with configuration at the begining)
-- [x] Make More Screen-Layouts -> selectable by config
-- [x] Add an "Playback-Indicator-Icon" to the NowPlayingScreen
-- [x] A VU-Meter Screen
-- [x] Screen selection Menu (Aviable in Stand-ByScreen (clock) by pressing button-C)
-- [x] VU-Meter-Bar-Layout -> Thanks Mihai for the Background Image! <3
-- [x] Peak-Hold enabled in VU-Meter-Bar-Layout -> Thanks [almajiro](https://github.com/almajiro) for providing a sample! <3
-- [x] Scrolling-Text is back!
-- [x] Tidal Playback is functional now
-- [x] Simplyfied installation routine by using a bassh-script
-- [x] Upgrade to latest Python (3.8.5) -> Alternative installation!
-- [x] added a configuration script to [installer](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Autoconfig-Bash-Script))
-- [x] Python 3.5 (Support ends 13. september 2020) -> Upgrade to latest posssible version 
-- [x] PIP 21.0 (Support ends January 2021) -> Upgrade to latest posssible version
-- [x] Splitted Versions into unique Repositorys. Python 3.5.2 Version [here](https://github.com/Maschine2501/NR1-UI-352)
 
 ## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
