@@ -1,8 +1,6 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 
-## 13.09.2020 Upgrade to Python3.8.5
-
-### This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
+### This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 ---
 
 # NR1-UI
@@ -134,6 +132,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 - [x] added a configuration script to [installer](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Autoconfig-Bash-Script))
 - [x] Python 3.5 (Support ends 13. september 2020) -> Upgrade to latest posssible version 
 - [x] PIP 21.0 (Support ends January 2021) -> Upgrade to latest posssible version
+- [x] Splitted Versions into unique Repositorys. Python 3.5.2 Version [here](https://github.com/Maschine2501/NR1-UI-352)
 
 ## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
@@ -142,9 +141,8 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 ## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
 
 ---
-## [Main-Installation steps (Python 3.5.2) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(Bash-Script))
 
-# [Main-Installation steps (Python 3.8.5) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script))
+# [Main-Installation steps (Python 3.8.5) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Autoconfig-Bash-Script))
 ---
 
 ## Configuration Manual (will follow soon!)
