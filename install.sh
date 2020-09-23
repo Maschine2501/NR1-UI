@@ -7,7 +7,6 @@ cd #
 sudo chmod +x NR1-UI/mpd-buffertime.sh #
 sudo chmod +x NR1-UI/mpd.sh #
 sudo chmod +x NR1-UI/PreConfiguration.sh #
-echo "configuring Config.txt" #
 sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
 echo "Installing OpenSSL 1.1.1b" #
 mkdir /home/volumio/src #
@@ -383,7 +382,8 @@ StandbyUsage() { #
   read -p "Enter your decision: " StandbyNumber #
   case "$StandbyNumber" in #
     1) #   
-      sed -i 's/\(StandbyActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      sed -i 's/\(StandbyActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "dtoverlay=gpio-shutdown" >> /boot/userconfig.txt #
       echo " " #
       echo "Activated Standby-Function" #
       return 0 #
