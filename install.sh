@@ -7,7 +7,131 @@ cd #
 sudo chmod +x NR1-UI/mpd-buffertime.sh #
 sudo chmod +x NR1-UI/mpd.sh #
 sudo chmod +x NR1-UI/PreConfiguration.sh #
-sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
+#sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
+echo "dtparam=spi=on" >> /boot/userconfig.txt #
+echo "dtparam=i2c=on" >> /boot/userconfig.txt #
+echo "_________________________________________________________________ " #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo "________________________________________ " #
+echo "This is the Configuration for config.txt" #
+echo "________________________________________ " #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo "______________________________________________" #
+echo "Do you want to deactivate (onboard-)Bluetooth?" #
+echo "______________________________________________" #
+echo " " #
+echo " " #
+echo "______________________ " #
+echo " " #
+echo "Valid selections are: " #
+echo "1 -> Yes" #
+echo "2 -> No" #
+echo "--->" #
+getBluetooth() { #
+  read -p "Enter your decision: " Bluetooth #
+  case "$Bluetooth" in #
+    1) #    
+      echo "dtoverlay=pi3-disable-bt" >> /boot/userconfig.txt #
+      echo " " #
+      echo "(onboard-) Bluetooth is disabled..." #
+      return 0 #
+      ;; #
+    2) #
+      echo " " #
+      echo "(onboard-) Bluetooth stays active..." #
+      return 0 #
+      ;; #        
+    *) #
+      printf %s\\n "Please enter '1' or '2'" #
+      return 1 #
+      ;; #
+  esac #
+} #
+until getBluetooth; do : ; done #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo "______________________________________________" #
+echo "Do you want to deactivate (onboard-) WiFi?" #
+echo "______________________________________________" #
+echo " " #
+echo " " #
+echo "______________________ " #
+echo " " #
+echo "Valid selections are: " #
+echo "1 -> Yes" #
+echo "2 -> No" #
+echo "--->" #
+getWiFi() { #
+  read -p "Enter your decision: " WiFi #
+  case "$WiFi" in #
+    1) #    
+      echo "dtoverlay=pi3-disable-wifi" >> /boot/userconfig.txt #
+      echo " " #
+      echo "(onboard-) WiFi is disabled..." #
+      return 0 #
+      ;; #
+    2) #
+      echo " " #
+      echo "(onboard-) WiFi stays active..." #
+      return 0 #
+      ;; #        
+    *) #
+      printf %s\\n "Please enter '1' or '2'" #
+      return 1 #
+      ;; #
+  esac #
+} #
+until getWiFi; do : ; done #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo "______________________________________________" #
+echo "Do you want to activate Touch-Display-Support?" #
+echo "(This enables a resolution of 800x480 pixels)" #
+echo "______________________________________________" #
+echo "---> Touchdisplay Plugin in Volumio needed!!! " #
+echo " " #
+echo " " #
+echo "______________________ " #
+echo " " #
+echo "Valid selections are: " #
+echo "1 -> Yes" #
+echo "2 -> No" #
+echo "--->" #
+getDisp() { #
+  read -p "Enter your decision: " Disp #
+  case "$Disp" in #
+    1) #    
+      echo "hdmi_force_hotplug=1" >> /boot/userconfig.txt #
+      echo "hdmi_group=2" >> /boot/userconfig.txt #
+      echo "hdmi_mode=87" >> /boot/userconfig.txt #
+      echo "hdmi_cvt=800 480 60 6 0 0 0" >> /boot/userconfig.txt #
+      echo "hdmi_drive=1" >> /boot/userconfig.txt #
+      echo " " #
+      echo "Touch-Display-Support enabled..." #
+      return 0 #
+      ;; #
+    2) #
+      echo " " #
+      echo "Touch-Display-Support disabled..." #
+      return 0 #
+      ;; #        
+    *) #
+      printf %s\\n "Please enter '1' or '2'" #
+      return 1 #
+      ;; #
+  esac #
+} #
+until getDisp; do : ; done #
 echo "Installing OpenSSL 1.1.1b" #
 mkdir /home/volumio/src #
 cd /home/volumio/src && mkdir openssl && cd openssl #
@@ -16,7 +140,6 @@ tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
 ./config --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
 cd #
 sudo cp /home/volumio/NR1-UI/ConfigurationFiles/ldconf/libc.conf /etc/ld.so.conf.d #
-#echo "/home/volumio/src/openssl-1.1.1b/lib" >> /etc/ld.so.conf.d
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
 echo "Installing 3.8.5 and related modules" #
