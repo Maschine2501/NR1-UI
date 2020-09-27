@@ -4,9 +4,10 @@ sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
 sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
 cd #
-sudo chmod +x NR1-UI/mpd-buffertime.sh #
-sudo chmod +x NR1-UI/mpd.sh #
-sudo chmod +x NR1-UI/PreConfiguration.sh #
+sudo chmod +x /home/volumio/NR1-UI/mpd-buffertime.sh #
+sudo chmod +x /home/volumio/NR1-UI/mpd.sh #
+sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
+sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
 #sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
 echo "dtparam=spi=on" >> /boot/userconfig.txt #
 echo "dtparam=i2c=on" >> /boot/userconfig.txt #
