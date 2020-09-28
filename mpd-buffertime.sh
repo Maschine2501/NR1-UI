@@ -19,7 +19,7 @@ echo "1 -> Yes" #
 echo "2 -> No" #
 echo "---> " #
 echo " " #
-getBuffertime() {#
+getBuffertime() { #
   echo " "
   echo "_________________________________ "   
   echo "Remember: These are nano Seconds! "  
