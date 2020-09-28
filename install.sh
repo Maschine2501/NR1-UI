@@ -716,6 +716,59 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
+echo "_________________________________________________________________ " #
+echo " " #
+echo " " #
+echo " " #
+echo " " #
+echo "________________________________" #
+echo "Do you want to set a Buffertime?" #
+echo "________________________________" #
+echo " " #
+echo "What is a Buffertime, and why do I (may) need it? " #
+echo "------------------------------------------------- " #
+echo "The way of the audio-signal to your speaker is much faster," #
+echo "faster then the way to the spectrum display." #
+echo "--> This results in an asynchronous spectrum on the display. " #
+echo "" #
+echo "Do you want to set a Buffer-Time now?" #
+echo "(you also can do it later manually...) " #
+echo "" #
+echo "Valid selections are: " #
+echo "1 -> Yes" #
+echo "2 -> No" #
+echo "--->" #
+getBufferTimeT() { #
+  read -p "Enter your decision: " BufferTimeT #
+  case "$BufferTimeT" in #
+    1) #    
+      echo " " #
+      /bin/bash /home/volumio/NR1-UI/mpd-buffertime.sh #
+      echo "Buffertime was set..." #
+      echo " " #
+      echo "You can change the value anytime by typying: " #
+      echo "   cd' " #
+      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh"
+      echo " " #
+      return 0 #
+      ;; #
+    2) #
+      echo " " #
+      echo "Buffertime was not set..." #
+      echo " " #
+      echo "You can set it later by typying: " #
+      echo "   cd' " #
+      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh" #
+      echo " " #
+      return 0 #
+      ;; #   
+    *) #
+      printf %s\\n "Please enter '1' or '2'..." #
+      return 1 #
+      ;; #
+  esac #
+} #
+until getBufferTimeT; do : ; done #
 echo " " #
 echo " " #
 echo " " #
