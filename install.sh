@@ -458,7 +458,13 @@ getLEDType() { #
       ;; #
     2) #
       sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"pcf8574usage"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo " " #
+      echo " " #
       echo "Activated LED-Type: PCF8574" #
+      echo " " #
+      echo " " #
+      echo " " #
+      /bin/bash /home/volumio/NR1-UI/pcf-i2c-adress-config.sh
       return 0 #
       ;; #        
     *) #
