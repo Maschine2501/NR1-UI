@@ -215,7 +215,7 @@ cd cava #
 sudo bash autogen.sh #
 ./configure && make -j4 && sudo make install #
 cd #
-git clone https://github.com/Maschine2501/cava.git /home/volumio/CAVAinstall #
+git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
 cd /home/volumio/CAVAinstall #
 sudo bash ./autogen.sh #
 ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
