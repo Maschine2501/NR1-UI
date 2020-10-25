@@ -50,6 +50,13 @@ from modules.rotaryencoder import RotaryEncoder
 import uuid
 import numpy as np
 from ConfigurationFiles.PreConfiguration import*
+import urllib.request
+from urllib.parse import* #from urllib import*
+from urllib.parse import urlparse
+from urllib.parse import urlencode
+import ssl
+import re
+import fnmatch
 sleep(5.0)
 #from decimal import Decimal
 #________________________________________________________________________________________
@@ -181,6 +188,8 @@ oled.activeSamplerate = ''  			   #makes oled.activeSamplerate globaly usable
 oled.activeBitdepth = ''                   #makes oled.activeBitdepth globaly usable
 oled.activeArtists = ''                    #makes oled.activeArtists globaly usable
 oled.activeAlbums = ''                     #makes oled.activeAlbums globaly usable
+oled.activeAlbum = ''
+oled.activeAlbumart = ''
 oled.activeSongs = ''                      #makes oled.activeSongs globaly usable
 oled.activePlaytime = ''                   #makes oled.activePlaytime globaly usable
 oled.randomTag = False                     #helper to detect if "Random/shuffle" is set
@@ -404,10 +413,58 @@ def SetState(status):
 # / /_/ / /_/ / /_/ /_/ /_____/ __  / /_/ / / / / /_/ / /  __/ /     _   
 #/_____/\__,_/\__/\__,_/     /_/ /_/\__,_/_/ /_/\__,_/_/\___/_/     (_)  
 #   
-def onPushState(data):
+def JPGPathfinder(String):
+    print('JPGPathfinder')
+    albumstring = String
+    p1 = 'path=(.+?)&metadata'
+    result = re.search(p1, albumstring)
+    URL = result.group(1)
+    URLPath = "/mnt" + URL + '/'
+    accepted_extensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp']
+    global FullJPGPath
+    try:
+        filenames = [fn for fn in os.listdir(URLPath) if fn.split(".")[-1] in accepted_extensions]
+        JPGName = filenames[0]
+        
+        FullJPGPath = URLPath + JPGName
+    except:
+        
+        FullJPGPath = '/home/volumio/NR1-UI/NoCover.bmp'
+    JPGSave(FullJPGPath)
+    print('FullJPGPath: ', FullJPGPath)
 
+def JPGSave(Path):
+    print('JPGSave')
+    FullJPGPath = Path
+    img = Image.open(FullJPGPath)     # puts our image to the buffer of the PIL.Image object
+    width, height = img.size
+    asp_rat = width/height
+    new_width = 90
+    new_height = 90
+    new_rat = new_width/new_height
+    img = img.resize((new_width, new_height), Image.ANTIALIAS)
+    img.save('/home/volumio/album.bmp') 
+
+def JPGSaveURL(link):
+    print('JPGSaveURL')
+    httpLink = urllib.parse.quote(link).replace('%3A',':')
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    with urllib.request.urlopen(httpLink, context=ctx) as url:
+        with open('temp.jpg', 'wb') as f:
+            f.write(url.read())
+    img = Image.open('temp.jpg')
+    width, height = img.size
+    asp_rat = width/height
+    new_width = 90
+    new_height = 90
+    new_rat = new_width/new_height
+    img = img.resize((new_width, new_height), Image.ANTIALIAS)
+    img.save('/home/volumio/album.bmp') 
+
+def onPushState(data):
     if oled.state != 3:
-#        data = json.loads(data.decode("utf-8"))
         global OPDsave	
         global newStatus #global definition for newStatus, used at the end-loop to update standby
         global newSong
@@ -518,16 +575,22 @@ def onPushState(data):
         else:
             oled.seek = None
 
-        if newArtist is None:   #volumio can push NoneType
-            newArtist = ''
-        
-        #oled.activeFormat = newFormat
-        #oled.activeSamplerate = newSamplerate
-        #oled.activeBitdepth = newBitdepth
-    
-        if (newSong != oled.activeSong) or (newArtist != oled.activeArtist):                                # new song and artist
+        if 'albumart' in data:
+            newAlbumart = data['albumart']
+        if newAlbumart is None:
+            newAlbumart = 'nothing'
+        AlbumArtHTTP = newAlbumart.startswith('http')
+
+        if 'album' in data:
+            newAlbum = data['album']
+   
+        if (newSong != oled.activeSong) or (newArtist != oled.activeArtist) or (newAlbum != oled.activeAlbum):                                # new song and artist
+            WriteData = open('/home/volumio/VolumioData.txt', 'w')
+            WriteData.write(json.dumps(data))
+            WriteData.close
             oled.activeSong = newSong
             oled.activeArtist = newArtist
+            oled.activeAlbum = newAlbum
             varcanc = True                      #helper for pause -> stop timeout counter
             secvar = 0.0
             ScrollArtistTag = 0
@@ -561,7 +624,7 @@ def onPushState(data):
                         if ledActive == True:
                             PlayLEDon()
                         oled.playstateIcon = oledplayIcon
-                    #oled.modal.UpdatePlayingInfo()
+                    oled.modal.UpdatePlayingInfo()
                 else:
                     if ledActive == True:
                         PlayLEDoff()
@@ -574,8 +637,17 @@ def onPushState(data):
                     ScrollSongNext = 0
                     ScrollSongFirstRound = True
                     ScrollSongNextRound = False
-                    #SetState(STATE_PLAYER)
+                    SetState(STATE_PLAYER)
                     oled.modal.UpdateStandbyInfo()
+        
+        if NR1UIRemoteActive == True:
+            if newAlbumart != oled.activeAlbumart:
+                oled.activeAlbumart = newAlbumart
+                if AlbumArtHTTP is True and Format == 'webradio':
+                    JPGSaveURL(albumart)
+                else:
+                    albumdecode = urllib.parse.unquote(newAlbumart, encoding='utf-8', errors='replace')
+                    JPGPathfinder(albumdecode)
 
 def onPushCollectionStats(data):
     data = json.loads(data.decode("utf-8"))             #data import from REST-API (is set when ButtonD short-pressed in Standby)
