@@ -8,6 +8,7 @@ sudo chmod +x /home/volumio/NR1-UI/mpd-buffertime.sh #
 sudo chmod +x /home/volumio/NR1-UI/mpd.sh #
 sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
 sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
+sudo chmod +x /home/volumio/NR1-UI/ftp.sh #
 #sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
 echo "dtparam=spi=on" >> /boot/userconfig.txt #
 echo "dtparam=i2c=on" >> /boot/userconfig.txt #
