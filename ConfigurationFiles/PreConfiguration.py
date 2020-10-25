@@ -1,6 +1,9 @@
 #config for Standby
 StandbyActive = False
 
+#config for NR1-UI-Remote
+NR1UIRemoteActive = False
+
 #config for LED
 ledActive = False
 ledTechnology = None
@@ -16,7 +19,7 @@ oledRtrBtn = 27
 
 #config for Display:
 DisplayTechnology = "spi1322"
-NowPlayingLayout = 'Spectrum-Left'
+NowPlayingLayout = "Modern"
 oledrotation = 0
 
 #config for timers:
