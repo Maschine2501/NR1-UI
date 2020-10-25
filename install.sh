@@ -157,7 +157,7 @@ getRemote() { #
   case "$Remote" in #
     1) #    
       sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      sudo apt install proftpd-basic #
+      sudo apt install -y proftpd-basic #
       sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftpd.conf /etc/proftpd #
       sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftp-custom.conf /etc/proftpd/conf.d #
       sudo mkdir /home/volumio/proftpd #
