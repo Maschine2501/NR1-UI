@@ -80,7 +80,7 @@ if DisplayTechnology == 'ssd1306':
     if SpectrumActive == False:
         ScreenList = ['Progress-Bar']
 
-ReadScreenLayout = open('/home/volumio/NR1-UI/config/LayoutSet.txt', 'r')
+ReadScreenLayout = open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt', 'r')
 NowPlayingLayoutSave = ReadScreenLayout.read()
 ReadScreenLayout.close()
 
