@@ -97,11 +97,11 @@ echo " " #
 echo " " #
 echo " " #
 echo "______________________________________________" #
-echo "Do you want to activate Touch-Display-Support?" #
-echo "(This enables a resolution of 800x480 pixels)" #
+echo "Do you want to use Spectrum/VU-Meter?" #
+echo "(This enables two CAVA instances)" #
 echo "______________________________________________" #
-echo "---> Touchdisplay Plugin in Volumio needed!!! " #
-echo " " #
+echo "---> This needs some resources!!! " #
+echo "-> Better use Pi3 or above." #
 echo " " #
 echo "______________________ " #
 echo " " #
@@ -109,22 +109,19 @@ echo "Valid selections are: " #
 echo "1 -> Yes" #
 echo "2 -> No" #
 echo "--->" #
-getDisp() { #
-  read -p "Enter your decision: " Disp #
-  case "$Disp" in #
+getCAVATag() { #
+  read -p "Enter your decision: " CAVATag #
+  case "$CAVATag" in #
     1) #    
-      echo "hdmi_force_hotplug=1" >> /boot/userconfig.txt #
-      echo "hdmi_group=2" >> /boot/userconfig.txt #
-      echo "hdmi_mode=87" >> /boot/userconfig.txt #
-      echo "hdmi_cvt=800 480 60 6 0 0 0" >> /boot/userconfig.txt #
-      echo "hdmi_drive=1" >> /boot/userconfig.txt #
+      sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Touch-Display-Support enabled..." #
+      echo "CAVA/Spectrum will be installed..." #
       return 0 #
       ;; #
     2) #
+      sed -i 's/\(SpectrumActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Touch-Display-Support disabled..." #
+      echo "CAVA/Spectrum won't be installed..." #
       return 0 #
       ;; #        
     *) #
@@ -133,7 +130,7 @@ getDisp() { #
       ;; #
   esac #
 } #
-until getDisp; do : ; done #
+until getCAVATag; do : ; done #
 echo "________________________________________________________________________ " #
 echo " " #
 echo " " #
@@ -208,55 +205,62 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade setuptools pip 
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
 echo "all Python related modules arre installed..." #
-echo "Installing Cava..." #
 cd #
-git clone https://github.com/Maschine2501/cava.git #
-cd cava #
-sudo bash autogen.sh #
-./configure && make -j4 && sudo make install #
-cd #
-git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
-cd /home/volumio/CAVAinstall #
-sudo bash ./autogen.sh #
-./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
-cd #
+if [[ $CAVATag -eq 1 ]]
+then
+    echo "Installing Cava..." #
+    git clone https://github.com/Maschine2501/cava.git #
+    cd cava #
+    sudo bash autogen.sh #
+    ./configure && make -j4 && sudo make install #
+    cd #
+    git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
+    cd /home/volumio/CAVAinstall #
+    sudo bash ./autogen.sh #
+    ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
+    cd #
+    sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
+    sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
+    sudo systemctl daemon-reload #
+    sudo systemctl enable cava1.service #
+    sudo systemctl enable cava2.service #
+fi
 echo "Installing NR1-UI..."  #
 chmod +x /home/volumio/NR1-UI/nr1ui.py #
 sudo cp /home/volumio/NR1-UI/service-files/nr1ui.service /lib/systemd/system/ #
-sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
-sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
 sudo systemctl enable nr1ui.service #
-sudo systemctl enable cava1.service #
-sudo systemctl enable cava2.service #
-echo "audio_output {" >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    type     "fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    name     "my_fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    path     "/tmp/mpd.fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    format   "44100:16:2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo "}" >> /etc/mpd.conf #
-echo "audio_output {" >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    type     "fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    name     "my_fifo2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    path     "/tmp/mpd2.fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    format   "44100:16:2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo "}" >> /etc/mpd.conf #
-echo " " #
-echo " " #
-echo "Fifo-Audio-Outputs for Cava has been added to mpd.conf" #
-echo " " #
-echo " " #
-sudo service mpd restart #
+if [[ $CAVATag -eq 1 ]]
+then
+    echo "audio_output {" >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    type     "fifo"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    name     "my_fifo"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    path     "/tmp/mpd.fifo"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    format   "44100:16:2"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo "}" >> /etc/mpd.conf #
+    echo "audio_output {" >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    type     "fifo"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    name     "my_fifo2"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    path     "/tmp/mpd2.fifo"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo '    format   "44100:16:2"' >> /etc/mpd.conf #
+    echo " " >> /etc/mpd.conf #
+    echo "}" >> /etc/mpd.conf #
+    echo " " #
+    echo " " #
+    echo "Fifo-Audio-Outputs for Cava has been added to mpd.conf" #
+    echo " " #
+    echo " " #
+    sudo service mpd restart #
+fi
 echo "_________________________________________________________________ " #
 echo " " #
 echo " " #
@@ -318,13 +322,13 @@ getScreenLayout1306() { #
     1) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Screen"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Set Display-Type as ssd1306" #
+      echo "Set Layout as Spectrum-Screen" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Set Display-Type as ssd1322" #
+      echo "Set Layout as Progress-Bar" #
       return 0 #
       ;; #         
     *) #
@@ -396,34 +400,43 @@ getScreenLayout1322() { #
       ;; #
   esac #
 } #
-echo "_________________________________" #
-echo "Please select your Screen Layout." #
-echo "_________________________________" #
-echo " " #
-echo "You can find Previews/Screenshots here: " #
-echo "https://github.com/Maschine2501/NR1-UI " #
-if [ $DisplayNumber -eq 1 ] #
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]]
 then #
-   echo "_____________________" #
-   echo "Valid selections are:" #
-   echo "1 -> Spectrum-Screen" #
-   echo "2 -> Progress-Bar" #
-   echo "---> " #
-   until getScreenLayout1306; do : ; done #
+   sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
 else #
-   echo "_____________________ " #   
-   echo "Valid selections are:" #
-   echo "1 -> for Spectrum-Left" #
-   echo "2 -> for Spectrum-Center" #
-   echo "3 -> for Spectrum-Right" #
-   echo "4 -> for No-Spectrum" #
-   echo "5 -> for Modern" #
-   echo "6 -> for VU-Meter-1" #
-   echo "7 -> for VU-Meter-2" #
-   echo "8 -> for VU-Meter-Bar" #
-   echo "9 -> for Modern-simplistic" #
-   echo "---> " #
-   until getScreenLayout1322; do : ; done #
+   sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+fi #
+if [[ $CAVATag -eq 1 ]]
+then
+    echo "_________________________________" #
+    echo "Please select your Screen Layout." #
+    echo "_________________________________" #
+    echo " " #
+    echo "You can find Previews/Screenshots here: " #
+    echo "https://github.com/Maschine2501/NR1-UI " #
+    if [ $DisplayNumber -eq 1 ] #
+    then #
+       echo "_____________________" #
+       echo "Valid selections are:" #
+       echo "1 -> Spectrum-Screen" #
+       echo "2 -> Progress-Bar" #
+       echo "---> " #
+       until getScreenLayout1306; do : ; done #
+    else #
+       echo "_____________________ " #   
+       echo "Valid selections are:" #
+       echo "1 -> for Spectrum-Left" #
+       echo "2 -> for Spectrum-Center" #
+       echo "3 -> for Spectrum-Right" #
+       echo "4 -> for No-Spectrum" #
+       echo "5 -> for Modern" #
+       echo "6 -> for VU-Meter-1" #
+       echo "7 -> for VU-Meter-2" #
+       echo "8 -> for VU-Meter-Bar" #
+       echo "9 -> for Modern-simplistic" #
+       echo "---> " #
+       until getScreenLayout1322; do : ; done #
+    fi
 fi #
 echo "_________________________________________________________________ " #
 echo " " #
@@ -765,59 +778,62 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
-echo "_________________________________________________________________ " #
-echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo "________________________________" #
-echo "Do you want to set a Buffertime?" #
-echo "________________________________" #
-echo " " #
-echo "What is a Buffertime, and why do I (may) need it? " #
-echo "------------------------------------------------- " #
-echo "The way of the audio-signal to your speaker is much faster," #
-echo "faster then the way to the spectrum display." #
-echo "--> This results in an asynchronous spectrum on the display. " #
-echo "" #
-echo "Do you want to set a Buffer-Time now?" #
-echo "(you also can do it later manually...) " #
-echo "" #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
-getBufferTimeT() { #
-  read -p "Enter your decision: " BufferTimeT #
-  case "$BufferTimeT" in #
-    1) #    
-      echo " " #
-      /bin/bash /home/volumio/NR1-UI/mpd-buffertime.sh #
-      echo "Buffertime was set..." #
-      echo " " #
-      echo "You can change the value anytime by typying: " #
-      echo "   cd' " #
-      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh"
-      echo " " #
-      return 0 #
-      ;; #
-    2) #
-      echo " " #
-      echo "Buffertime was not set..." #
-      echo " " #
-      echo "You can set it later by typying: " #
-      echo "   cd' " #
-      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh" #
-      echo " " #
-      return 0 #
-      ;; #   
-    *) #
-      printf %s\\n "Please enter '1' or '2'..." #
-      return 1 #
-      ;; #
-  esac #
-} #
-until getBufferTimeT; do : ; done #
+if [[ $CAVATag -eq 1 ]]
+then
+    echo "_________________________________________________________________ " #
+    echo " " #
+    echo " " #
+    echo " " #
+    echo " " #
+    echo "________________________________" #
+    echo "Do you want to set a Buffertime?" #
+    echo "________________________________" #
+    echo " " #
+    echo "What is a Buffertime, and why do I (may) need it? " #
+    echo "------------------------------------------------- " #
+    echo "The way of the audio-signal to your speaker is much faster," #
+    echo "faster then the way to the spectrum display." #
+    echo "--> This results in an asynchronous spectrum on the display. " #
+    echo "" #
+    echo "Do you want to set a Buffer-Time now?" #
+    echo "(you also can do it later manually...) " #
+    echo "" #
+    echo "Valid selections are: " #
+    echo "1 -> Yes" #
+    echo "2 -> No" #
+    echo "--->" #
+    getBufferTimeT() { #
+      read -p "Enter your decision: " BufferTimeT #
+      case "$BufferTimeT" in #
+        1) #    
+          echo " " #
+          /bin/bash /home/volumio/NR1-UI/mpd-buffertime.sh #
+          echo "Buffertime was set..." #
+          echo " " #
+          echo "You can change the value anytime by typying: " #
+          echo "   cd' " #
+          echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh"
+          echo " " #
+          return 0 #
+          ;; #
+        2) #
+          echo " " #
+          echo "Buffertime was not set..." #
+          echo " " #
+          echo "You can set it later by typying: " #
+          echo "   cd' " #
+          echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh" #
+          echo " " #
+          return 0 #
+          ;; #   
+        *) #
+          printf %s\\n "Please enter '1' or '2'..." #
+          return 1 #
+          ;; #
+      esac #
+    } #
+    until getBufferTimeT; do : ; done #
+fi
 echo " " #
 echo " " #
 echo " " #
