@@ -70,9 +70,19 @@ sleep(5.0)
 #                       /____/
 #
 if DisplayTechnology != 'ssd1306':
-    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
+    if SpectrumActive == True:
+        ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
+    if SpectrumActive == False:
+        ScreenList = ['No-Spectrum']
 if DisplayTechnology == 'ssd1306':
-    ScreenList = ['Progress-Bar', 'Spectrum-Screen']
+    if SpectrumActive == True:
+        ScreenList = ['Progress-Bar', 'Spectrum-Screen']
+    if SpectrumActive == False:
+        ScreenList = ['Progress-Bar']
+
+ReadScreenLayout = open('/home/volumio/NR1-UI/config/LayoutSet.txt', 'r')
+NowPlayingLayoutSave = ReadScreenLayout.read()
+ReadScreenLayout.close()
 
 if DisplayTechnology != 'ssd1306':
     if NowPlayingLayout not in ScreenList:
@@ -86,6 +96,9 @@ if DisplayTechnology == 'ssd1306':
         WriteScreen1.write('Progress-Bar')
         WriteScreen1.close
         NowPlayingLayout = 'Progress-Bar'        
+
+if NowPlayingLayoutSave != NowPlayingLayout:
+    NowPlayingLayout = NowPlayingLayoutSave
 
 #config for timers:
 oledPlayFormatRefreshTime = 1.5
