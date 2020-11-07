@@ -21,11 +21,11 @@ I try to assist you, if you got questions or even problems with the code, just c
 
 Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1-UI/wiki) will follow...
 
+## 07.11.2020: You can choose if you want to use CAVA (Spectrum/VU) during setup. 
+#### This should be usefull if you don't use a RPi4 (resourcefriendly, but no Spectrum/VU) 
+#### Thank you Mihai for this Idea!
+
 ## The Code is now modular:
-
-### To modify your Layout use the [config files](https://github.com/Maschine2501/NR1-UI/tree/master/config) -> [here](https://github.com/Maschine2501/NR1-UI/wiki/Styling-Modification-Basics) is a little instruction about it.
-
-### To select your display, just change [line 68](https://github.com/Maschine2501/NR1-UI/blob/7be15f426592573882ba3fdfc91f5898ab6e5aa4/nr1ui.py#L68) in nr1ui.py
 
 ### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
 ![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
