@@ -24,3 +24,6 @@ oledrotation = 0
 
 #config for timers:
 oledPause2StopTime = 15.0
+
+#config for spectrum
+SpectrumActive = False
