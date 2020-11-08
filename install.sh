@@ -113,13 +113,13 @@ getCAVATag() { #
   read -p "Enter your decision: " CAVATag #
   case "$CAVATag" in #
     1) #    
-      sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      #sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "CAVA/Spectrum will be installed..." #
       return 0 #
       ;; #
     2) #
-      sed -i 's/\(SpectrumActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      #sed -i 's/\(SpectrumActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo "CAVA/Spectrum won't be installed..." #
       return 0 #
@@ -321,12 +321,14 @@ getScreenLayout1306() { #
   case "$DisplayNumber" in #
     1) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Screen"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Screen" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Layout as Spectrum-Screen" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Progress-Bar" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Layout as Progress-Bar" #
       return 0 #
@@ -342,54 +344,63 @@ getScreenLayout1322() { #
   case "$DisplayNumber" in #
     1) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Left"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Left" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as Spetrum-Left" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Spectrum-Center" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as Spetrum-Center" #
       return 0 #
       ;; #         
     3) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Right"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Spectrum-Right" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as Spetrum-Right" #
       return 0 #
       ;; #  
     4) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "No-Spectrum" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as No-Spetrum" #
       return 0 #
       ;; #
     5) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as Modern" #
       return 0 #
       ;; #         
     6) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-1"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "VU-Meter-1" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as VU-Meter-1" #
       return 0 #
       ;; #        
     7) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "VU-Meter-2" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as VU-Meter-2" #
       return 0 #
       ;; #
     8) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "VU-Meter-Bar" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as VU-Meter-Bar" #
       return 0 #
       ;; #         
     9) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern-simplistic"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Modern-simplistic" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo "Set Screen Layout as Modern-simplistic" #
       return 0 #
@@ -436,6 +447,16 @@ then
        echo "9 -> for Modern-simplistic" #
        echo "---> " #
        until getScreenLayout1322; do : ; done #
+    fi
+fi #
+if [[ $CAVATag -eq 2 ]] #
+then #
+    if [ $DisplayNumber -eq 1 ] #
+        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+        echo "Progress-Bar" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
+    else #
+        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+        echo "No-Spectrum" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
     fi
 fi #
 echo "_________________________________________________________________ " #
