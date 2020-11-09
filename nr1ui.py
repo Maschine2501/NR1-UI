@@ -598,9 +598,9 @@ def onPushState(data):
             newAlbum = data['album']
    
         if (newSong != oled.activeSong) or (newArtist != oled.activeArtist) or (newAlbum != oled.activeAlbum):                                # new song and artist
-            WriteData = open('/home/volumio/VolumioData.txt', 'w')
-            WriteData.write(json.dumps(data))
-            WriteData.close
+            #WriteData = open('/home/volumio/VolumioData.txt', 'w')
+            #WriteData.write(json.dumps(data))
+            #WriteData.close
             oled.activeSong = newSong
             oled.activeArtist = newArtist
             oled.activeAlbum = newAlbum
