@@ -587,12 +587,12 @@ def onPushState(data):
             oled.seek = data['seek']
         else:
             oled.seek = None
-
-        if 'albumart' in data:
-            newAlbumart = data['albumart']
-        if newAlbumart is None:
-            newAlbumart = 'nothing'
-        AlbumArtHTTP = newAlbumart.startswith('http')
+        if NR1UIRemoteActive = True:
+            if 'albumart' in data:
+                newAlbumart = data['albumart']
+            if newAlbumart is None:
+                newAlbumart = 'nothing'
+            AlbumArtHTTP = newAlbumart.startswith('http')
 
         if 'album' in data:
             newAlbum = data['album']
