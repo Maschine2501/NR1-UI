@@ -206,7 +206,7 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
 echo "all Python related modules arre installed..." #
 cd #
-if [[ $CAVATag -eq 1 ]]
+if [[ $CAVATag -eq 1 ]];
 then
     echo "Installing Cava..." #
     git clone https://github.com/Maschine2501/cava.git #
@@ -230,7 +230,7 @@ chmod +x /home/volumio/NR1-UI/nr1ui.py #
 sudo cp /home/volumio/NR1-UI/service-files/nr1ui.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
 sudo systemctl enable nr1ui.service #
-if [[ $CAVATag -eq 1 ]]
+if [[ $CAVATag -eq 1 ]];
 then
     echo "audio_output {" >> /etc/mpd.conf #
     echo " " >> /etc/mpd.conf #
@@ -411,13 +411,14 @@ getScreenLayout1322() { #
       ;; #
   esac #
 } #
-if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]]
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]];
 then #
    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-else #
+fi
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 2 ]];
    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
 fi #
-if [[ $CAVATag -eq 1 ]]
+if [[ $CAVATag -eq 1 ]];
 then
     echo "_________________________________" #
     echo "Please select your Screen Layout." #
@@ -425,7 +426,7 @@ then
     echo " " #
     echo "You can find Previews/Screenshots here: " #
     echo "https://github.com/Maschine2501/NR1-UI " #
-    if [ $DisplayNumber -eq 1 ] #
+    if [ $DisplayNumber -eq 1 ]; #
     then #
        echo "_____________________" #
        echo "Valid selections are:" #
@@ -449,12 +450,14 @@ then
        until getScreenLayout1322; do : ; done #
     fi
 fi #
-if [[ $CAVATag -eq 2 ]] #
+if [[ $CAVATag -eq 2 ]]; #
 then #
-    if [ $DisplayNumber -eq 1 ] #
+    if [ $DisplayNumber -eq 1 ];
+    then #
         sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
         echo "Progress-Bar" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
-    else #
+    fi
+    if [ $DisplayNumber -eq 2 ]; #
         sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
         echo "No-Spectrum" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
     fi
@@ -799,7 +802,7 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
-if [[ $CAVATag -eq 1 ]]
+if [[ $CAVATag -eq 1 ]];
 then
     echo "_________________________________________________________________ " #
     echo " " #
