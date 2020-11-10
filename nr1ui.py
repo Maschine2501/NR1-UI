@@ -192,7 +192,7 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
+oled.date = ""   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
 emit_track = False
 newStatus = 0              				   #makes newStatus usable outside of onPushState
@@ -3716,6 +3716,7 @@ GetIP()
 def PlaypositionHelper():
     while True:
           volumioIO.emit('getState')
+	  oled.date = now.strftime("%d.%m.%Y")
           sleep(1.0)
 
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
