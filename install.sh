@@ -204,7 +204,7 @@ sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade setuptools pip wheel #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
-echo "all Python related modules arre installed..." #
+echo "all Python related modules are installed..." #
 cd #
 if [[ $CAVATag -eq 1 ]];
 then
@@ -413,10 +413,12 @@ getScreenLayout1322() { #
 } #
 if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]];
 then #
-   sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
 fi
 if [[ $CAVATag -eq 2 && $DisplayNumber -eq 2 ]];
-   sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+then
+#else
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
 fi #
 if [[ $CAVATag -eq 1 ]];
 then
@@ -456,8 +458,9 @@ then #
     then #
         sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
         echo "Progress-Bar" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
-    fi
-    if [ $DisplayNumber -eq 2 ]; #
+    #fi
+    #if [ $DisplayNumber -eq 2 ]; #
+    else
         sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
         echo "No-Spectrum" > /home/volumio/NR1UI/ConfigurationFiles/LayoutSet.txt #
     fi
@@ -871,4 +874,4 @@ echo "https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python
 echo " " #
 echo " " #
 echo " " #
-exit 0
+exit 0 #
