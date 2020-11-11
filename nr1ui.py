@@ -3715,9 +3715,9 @@ GetIP()
 
 def PlaypositionHelper():
     while True:
-          volumioIO.emit('getState')
-	  oled.date = now.strftime("%d.%m.%Y")
-          sleep(1.0)
+        volumioIO.emit('getState')
+        oled.date = now.strftime("%d.%m.%Y")
+        sleep(1.0)
 
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
 PlayPosHelp.start()
