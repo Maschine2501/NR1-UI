@@ -70,19 +70,9 @@ sleep(5.0)
 #                       /____/
 #
 if DisplayTechnology != 'ssd1306':
-    if SpectrumActive == True:
-        ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
-    if SpectrumActive == False:
-        ScreenList = ['No-Spectrum']
+    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
 if DisplayTechnology == 'ssd1306':
-    if SpectrumActive == True:
-        ScreenList = ['Progress-Bar', 'Spectrum-Screen']
-    if SpectrumActive == False:
-        ScreenList = ['Progress-Bar']
-
-ReadScreenLayout = open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt', 'r')
-NowPlayingLayoutSave = ReadScreenLayout.read()
-ReadScreenLayout.close()
+    ScreenList = ['Progress-Bar', 'Spectrum-Screen']
 
 if DisplayTechnology != 'ssd1306':
     if NowPlayingLayout not in ScreenList:
@@ -96,9 +86,6 @@ if DisplayTechnology == 'ssd1306':
         WriteScreen1.write('Progress-Bar')
         WriteScreen1.close
         NowPlayingLayout = 'Progress-Bar'        
-
-if NowPlayingLayoutSave != NowPlayingLayout:
-    NowPlayingLayout = NowPlayingLayoutSave
 
 #config for timers:
 oledPlayFormatRefreshTime = 1.5
@@ -192,7 +179,7 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = ""   #resolves time as dd.mm.YYYY eg. 17.04.2020
+oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
 emit_track = False
 newStatus = 0              				   #makes newStatus usable outside of onPushState
@@ -587,20 +574,20 @@ def onPushState(data):
             oled.seek = data['seek']
         else:
             oled.seek = None
-        if NR1UIRemoteActive == True:
-            if 'albumart' in data:
-                newAlbumart = data['albumart']
-            if newAlbumart is None:
-                newAlbumart = 'nothing'
-            AlbumArtHTTP = newAlbumart.startswith('http')
+
+        if 'albumart' in data:
+            newAlbumart = data['albumart']
+        if newAlbumart is None:
+            newAlbumart = 'nothing'
+        AlbumArtHTTP = newAlbumart.startswith('http')
 
         if 'album' in data:
             newAlbum = data['album']
    
         if (newSong != oled.activeSong) or (newArtist != oled.activeArtist) or (newAlbum != oled.activeAlbum):                                # new song and artist
-            #WriteData = open('/home/volumio/VolumioData.txt', 'w')
-            #WriteData.write(json.dumps(data))
-            #WriteData.close
+            WriteData = open('/home/volumio/VolumioData.txt', 'w')
+            WriteData.write(json.dumps(data))
+            WriteData.close
             oled.activeSong = newSong
             oled.activeArtist = newArtist
             oled.activeAlbum = newAlbum
@@ -3715,9 +3702,8 @@ GetIP()
 
 def PlaypositionHelper():
     while True:
-        volumioIO.emit('getState')
-        oled.date = now.strftime("%d.%m.%Y")
-        sleep(1.0)
+          volumioIO.emit('getState')
+          sleep(1.0)
 
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
 PlayPosHelp.start()
