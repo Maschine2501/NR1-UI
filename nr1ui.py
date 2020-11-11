@@ -587,7 +587,7 @@ def onPushState(data):
             oled.seek = data['seek']
         else:
             oled.seek = None
-        if NR1UIRemoteActive = True:
+        if NR1UIRemoteActive == True:
             if 'albumart' in data:
                 newAlbumart = data['albumart']
             if newAlbumart is None:
