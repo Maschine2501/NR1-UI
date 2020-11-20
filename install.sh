@@ -357,7 +357,7 @@ getScreenLayout1322() { #
     4) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Set Screen Layout as No-Spetrum" #
+      echo "Set Screen Layout as No-Spectrum" #
       return 0 #
       ;; #
     5) #
@@ -604,7 +604,7 @@ getGPIONumberA() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
