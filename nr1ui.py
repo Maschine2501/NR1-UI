@@ -58,8 +58,6 @@ import ssl
 import re
 import fnmatch
 sleep(5.0)
-#from decimal import Decimal
-#________________________________________________________________________________________
 #________________________________________________________________________________________
 #	
 #   ______            _____                        __  _                 
@@ -70,9 +68,19 @@ sleep(5.0)
 #                       /____/
 #
 if DisplayTechnology != 'ssd1306':
-    ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
+    if SpectrumActive == True:
+        ScreenList = ['Spectrum-Left', 'Spectrum-Center', 'Spectrum-Right', 'No-Spectrum', 'Modern', 'VU-Meter-1', 'VU-Meter-2', 'VU-Meter-Bar', 'Modern-simplistic']
+    if SpectrumActive == False:
+        ScreenList = ['No-Spectrum']
 if DisplayTechnology == 'ssd1306':
-    ScreenList = ['Progress-Bar', 'Spectrum-Screen']
+    if SpectrumActive == True:
+        ScreenList = ['Progress-Bar', 'Spectrum-Screen']
+    if SpectrumActive == False:
+        ScreenList = ['Progress-Bar']
+
+NowPlayingLayoutSave=open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt').readline().rstrip()
+print('Layout selected during setup: ', NowPlayingLayout)
+print('Last manually selected Layout: ', NowPlayingLayoutSave)
 
 if DisplayTechnology != 'ssd1306':
     if NowPlayingLayout not in ScreenList:
@@ -86,6 +94,21 @@ if DisplayTechnology == 'ssd1306':
         WriteScreen1.write('Progress-Bar')
         WriteScreen1.close
         NowPlayingLayout = 'Progress-Bar'        
+
+if NowPlayingLayoutSave != NowPlayingLayout:
+    if NowPlayingLayoutSave not in ScreenList and SpectrumActive == False:
+        if DisplayTechnology == 'ssd1306':
+            WriteScreen1 = open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt', 'w')
+            WriteScreen1.write('Progress-Bar')
+            WriteScreen1.close
+            NowPlayingLayout = 'Progress-Bar'       
+        if DisplayTechnology != 'ssd1306':
+            WriteScreen1 = open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt', 'w')
+            WriteScreen1.write('No-Spectrum')
+            WriteScreen1.close
+            NowPlayingLayout = 'No-Spectrum'
+    else:
+        NowPlayingLayout = NowPlayingLayoutSave
 
 #config for timers:
 oledPlayFormatRefreshTime = 1.5
@@ -179,7 +202,7 @@ oled.volumeControlDisabled = True
 oled.volume = 100
 now = datetime.now()                       #current date and time
 oled.time = now.strftime("%H:%M:%S")       #resolves time as HH:MM:SS eg. 14:33:15
-oled.date = now.strftime("%d.%m.%Y")   #resolves time as dd.mm.YYYY eg. 17.04.2020
+oled.date = ""   #resolves time as dd.mm.YYYY eg. 17.04.2020
 oled.IP = ''
 emit_track = False
 newStatus = 0              				   #makes newStatus usable outside of onPushState
@@ -212,6 +235,11 @@ ScrollSongNext = 0
 ScrollSongFirstRound = True
 ScrollSongNextRound = False
 oled.selQueue = ''
+oled.repeat = False
+oled.bitrate = ''
+oled.repeatonce = False
+oled.shuffle = False
+oled.mute = False
 
 if DisplayTechnology != 'i2c1306':
     image = Image.new('RGB', (oled.WIDTH, oled.HEIGHT))  #for Pixelshift: (oled.WIDTH + 4, oled.HEIGHT + 4)) 
@@ -239,9 +267,11 @@ if DisplayTechnology != 'i2c1306':
     font9 = load_font('Oxanium-Bold.ttf', 16)                       #used for Artist ('Oxanium-Bold.ttf', 20)  
     font10 = load_font('Oxanium-Regular.ttf', 14)                       #used for Artist ('Oxanium-Bold.ttf', 20)  
     mediaicon = load_font('fa-solid-900.ttf', 10)    	           #used for icon in Media-library info
-    iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
+    #iconfont = load_font('entypo.ttf', oled.HEIGHT)                #used for play/pause/stop/shuffle/repeat... icons
     labelfont = load_font('entypo.ttf', 12)                        #used for Menu-icons
     iconfontBottom = load_font('entypo.ttf', 10)                   #used for icons under the screen / button layout
+    labelfontfa = load_font('fa-solid-900.ttf', 12)                   #used for icons under the screen / button layout
+    labelfontfa2 = load_font('fa-solid-900.ttf', 14)
     fontClock = load_font('DSG.ttf', 30)                           #used for clock
     fontDate = load_font('Oxanium-Light.ttf', 12)           #used for Date 'DSEG7Classic-Regular.ttf'
     fontIP = load_font('Oxanium-Light.ttf', 12)             #used for IP 'DSEG7Classic-Regular.ttf'
@@ -347,12 +377,6 @@ if StandbyActive == True and firstStart == True:
        firstStart = False
 
 GetIP()
-
-if ledActive == True and firstStart == True:
-    SysStart()
-    Processor = threading.Thread(target=CPUload, daemon=True)
-    Processor.start()
-    firstStart = False
 #________________________________________________________________________________________
 #________________________________________________________________________________________
 #
@@ -416,19 +440,17 @@ def SetState(status):
 def JPGPathfinder(String):
     print('JPGPathfinder')
     albumstring = String
-    p1 = 'path=(.+?)&metadata'
-    result = re.search(p1, albumstring)
-    URL = result.group(1)
-    URLPath = "/mnt" + URL + '/'
-    accepted_extensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp']
     global FullJPGPath
     try:
+        p1 = 'path=(.+?)&metadata'
+        result = re.search(p1, albumstring)
+        URL = result.group(1)
+        URLPath = "/mnt" + URL + '/'
+        accepted_extensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp']
         filenames = [fn for fn in os.listdir(URLPath) if fn.split(".")[-1] in accepted_extensions]
         JPGName = filenames[0]
-        
         FullJPGPath = URLPath + JPGName
     except:
-        
         FullJPGPath = '/home/volumio/NR1-UI/NoCover.bmp'
     JPGSave(FullJPGPath)
     print('FullJPGPath: ', FullJPGPath)
@@ -447,14 +469,17 @@ def JPGSave(Path):
 
 def JPGSaveURL(link):
     print('JPGSaveURL')
-    httpLink = urllib.parse.quote(link).replace('%3A',':')
-    ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
-    with urllib.request.urlopen(httpLink, context=ctx) as url:
-        with open('temp.jpg', 'wb') as f:
-            f.write(url.read())
-    img = Image.open('temp.jpg')
+    try:
+        httpLink = urllib.parse.quote(link).replace('%3A',':')
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        with urllib.request.urlopen(httpLink, context=ctx) as url:
+            with open('temp.jpg', 'wb') as f:
+                f.write(url.read())
+        img = Image.open('temp.jpg')
+    except:
+        img = Image.open('/home/volumio/NR1-UI/NoCover.bmp')    
     width, height = img.size
     asp_rat = width/height
     new_width = 90
@@ -481,7 +506,7 @@ def onPushState(data):
         global ScrollSongFirstRound
         global ScrollSongNextRound
         OPDsave = data
-#        print('data: ', str(data).encode('utf-8'))    
+        #print('data: ', str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
@@ -504,12 +529,16 @@ def onPushState(data):
         if 'trackType' in data:
             newFormat = data['trackType']
             oled.activeFormat = newFormat
-            if newFormat == True and newSong != 'HiFiBerry ADC':
-                newFormat = 'WebRadio'
-                oled.activeFormat = newFormat
-            if newFormat == True and newSong == 'HiFiBerry ADC':
-                newFormat = 'Live-Stream'
-                oled.activeFormat = newFormat
+        else:
+            newFormat = ''
+        if newFormat is None:
+            newFormat = ''
+        if newFormat == True and newSong != 'HiFiBerry ADC':
+            newFormat = 'WebRadio'
+            oled.activeFormat = newFormat
+        if newFormat == True and newSong == 'HiFiBerry ADC':
+            newFormat = 'Live-Stream'
+            oled.activeFormat = newFormat
                	
 #        if 'stream' in data:
 #            newFormat = data['stream']
@@ -539,7 +568,14 @@ def onPushState(data):
         if newSamplerate is None:
             newSamplerate = ' '
             oled.activeSamplerate = newSamplerate
-    
+        
+        if 'bitrate' in data:
+            oled.bitrate = data['bitrate']
+        else:
+            bitrate = ''
+        if oled.bitrate is None:
+            oled.bitrate = ''
+        
         if 'bitdepth' in data:
             newBitdepth = data['bitdepth']
             oled.activeBitdepth = newBitdepth
@@ -552,16 +588,38 @@ def onPushState(data):
             
         if 'position' in data:                      # current position in queue
             oled.playPosition = data['position']    # didn't work well with volumio ver. < 2.5
+        else:
+            oled.playPosition = None
             
         if 'status' in data:
             newStatus = data['status']
+
+        if 'volume' in data:            #get volume on startup and remote control
+            oled.volume = int(data['volume'])
+        else:
+            oled.volume = 100
+
+        if 'repeat' in data:
+            oled.repeat = data['repeat']
         
+        if 'repeatSingle' in data:
+            oled.repeatonce = data['repeatSingle']
+
+        if 'random' in data:
+            oled.shuffle = data['random']
+
+        if 'mute' in data:
+            oled.mute = data['mute']
+
         if ledActive == True and 'channels' in data:
             channels = data['channels']
-            if channels == 2:
-               StereoLEDon()
-            else:
-               StereoLEDoff()
+            if newStatus != 'stop':
+                if channels == 2:
+                   StereoLEDon()
+                else:
+                    StereoLEDoff()
+            if newStatus == 'stop':
+                StereoLEDoff()
     
         if 'duration' in data:
             oled.duration = data['duration']
@@ -574,20 +632,25 @@ def onPushState(data):
             oled.seek = data['seek']
         else:
             oled.seek = None
-
-        if 'albumart' in data:
-            newAlbumart = data['albumart']
-        if newAlbumart is None:
-            newAlbumart = 'nothing'
-        AlbumArtHTTP = newAlbumart.startswith('http')
+        if NR1UIRemoteActive == True:
+            if 'albumart' in data:
+                newAlbumart = data['albumart']
+            else:
+                newAlbumart = None
+            if newAlbumart is None:
+                newAlbumart = 'nothing'
+            AlbumArtHTTP = newAlbumart.startswith('http')
 
         if 'album' in data:
             newAlbum = data['album']
-   
+        else: 
+            newAlbum = None
+            if newAlbum is None:
+                newAlbum = 'No Album'
+            if newAlbum == '':
+                newAlbum = 'No Album'
+
         if (newSong != oled.activeSong) or (newArtist != oled.activeArtist) or (newAlbum != oled.activeAlbum):                                # new song and artist
-            WriteData = open('/home/volumio/VolumioData.txt', 'w')
-            WriteData.write(json.dumps(data))
-            WriteData.close
             oled.activeSong = newSong
             oled.activeArtist = newArtist
             oled.activeAlbum = newAlbum
@@ -643,8 +706,8 @@ def onPushState(data):
         if NR1UIRemoteActive == True:
             if newAlbumart != oled.activeAlbumart:
                 oled.activeAlbumart = newAlbumart
-                if AlbumArtHTTP is True and Format == 'webradio':
-                    JPGSaveURL(albumart)
+                if AlbumArtHTTP is True and newFormat == 'WebRadio':
+                    JPGSaveURL(newAlbumart)
                 else:
                     albumdecode = urllib.parse.unquote(newAlbumart, encoding='utf-8', errors='replace')
                     JPGPathfinder(albumdecode)
@@ -807,16 +870,17 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen1specDistance+i*Screen1specWide1, Screen1specYposTag, Screen1specDistance+i*Screen1specWide1+Screen1specWide2, Screen1specYposTag-int(data[i])), outline = Screen1specBorder, fill =Screen1specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen1barwidth * self.playbackPoint / 100
                 self.draw.text((Screen1text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen1text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen1text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen1text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen1ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen1DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen1barLineX , Screen1barLineThick1, Screen1barLineX+Screen1barwidth, Screen1barLineThick2), outline=Screen1barLineBorder, fill=Screen1barLineFill)
-                self.draw.rectangle((self.bar+Screen1barLineX-Screen1barNibbleWidth, Screen1barThick1, Screen1barX+self.bar+Screen1barNibbleWidth, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen1barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen1DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen1barLineX , Screen1barLineThick1, Screen1barLineX+Screen1barwidth, Screen1barLineThick2), outline=Screen1barLineBorder, fill=Screen1barLineFill)
+                    self.draw.rectangle((self.bar+Screen1barLineX-Screen1barNibbleWidth, Screen1barThick1, Screen1barX+self.bar+Screen1barNibbleWidth, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -961,19 +1025,18 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen2specDistance+i*Screen2specWide1, Screen2specYposTag, Screen2specDistance+i*Screen2specWide1+Screen2specWide2, Screen2specYposTag-int(data[i])), outline = Screen2specBorder, fill =Screen2specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen2barwidth * self.playbackPoint / 100
                 self.draw.text((Screen2text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen2text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen2text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen2text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen2ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen2DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen2barLineX , Screen2barLineThick1, Screen2barLineX+Screen2barwidth, Screen2barLineThick2), outline=Screen2barLineBorder, fill=Screen2barLineFill)
-                self.draw.rectangle((self.bar+Screen2barLineX-Screen2barNibbleWidth, Screen2barThick1, Screen2barX+self.bar+Screen2barNibbleWidth, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen2DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen2barLineX , Screen2barLineThick1, Screen2barLineX+Screen2barwidth, Screen2barLineThick2), outline=Screen2barLineBorder, fill=Screen2barLineFill)
+                    self.draw.rectangle((self.bar+Screen2barLineX-Screen2barNibbleWidth, Screen2barThick1, Screen2barX+self.bar+Screen2barNibbleWidth, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
                 image.paste(self.image, (0, 0))
-                
-                
 
             if newStatus != 'stop' and oled.duration == None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
@@ -1117,16 +1180,17 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen3specDistance-i*Screen3specWide1, Screen3specYposTag, Screen3specDistance-i*Screen3specWide1+Screen3specWide2, Screen3specYposTag-int(data[i])), outline = Screen3specBorder, fill =Screen3specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen3barwidth * self.playbackPoint / 100
                 self.draw.text((Screen3text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen3text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen3text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen3text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen3ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen3DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen3barLineX , Screen3barLineThick1, Screen3barLineX+Screen3barwidth, Screen3barLineThick2), outline=Screen3barLineBorder, fill=Screen3barLineFill)
-                self.draw.rectangle((self.bar+Screen3barLineX-Screen3barNibbleWidth, Screen3barThick1, Screen3barX+self.bar+Screen3barNibbleWidth, Screen3barThick2), outline=Screen3barBorder, fill=Screen3barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen3DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen3barLineX , Screen3barLineThick1, Screen3barLineX+Screen3barwidth, Screen3barLineThick2), outline=Screen3barLineBorder, fill=Screen3barLineFill)
+                    self.draw.rectangle((self.bar+Screen3barLineX-Screen3barNibbleWidth, Screen3barThick1, Screen3barX+self.bar+Screen3barNibbleWidth, Screen3barThick2), outline=Screen3barBorder, fill=Screen3barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -1204,8 +1268,6 @@ class NowPlayingScreen():
 
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen4barwidth * self.playbackPoint / 100
                 self.ArtistWidth, self.ArtistHeight = self.draw.textsize(oled.activeArtist, font=font)
                 self.ArtistStopPosition = self.ArtistWidth - self.width + ArtistEndScrollMargin
                 if self.ArtistWidth >= self.width:
@@ -1269,10 +1331,28 @@ class NowPlayingScreen():
                 self.draw.text((Screen4text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen4text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen4text08), oled.activeBitdepth, font=font4, fill='white')
+                if oled.repeat == True:
+                    if oled.repeatonce == False:
+                        self.draw.text((Screen4text33), oledrepeat, font=labelfont, fill='white')
+                    if oled.repeatonce == True:
+                        self.draw.text((Screen4text33), oledrepeat, font=labelfont, fill='white')
+                        self.draw.text((Screen4text34), str(1), font=font4, fill='white')
+                if oled.shuffle == True:
+                    self.draw.text((Screen4text35), oledshuffle, font=labelfont, fill='white')
+                if oled.mute == False:
+                    self.draw.text((Screen4text30), oledvolumeon, font=labelfontfa, fill='white')
+                else:
+                    self.draw.text((Screen4text31), oledvolumeoff, font=labelfontfa, fill='white')
+                if oled.volume >= 0:
+                    self.volume = 'Vol.: ' + str(oled.volume) + '%'
+                    self.draw.text((Screen4text29), self.volume, font=font4, fill='white')
                 self.draw.text((Screen4ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
-                self.draw.rectangle((self.bar+Screen4barLineX-Screen4barNibbleWidth, Screen4barThick1, Screen4barX+self.bar+Screen4barNibbleWidth, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
+                    self.draw.rectangle((self.bar+Screen4barLineX-Screen4barNibbleWidth, Screen4barThick1, Screen4barX+self.bar+Screen4barNibbleWidth, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -1336,10 +1416,27 @@ class NowPlayingScreen():
                 if self.SongWidth <= self.width:                  # center text
                     self.SongPosition = (int((self.width-self.SongWidth)/2), Screen4text02[1])  
                 self.draw.text((self.SongPosition), oled.activeSong, font=font3, fill='white')
+                self.draw.text((Screen4text28), oled.playstateIcon, font=labelfont, fill='white')
+                self.draw.text((Screen4Text0008), oled.activeFormat, font=font4, fill='white')
+                self.draw.text((Screen4text008), oled.bitrate, font=font4, fill='white')
+                if oled.repeat == True:
+                    if oled.repeatonce == False:
+                        self.draw.text((Screen4text33), oledrepeat, font=labelfont, fill='white')
+                    if oled.repeatonce == True:
+                        self.draw.text((Screen4text33), oledrepeat, font=labelfont, fill='white')
+                        self.draw.text((Screen4text34), str(1), font=font4, fill='white')
+                if oled.shuffle == True:
+                    self.draw.text((Screen4text35), oledshuffle, font=labelfont, fill='white')
+                if oled.mute == False:
+                    self.draw.text((Screen4text30), oledvolumeon, font=labelfontfa, fill='white')
+                else:
+                    self.draw.text((Screen4text31), oledvolumeoff, font=labelfontfa, fill='white')
+                if oled.volume >= 0:
+                    self.volume = 'Vol.: ' + str(oled.volume) + '%'
+                    self.draw.text((Screen4text29), self.volume, font=font4, fill='white')
                 image.paste(self.image, (0, 0))
 
         if NowPlayingLayout == 'Modern' and newStatus != 'stop' and DisplayTechnology == 'spi1322':
-
 
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
@@ -1400,8 +1497,6 @@ class NowPlayingScreen():
                                 self.draw.rectangle((Screen5rightVUDistance-i*Screen5rightVUWide1, Screen5rightVUYpos1, Screen5rightVUDistance-i*Screen5rightVUWide1+Screen5rightVUWide2, Screen5rightVUYpos2), outline = Screen5rightVUBorder, fill = Screen5rightVUFill)
                             except:
                                 continue    
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen5barwidth * self.playbackPoint / 100
                 if DisplayTechnology == 'Braun':
                     self.draw.line((34, 36, 242, 36), fill='white', width=1)
                     self.draw.line((34, 47, 83, 47), fill='white', width=1)
@@ -1419,9 +1514,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen5text07), oled.activeSamplerate, font=font7, fill='white')
                 self.draw.text((Screen5text08), oled.activeBitdepth, font=font7, fill='white')
                 self.draw.text((Screen5ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
-                self.draw.text((Screen5DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
-                self.draw.rectangle((Screen5barLineX , Screen5barLineThick1, Screen5barLineX+Screen5barwidth, Screen5barLineThick2), outline=Screen5barLineBorder, fill=Screen5barLineFill)
-                self.draw.rectangle((self.bar+Screen5barLineX-Screen5barNibbleWidth, Screen5barThick1, Screen5barX+self.bar+Screen5barNibbleWidth, Screen5barThick2), outline=Screen5barBorder, fill=Screen5barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen5DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                    self.draw.rectangle((Screen5barLineX , Screen5barLineThick1, Screen5barLineX+Screen5barwidth, Screen5barLineThick2), outline=Screen5barLineBorder, fill=Screen5barLineFill)
+                    self.draw.rectangle((self.bar+Screen5barLineX-Screen5barNibbleWidth, Screen5barThick1, Screen5barX+self.bar+Screen5barNibbleWidth, Screen5barThick2), outline=Screen5barBorder, fill=Screen5barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -1588,16 +1686,17 @@ class NowPlayingScreen():
                 if self.ArtistWidth <= self.width:                  # center text
                     self.ArtistPosition = (int((self.width-self.ArtistWidth)/2), Screen7text01[1])  
                 self.draw.text((self.ArtistPosition), TextBaustein, font=font6, fill='white')
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen7barwidth * self.playbackPoint / 100
                 self.draw.text((Screen7text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen7text06), oled.activeFormat, font=font8, fill='white')
                 self.draw.text((Screen7text07), oled.activeSamplerate, font=font8, fill='white')
                 self.draw.text((Screen7text08), oled.activeBitdepth, font=font8, fill='white')
                 self.draw.text((Screen7ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
-                self.draw.text((Screen7DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
-                self.draw.rectangle((Screen7barLineX , Screen7barLineThick1, Screen7barLineX+Screen7barwidth, Screen7barLineThick2), outline=Screen7barLineBorder, fill=Screen7barLineFill)
-                self.draw.rectangle((self.bar+Screen7barLineX-Screen7barNibbleWidth, Screen7barThick1, Screen7barX+self.bar+Screen7barNibbleWidth, Screen7barThick2), outline=Screen7barBorder, fill=Screen7barFill)  
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen7DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                    self.draw.rectangle((Screen7barLineX , Screen7barLineThick1, Screen7barLineX+Screen7barwidth, Screen7barLineThick2), outline=Screen7barLineBorder, fill=Screen7barLineFill)
+                    self.draw.rectangle((self.bar+Screen7barLineX-Screen7barNibbleWidth, Screen7barThick1, Screen7barX+self.bar+Screen7barNibbleWidth, Screen7barThick2), outline=Screen7barBorder, fill=Screen7barFill)  
                 if len(data2) >= 3:
                     leftVU = data2[0]
                     if leftVU != '':
@@ -1666,9 +1765,6 @@ class NowPlayingScreen():
                 spec_gradient = np.linspace(Screen8specGradstart, Screen8specGradstop, Screen8specGradSamples)
                 cava2_fifo = open("/tmp/cava2_fifo", 'r')
                 data2 = cava2_fifo.readline().strip().split(';')
-
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen8barwidth * self.playbackPoint / 100
                 self.ArtistWidth, self.ArtistHeight = self.draw.textsize(oled.activeArtist, font=font9)
                 self.ArtistStopPosition = self.ArtistWidth - self.width + ArtistEndScrollMargin
                 if self.ArtistWidth >= self.width - 60:
@@ -1734,9 +1830,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen8text07), str(oled.activeSamplerate), font=font8, fill='white')
                 self.draw.text((Screen8text08), oled.activeBitdepth, font=font8, fill='white')
                 self.draw.text((Screen8ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
-                self.draw.text((Screen8DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
-                self.draw.rectangle((Screen8barLineX , Screen8barLineThick1, Screen8barLineX+Screen8barwidth, Screen8barLineThick2), outline=Screen8barLineBorder, fill=Screen8barLineFill)
-                self.draw.rectangle((self.bar+Screen8barLineX-Screen8barNibbleWidth, Screen8barThick1, Screen8barX+self.bar+Screen8barNibbleWidth, Screen8barThick2), outline=Screen8barBorder, fill=Screen8barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen8DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                    self.draw.rectangle((Screen8barLineX , Screen8barLineThick1, Screen8barLineX+Screen8barwidth, Screen8barLineThick2), outline=Screen8barLineBorder, fill=Screen8barLineFill)
+                    self.draw.rectangle((self.bar+Screen8barLineX-Screen8barNibbleWidth, Screen8barThick1, Screen8barX+self.bar+Screen8barNibbleWidth, Screen8barThick2), outline=Screen8barBorder, fill=Screen8barFill)
                 if len(data2) >= 3:
                     leftVU = data2[0]
                     rightVU = data2[1]
@@ -1939,9 +2038,7 @@ class NowPlayingScreen():
                             try:
                                 self.draw.rectangle((Screen9rightVUDistance-i*Screen9rightVUWide1, Screen9rightVUYpos1, Screen9rightVUDistance-i*Screen9rightVUWide1+Screen9rightVUWide2, Screen9rightVUYpos2), outline = Screen9rightVUBorder, fill = Screen9rightVUFill)
                             except:
-                                continue    
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen9barwidth * self.playbackPoint / 100
+                                continue 
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen9text01
@@ -1965,9 +2062,12 @@ class NowPlayingScreen():
                     self.draw.line((190, 60, 255, 60), fill='white', width=1)
                     self.draw.line((184, 51, 190, 60), fill='white', width=1)
                 self.draw.text((Screen9ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
-                self.draw.text((Screen9DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
-                self.draw.rectangle((Screen9barLineX , Screen9barLineThick1, Screen9barLineX+Screen9barwidth, Screen9barLineThick2), outline=Screen9barLineBorder, fill=Screen9barLineFill)
-                self.draw.rectangle((self.bar+Screen9barLineX-Screen9barNibbleWidth, Screen9barThick1, Screen9barX+self.bar+Screen9barNibbleWidth, Screen9barThick2), outline=Screen9barBorder, fill=Screen9barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen9DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                    self.draw.rectangle((Screen9barLineX , Screen9barLineThick1, Screen9barLineX+Screen9barwidth, Screen9barLineThick2), outline=Screen9barLineBorder, fill=Screen9barLineFill)
+                    self.draw.rectangle((self.bar+Screen9barLineX-Screen9barNibbleWidth, Screen9barThick1, Screen9barX+self.bar+Screen9barNibbleWidth, Screen9barThick2), outline=Screen9barBorder, fill=Screen9barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2055,8 +2155,6 @@ class NowPlayingScreen():
         if NowPlayingLayout != 'Progress-Bar' and newStatus != 'stop' and DisplayTechnology == 'i2c1306':
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen4barwidth * self.playbackPoint / 100
                 self.draw.text((Screen4text01), oled.activeArtist, font=font, fill='white')
                 self.draw.text((Screen4text02), oled.activeSong, font=font3, fill='white')
                 self.draw.text((Screen4text28), oled.playstateIcon, font=labelfont, fill='white')
@@ -2064,9 +2162,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen4text07), oled.activeSamplerate, font=font4, fill='white')
                 self.draw.text((Screen4text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen4ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
-                self.draw.rectangle((Screen4barLineX, Screen4barThick1, Screen4barX+self.bar, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
+                    self.draw.rectangle((Screen4barLineX, Screen4barThick1, Screen4barX+self.bar, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2151,16 +2252,17 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen1specDistance+i*Screen1specWide1, Screen1specYposTag, Screen1specDistance+i*Screen1specWide1+Screen1specWide2, Screen1specYposTag-int(data[i])), outline = Screen1specBorder, fill =Screen1specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen1barwidth * self.playbackPoint / 100
                 self.draw.text((Screen1text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen1text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen1text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen1text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen1ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen1DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen1barLineX , Screen1barLineThick1, Screen1barLineX+Screen1barwidth, Screen1barLineThick2), outline=Screen1barLineBorder, fill=Screen1barLineFill)
-                self.draw.rectangle((self.bar+Screen1barLineX-Screen1barNibbleWidth, Screen1barThick1, Screen1barX+self.bar+Screen1barNibbleWidth, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen1DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen1barLineX , Screen1barLineThick1, Screen1barLineX+Screen1barwidth, Screen1barLineThick2), outline=Screen1barLineBorder, fill=Screen1barLineFill)
+                    self.draw.rectangle((self.bar+Screen1barLineX-Screen1barNibbleWidth, Screen1barThick1, Screen1barX+self.bar+Screen1barNibbleWidth, Screen1barThick2), outline=Screen1barBorder, fill=Screen1barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2305,16 +2407,17 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen2specDistance+i*Screen2specWide1, Screen2specYposTag, Screen2specDistance+i*Screen2specWide1+Screen2specWide2, Screen2specYposTag-int(data[i])), outline = Screen2specBorder, fill =Screen2specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen2barwidth * self.playbackPoint / 100
                 self.draw.text((Screen2text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen2text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen2text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen2text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen2ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen2DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen2barLineX , Screen2barLineThick1, Screen2barLineX+Screen2barwidth, Screen2barLineThick2), outline=Screen2barLineBorder, fill=Screen2barLineFill)
-                self.draw.rectangle((self.bar+Screen2barLineX-Screen2barNibbleWidth, Screen2barThick1, Screen2barX+self.bar+Screen2barNibbleWidth, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen2DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen2barLineX , Screen2barLineThick1, Screen2barLineX+Screen2barwidth, Screen2barLineThick2), outline=Screen2barLineBorder, fill=Screen2barLineFill)
+                    self.draw.rectangle((self.bar+Screen2barLineX-Screen2barNibbleWidth, Screen2barThick1, Screen2barX+self.bar+Screen2barNibbleWidth, Screen2barThick2), outline=Screen2barBorder, fill=Screen2barFill)
                 image.paste(self.image, (0, 0))
                 
                 
@@ -2461,16 +2564,17 @@ class NowPlayingScreen():
                             self.draw.rectangle((Screen3specDistance-i*Screen3specWide1, Screen3specYposTag, Screen3specDistance-i*Screen3specWide1+Screen3specWide2, Screen3specYposTag-int(data[i])), outline = Screen3specBorder, fill =Screen3specFill)  #(255, 255, 255, 200) means Icon is nearly white. Change 200 to 0 -> icon is not visible. scale = 0-255
                         except:
                             pass
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen3barwidth * self.playbackPoint / 100
                 self.draw.text((Screen3text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen3text06), oled.activeFormat, font=font4, fill='white')
                 self.draw.text((Screen3text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen3text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen3ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen3DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen3barLineX , Screen3barLineThick1, Screen3barLineX+Screen3barwidth, Screen3barLineThick2), outline=Screen3barLineBorder, fill=Screen3barLineFill)
-                self.draw.rectangle((self.bar+Screen3barLineX-Screen3barNibbleWidth, Screen3barThick1, Screen3barX+self.bar+Screen3barNibbleWidth, Screen3barThick2), outline=Screen3barBorder, fill=Screen3barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen3DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen3barLineX , Screen3barLineThick1, Screen3barLineX+Screen3barwidth, Screen3barLineThick2), outline=Screen3barLineBorder, fill=Screen3barLineFill)
+                    self.draw.rectangle((self.bar+Screen3barLineX-Screen3barNibbleWidth, Screen3barThick1, Screen3barX+self.bar+Screen3barNibbleWidth, Screen3barThick2), outline=Screen3barBorder, fill=Screen3barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2548,8 +2652,6 @@ class NowPlayingScreen():
 
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen4barwidth * self.playbackPoint / 100
                 self.ArtistWidth, self.ArtistHeight = self.draw.textsize(oled.activeArtist, font=font)
                 self.ArtistStopPosition = self.ArtistWidth - self.width + ArtistEndScrollMargin + 41
                 if self.ArtistWidth >= self.width - 62:
@@ -2614,9 +2716,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen4text07), str(oled.activeSamplerate), font=font4, fill='white')
                 self.draw.text((Screen4text08), oled.activeBitdepth, font=font4, fill='white')
                 self.draw.text((Screen4ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
-                self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
-                self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
-                self.draw.rectangle((self.bar+Screen4barLineX-Screen4barNibbleWidth, Screen4barThick1, Screen4barX+self.bar+Screen4barNibbleWidth, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
+                    self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
+                    self.draw.rectangle((self.bar+Screen4barLineX-Screen4barNibbleWidth, Screen4barThick1, Screen4barX+self.bar+Screen4barNibbleWidth, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2684,7 +2789,6 @@ class NowPlayingScreen():
 
         if NowPlayingLayout == 'Modern' and newStatus != 'stop' and DisplayTechnology == 'Braun':
 
-
             if newStatus != 'stop' and oled.duration != None:
                 self.image.paste(('black'), [0, 0, image.size[0], image.size[1]])
                 cava_fifo = open("/tmp/cava_fifo", 'r')
@@ -2743,9 +2847,7 @@ class NowPlayingScreen():
                             try:
                                 self.draw.rectangle((Screen5rightVUDistance-i*Screen5rightVUWide1, Screen5rightVUYpos1, Screen5rightVUDistance-i*Screen5rightVUWide1+Screen5rightVUWide2, Screen5rightVUYpos2), outline = Screen5rightVUBorder, fill = Screen5rightVUFill)
                             except:
-                                continue    
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen5barwidth * self.playbackPoint / 100
+                                continue 
                 if DisplayTechnology == 'Braun':
                     self.draw.line((34, 36, 242, 36), fill='white', width=1)
                     self.draw.line((34, 47, 83, 47), fill='white', width=1)
@@ -2763,9 +2865,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen5text07), oled.activeSamplerate, font=font7, fill='white')
                 self.draw.text((Screen5text08), oled.activeBitdepth, font=font7, fill='white')
                 self.draw.text((Screen5ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
-                self.draw.text((Screen5DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
-                self.draw.rectangle((Screen5barLineX , Screen5barLineThick1, Screen5barLineX+Screen5barwidth, Screen5barLineThick2), outline=Screen5barLineBorder, fill=Screen5barLineFill)
-                self.draw.rectangle((self.bar+Screen5barLineX-Screen5barNibbleWidth, Screen5barThick1, Screen5barX+self.bar+Screen5barNibbleWidth, Screen5barThick2), outline=Screen5barBorder, fill=Screen5barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen5DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                    self.draw.rectangle((Screen5barLineX , Screen5barLineThick1, Screen5barLineX+Screen5barwidth, Screen5barLineThick2), outline=Screen5barLineBorder, fill=Screen5barLineFill)
+                    self.draw.rectangle((self.bar+Screen5barLineX-Screen5barNibbleWidth, Screen5barThick1, Screen5barX+self.bar+Screen5barNibbleWidth, Screen5barThick2), outline=Screen5barBorder, fill=Screen5barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -2932,16 +3037,17 @@ class NowPlayingScreen():
                 if self.ArtistWidth <= self.width - 62:                  # center text
                     self.ArtistPosition = (int((self.width-self.ArtistWidth)/2), Screen7text01[1])  
                 self.draw.text((self.ArtistPosition), TextBaustein, font=font6, fill='white')
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen7barwidth * self.playbackPoint / 100
                 self.draw.text((Screen7text28), oled.playstateIcon, font=labelfont, fill='white')
                 self.draw.text((Screen7text06), oled.activeFormat, font=font8, fill='white')
                 self.draw.text((Screen7text07), oled.activeSamplerate, font=font8, fill='white')
                 self.draw.text((Screen7text08), oled.activeBitdepth, font=font8, fill='white')
                 self.draw.text((Screen7ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
-                self.draw.text((Screen7DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
-                self.draw.rectangle((Screen7barLineX , Screen7barLineThick1, Screen7barLineX+Screen7barwidth, Screen7barLineThick2), outline=Screen7barLineBorder, fill=Screen7barLineFill)
-                self.draw.rectangle((self.bar+Screen7barLineX-Screen7barNibbleWidth, Screen7barThick1, Screen7barX+self.bar+Screen7barNibbleWidth, Screen7barThick2), outline=Screen7barBorder, fill=Screen7barFill)  
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen7DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                    self.draw.rectangle((Screen7barLineX , Screen7barLineThick1, Screen7barLineX+Screen7barwidth, Screen7barLineThick2), outline=Screen7barLineBorder, fill=Screen7barLineFill)
+                    self.draw.rectangle((self.bar+Screen7barLineX-Screen7barNibbleWidth, Screen7barThick1, Screen7barX+self.bar+Screen7barNibbleWidth, Screen7barThick2), outline=Screen7barBorder, fill=Screen7barFill)  
                 if len(data2) >= 3:
                     leftVU = data2[0]
                     if leftVU != '':
@@ -3010,8 +3116,6 @@ class NowPlayingScreen():
                 spec_gradient = np.linspace(Screen8specGradstart, Screen8specGradstop, Screen8specGradSamples)
                 cava2_fifo = open("/tmp/cava2_fifo", 'r')
                 data2 = cava2_fifo.readline().strip().split(';')
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen8barwidth * self.playbackPoint / 100
                 self.ArtistWidth, self.ArtistHeight = self.draw.textsize(oled.activeArtist, font=font9)
                 self.ArtistStopPosition = self.ArtistWidth - self.width + ArtistEndScrollMargin + 41
                 if self.ArtistWidth >= self.width - 60:
@@ -3077,9 +3181,12 @@ class NowPlayingScreen():
                 self.draw.text((Screen8text07), str(oled.activeSamplerate), font=font8, fill='white')
                 self.draw.text((Screen8text08), oled.activeBitdepth, font=font8, fill='white')
                 self.draw.text((Screen8ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font8, fill='white')
-                self.draw.text((Screen8DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
-                self.draw.rectangle((Screen8barLineX , Screen8barLineThick1, Screen8barLineX+Screen8barwidth, Screen8barLineThick2), outline=Screen8barLineBorder, fill=Screen8barLineFill)
-                self.draw.rectangle((self.bar+Screen8barLineX-Screen8barNibbleWidth, Screen8barThick1, Screen8barX+self.bar+Screen8barNibbleWidth, Screen8barThick2), outline=Screen8barBorder, fill=Screen8barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen8DurationText), str(timedelta(seconds=oled.duration)), font=font8, fill='white')
+                    self.draw.rectangle((Screen8barLineX , Screen8barLineThick1, Screen8barLineX+Screen8barwidth, Screen8barLineThick2), outline=Screen8barLineBorder, fill=Screen8barLineFill)
+                    self.draw.rectangle((self.bar+Screen8barLineX-Screen8barNibbleWidth, Screen8barThick1, Screen8barX+self.bar+Screen8barNibbleWidth, Screen8barThick2), outline=Screen8barBorder, fill=Screen8barFill)
                 if len(data2) >= 3:
                     leftVU = data2[0]
                     rightVU = data2[1]
@@ -3283,8 +3390,6 @@ class NowPlayingScreen():
                                 self.draw.rectangle((Screen9rightVUDistance-i*Screen9rightVUWide1, Screen9rightVUYpos1, Screen9rightVUDistance-i*Screen9rightVUWide1+Screen9rightVUWide2, Screen9rightVUYpos2), outline = Screen9rightVUBorder, fill = Screen9rightVUFill)
                             except:
                                 continue    
-                self.playbackPoint = oled.seek / oled.duration / 10
-                self.bar = Screen9barwidth * self.playbackPoint / 100
                 TextBaustein = oled.activeArtist + ' - ' + oled.activeSong
                 self.textwidth, self.textheight = self.draw.textsize(TextBaustein, font=font6)
                 position = Screen9text01
@@ -3308,9 +3413,12 @@ class NowPlayingScreen():
                     self.draw.line((190, 60, 255, 60), fill='white', width=1)
                     self.draw.line((184, 51, 190, 60), fill='white', width=1)
                 self.draw.text((Screen9ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font7, fill='white')
-                self.draw.text((Screen9DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
-                self.draw.rectangle((Screen9barLineX , Screen9barLineThick1, Screen9barLineX+Screen9barwidth, Screen9barLineThick2), outline=Screen9barLineBorder, fill=Screen9barLineFill)
-                self.draw.rectangle((self.bar+Screen9barLineX-Screen9barNibbleWidth, Screen9barThick1, Screen9barX+self.bar+Screen9barNibbleWidth, Screen9barThick2), outline=Screen9barBorder, fill=Screen9barFill)
+                if oled.duration != None:
+                    self.playbackPoint = oled.seek / oled.duration / 10
+                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.draw.text((Screen9DurationText), str(timedelta(seconds=oled.duration)), font=font7, fill='white')
+                    self.draw.rectangle((Screen9barLineX , Screen9barLineThick1, Screen9barLineX+Screen9barwidth, Screen9barLineThick2), outline=Screen9barLineBorder, fill=Screen9barLineFill)
+                    self.draw.rectangle((self.bar+Screen9barLineX-Screen9barNibbleWidth, Screen9barThick1, Screen9barX+self.bar+Screen9barNibbleWidth, Screen9barThick2), outline=Screen9barBorder, fill=Screen9barFill)
                 image.paste(self.image, (0, 0))
 
             if newStatus != 'stop' and oled.duration == None:
@@ -3517,12 +3625,12 @@ class ScreenSelectMenu():
 def ButtonA_PushEvent(hold_time):
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
         print('ButtonA short press event')
-        if oled.state == STATE_PLAYER and oled.playState != 'stop' and newFormat != 'WebRadio':
+        if oled.state == STATE_PLAYER and oled.playState != 'stop' and oled.duration != None:
             if oled.playState == 'play':
                 volumioIO.emit('pause')
             else:
                 volumioIO.emit('play')
-        if oled.state == STATE_PLAYER and oled.playState != 'stop' and newFormat == 'WebRadio':
+        if oled.state == STATE_PLAYER and oled.playState != 'stop' and oled.duration == None:
             volumioIO.emit('stop')
             oled.modal.UpdateStandbyInfo()  
 
@@ -3653,6 +3761,17 @@ RightKnob_Rotation.setCallback(RightKnob_RotaryEvent)
 #/_____/\____/\____/\__/     /_____/\____/\__, /\____/  (_)  
 #    
 show_logo(oledBootLogo, oled)
+if ledActive == True and firstStart == True:
+    SysStart()
+#show_logo(oled1BootLogo, oled)
+#show_logo2(oled2BootLogo, oled2)
+if ledActive == True and firstStart == True:
+    Processor = threading.Thread(target=CPUload, daemon=True)
+    Processor.start()
+    firstStart = False
+else: 
+    firstStart = False
+#sleep(2.0)
 sleep(2)
 SetState(STATE_PLAYER)
 #________________________________________________________________________________________
@@ -3702,8 +3821,9 @@ GetIP()
 
 def PlaypositionHelper():
     while True:
-          volumioIO.emit('getState')
-          sleep(1.0)
+        volumioIO.emit('getState')
+        oled.date = now.strftime("%d.%m.%Y")
+        sleep(1.0)
 
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
 PlayPosHelp.start()

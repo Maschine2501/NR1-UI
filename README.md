@@ -1,7 +1,5 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 
-And special Thanks to [KP-Dandy](https://github.com/KP-dandy) for the great support!
-
 ### This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 ---
 

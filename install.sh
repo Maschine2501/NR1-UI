@@ -1,52 +1,55 @@
 #!/bin/bash
 set +e #
+echo -e "\e[92m    _   ______ ___      __  ______\e[0m" #
+echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m" #
+echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
+echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
+echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
+echo "" #
+echo -e "\e[92mSeting up...\e[0m" #
+echo "" #
+echo "_________________________________________________________ " #
 sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
 sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
 cd #
-sudo chmod +x /home/volumio/NR1-UI/mpd-buffertime.sh #
-sudo chmod +x /home/volumio/NR1-UI/mpd.sh #
 sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
 sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
 sudo chmod +x /home/volumio/NR1-UI/ftp.sh #
-#sudo cp /home/volumio/NR1-UI/ConfigurationFiles/config.txt /boot/ #
-echo "dtparam=spi=on" >> /boot/userconfig.txt #
-echo "dtparam=i2c=on" >> /boot/userconfig.txt #
+sudo echo "dtparam=spi=on" >> /boot/userconfig.txt #
+sudo echo "dtparam=i2c=on" >> /boot/userconfig.txt #
 echo "_________________________________________________________________ " #
 echo " " #
 echo " " #
 echo " " #
 echo " " #
-echo "________________________________________ " #
-echo "This is the Configuration for config.txt" #
-echo "________________________________________ " #
+echo -e "\e[92m    _   ______ ___      __  ______\e[0m" #
+echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m" #
+echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
+echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
+echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
+echo "" #
+echo -e "\e[92mConfiguration Part 1...\e[0m" #
 echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo "______________________________________________" #
-echo "Do you want to deactivate (onboard-)Bluetooth?" #
-echo "______________________________________________" #
-echo " " #
+echo -e "\e[4;92mDo you want to deactivate (onboard-)Bluetooth?\e[0;0m" #
 echo " " #
 echo "______________________ " #
-echo " " #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
+echo -e "\e[93mValid selections are: \e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m--->\e[0m" #
 getBluetooth() { #
   read -p "Enter your decision: " Bluetooth #
   case "$Bluetooth" in #
     1) #    
       echo "dtoverlay=pi3-disable-bt" >> /boot/userconfig.txt #
       echo " " #
-      echo "(onboard-) Bluetooth is disabled..." #
+      echo -e "\e[92m(onboard-) Bluetooth is disabled...\e[0m" #
       return 0 #
       ;; #
     2) #
       echo " " #
-      echo "(onboard-) Bluetooth stays active..." #
+      echo -e "\e[92m(onboard-) Bluetooth stays active...\e[0m" #
       return 0 #
       ;; #        
     *) #
@@ -56,33 +59,28 @@ getBluetooth() { #
   esac #
 } #
 until getBluetooth; do : ; done #
+echo "_______________________________________________ " #
 echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo "______________________________________________" #
-echo "Do you want to deactivate (onboard-) WiFi?" #
-echo "______________________________________________" #
-echo " " #
+echo -e "\e[4;92mDo you want to deactivate (onboard-) WiFi?\e[0m" #
 echo " " #
 echo "______________________ " #
 echo " " #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
+echo -e "\e[93mValid selections are: \e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m--->\e[0m" #
 getWiFi() { #
   read -p "Enter your decision: " WiFi #
   case "$WiFi" in #
     1) #    
       echo "dtoverlay=pi3-disable-wifi" >> /boot/userconfig.txt #
       echo " " #
-      echo "(onboard-) WiFi is disabled..." #
+      echo -e "\e[92m(onboard-) WiFi is disabled...\e[0m" #
       return 0 #
       ;; #
     2) #
       echo " " #
-      echo "(onboard-) WiFi stays active..." #
+      echo -e "\e[92m(onboard-) WiFi stays active...\e[0m" #
       return 0 #
       ;; #        
     *) #
@@ -92,23 +90,20 @@ getWiFi() { #
   esac #
 } #
 until getWiFi; do : ; done #
+echo "_______________________________________________________ " #
 echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo "______________________________________________" #
-echo "Do you want to activate Touch-Display-Support?" #
-echo "(This enables a resolution of 800x480 pixels)" #
-echo "______________________________________________" #
-echo "---> Touchdisplay Plugin in Volumio needed!!! " #
-echo " " #
+echo -e "\e[4;92mDo you want to activate Touch-Display-Support?\e[0;0m" #
+echo -e "\e[92mNeeded for "'"unofficial"'" displays...\e[0m" #
+echo "" #
+echo -e "\e[91m---> Touchdisplay Plugin in Volumio needed!!! \e[0m" #
+echo -e "\e[91m------> Please install Plugin after Setup. \e[0m" #
 echo " " #
 echo "______________________ " #
-echo " " #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
+echo -e "\e[93mValid selections are: \e[0m" #
+echo -e "1 -> \e[92m5-Inch / 800x480 Pixel\e[0m" #
+echo -e "2 -> \e[92m7-Inch / 1024x600 Pixel\e[0m" #
+echo -e "3 -> \e[91mNo Touchscreen\e[0m" #
+echo -e "\e[93m--->" #
 getDisp() { #
   read -p "Enter your decision: " Disp #
   case "$Disp" in #
@@ -119,12 +114,58 @@ getDisp() { #
       echo "hdmi_cvt=800 480 60 6 0 0 0" >> /boot/userconfig.txt #
       echo "hdmi_drive=1" >> /boot/userconfig.txt #
       echo " " #
-      echo "Touch-Display-Support enabled..." #
+      echo -e "\e[92mTouch-Display-Support enabled...\e[0m" #
+      return 0 #
+      ;; #
+    2) #    
+      echo "hdmi_force_hotplug=1" >> /boot/userconfig.txt #
+      echo "hdmi_group=2" >> /boot/userconfig.txt #
+      echo "hdmi_mode=87" >> /boot/userconfig.txt #
+      echo "hdmi_cvt=1024 600 60 6 0 0 0" >> /boot/userconfig.txt #
+      echo "hdmi_drive=1" >> /boot/userconfig.txt #
+      echo " " #
+      echo -e "\e[92mTouch-Display-Support enabled...\e[0m" #
+      return 0 #
+      ;; #
+    3) #
+      echo " " #
+      echo -e "\e[92mTouch-Display-Support disabled...\e[0m" #
+      return 0 #
+      ;; #        
+    *) #
+      printf %s\\n "Please enter '1', '2' or '3'" #
+      return 1 #
+      ;; #
+  esac #
+} #
+until getDisp; do : ; done #
+echo "_________________________________________________________ " #
+echo " " #
+echo -e "\e[4;92mDo you want to use Spectrum/VU-Meter?\e[0;0m" #
+echo -e "\e[92m(This enables two CAVA instances)\e[0m" #
+echo "" #
+echo -e "\e[91m---> This needs some resources!!! " #
+echo -e "-> Better use Pi3 or above.\e[0m" #
+echo " " #
+echo "______________________ " #
+echo " " #
+echo -e "\e[93mValid selections are: \e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m--->\e[0m" #" #
+getCAVATag() { #
+  read -p "Enter your decision: " CAVATag #
+  case "$CAVATag" in #
+    1) #    
+      sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo " " #
+      echo -e "\e[92mCAVA/Spectrum will be installed...\e[0m" #
       return 0 #
       ;; #
     2) #
+      sed -i 's/\(SpectrumActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Touch-Display-Support disabled..." #
+      echo -e "\e[92mCAVA/Spectrum won't be installed...\e[0m" #
       return 0 #
       ;; #        
     *) #
@@ -133,24 +174,21 @@ getDisp() { #
       ;; #
   esac #
 } #
-until getDisp; do : ; done #
+until getCAVATag; do : ; done #
 echo "________________________________________________________________________ " #
 echo " " #
 echo " " #
+echo -e "\e[4;92mDo you want to activate Album-Art-Tool for NR1-UI-Remote?\e[0;0m" #
 echo " " #
-echo "______________________________________________" #
-echo "Do you want to activate Album-Art-Tool for NR1-UI-Remote?" #
-echo "______________________________________________" #
+echo -e "More informations under: \e[93mhttps://github.com/Maschine2501/NR1-UI-Remote\e[0m" #
 echo " " #
-echo "More informations under: https://github.com/Maschine2501/NR1-UI-Remote " #
-echo " " #
-echo " " #
+echo -e "\e[25;91mIf you select YES you'll get a promt, select: "'"Standalone"'" \e[0;0m" #
 echo "______________________ " #
 echo " " #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
+echo -e "\e[93mValid selections are: \e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m--->\e[0m" #
 cd #
 getRemote() { #
   read -p "Enter your decision: " Remote #
@@ -166,13 +204,13 @@ getRemote() { #
       sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftpd.log /home/volumio/proftpd #
       sudo service proftpd restart #
       echo " " #
-      echo "Album-Art-Tool is activated..." #
+      echo -e "\e[92mAlbum-Art-Tool is activated...\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py
       echo " " #
-      echo "Album-Art-Tool is not active..." #
+      echo -e "\e[92mAlbum-Art-Tool is not active...\e[0m" #
       return 0 #
       ;; #        
     *) #
@@ -182,7 +220,7 @@ getRemote() { #
   esac #
 } #
 until getRemote; do : ; done #
-echo "Installing OpenSSL 1.1.1b" #
+echo -e "\e[92mInstalling OpenSSL 1.1.1b\e[0m" #
 mkdir /home/volumio/src #
 cd /home/volumio/src && mkdir openssl && cd openssl #
 wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
@@ -192,7 +230,7 @@ cd #
 sudo cp /home/volumio/NR1-UI/ConfigurationFiles/ldconf/libc.conf /etc/ld.so.conf.d #
 sudo ldconfig #
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
-echo "Installing 3.8.5 and related modules" #
+echo -e "\e[92mInstalling 3.8.5 and related modules\e[0m" #
 cd /home/volumio/src && mkdir python && cd python #
 wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
 tar xf Python-3.8.5.tar.xz #
@@ -207,98 +245,85 @@ sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade setuptools pip wheel #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
-echo "all Python related modules arre installed..." #
-echo "Installing Cava..." #
+echo -e "\e[92mAll Python related modules are installed...\e[0m" #
 cd #
-git clone https://github.com/Maschine2501/cava.git #
-cd cava #
-sudo bash autogen.sh #
-./configure && make -j4 && sudo make install #
-cd #
-git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
-cd /home/volumio/CAVAinstall #
-sudo bash ./autogen.sh #
-./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
-cd #
-echo "Installing NR1-UI..."  #
+if [[ $CAVATag -eq 1 ]];
+then
+    echo -e "\e[92mInstalling Cava...\e[0m"
+    git clone https://github.com/Maschine2501/cava.git #
+    cd cava #
+    sudo bash autogen.sh #
+    ./configure && make -j4 && sudo make install #
+    cd #
+    git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
+    cd /home/volumio/CAVAinstall #
+    sudo bash ./autogen.sh #
+    ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
+    cd #
+    sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
+    sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
+    sudo systemctl daemon-reload #
+    sudo systemctl enable cava1.service #
+    sudo systemctl enable cava2.service #
+fi
+echo -e "\e[92mInstalling NR1-UI...\e[0m"
 chmod +x /home/volumio/NR1-UI/nr1ui.py #
 sudo cp /home/volumio/NR1-UI/service-files/nr1ui.service /lib/systemd/system/ #
-sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
-sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
 sudo systemctl enable nr1ui.service #
-sudo systemctl enable cava1.service #
-sudo systemctl enable cava2.service #
-echo "audio_output {" >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    type     "fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    name     "my_fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    path     "/tmp/mpd.fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    format   "44100:16:2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo "}" >> /etc/mpd.conf #
-echo "audio_output {" >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    type     "fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    name     "my_fifo2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    path     "/tmp/mpd2.fifo"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo '    format   "44100:16:2"' >> /etc/mpd.conf #
-echo " " >> /etc/mpd.conf #
-echo "}" >> /etc/mpd.conf #
-echo " " #
-echo " " #
-echo "Fifo-Audio-Outputs for Cava has been added to mpd.conf" #
-echo " " #
-echo " " #
-sudo service mpd restart #
+if [[ $CAVATag -eq 1 ]];
+then
+    sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd #
+    echo " " #
+    echo " " #
+    echo -e "\e[92mFifo-Audio-Outputs for Cava has been added to mpd.conf\e[0m"
+    echo " " #
+    echo " " #
+    sudo service mpd restart #
+fi
 echo "_________________________________________________________________ " #
 echo " " #
 echo " " #
 echo " " #
 echo " " #
-echo " " #
-echo "This is the Pre-Configuration Utility for NR1-UI." #
-echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo "________________________________ " #
-echo "Please select your Display-Type." #
-echo "________________________________" #
+echo -e "\e[92m    _   ______ ___      __  ______\e[0m" #
+echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m" #
+echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
+echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
+echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
+echo "" #
+echo -e "\e[92mConfiguration Part 1...\e[0m" #
+echo "" #
+echo "" #
+echo "" #
+echo -e "\e[4;92mPlease select your Display-Type.\e[0;0m" #
 echo " " #
 echo " " #
 echo "_____________________ " #
-echo "Valid selections are:" #
-echo "1 -> for ssd1306" #
-echo "2 -> for ssd1322" #
-echo "3 -> for Braun-specific" #
-echo "---> " #
+echo -e "\e[93mValid selections are:\e[0m" #
+echo -e "1 -> for \e[92mssd1306\e[0m" #
+echo -e "2 -> for \e[92mssd1322\e[0m" #
+echo -e "3 -> for \e[92mBraun-specific\e[0m" #
+echo -e "\e[93m---> \e[0m" #
 getDisplayType() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #
       sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"i2c1306"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Set Display-Type as ssd1306" #
+      echo -e "\e[92mSet Display-Type as ssd1306\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"spi1322"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Set Display-Type as ssd1322" #
+      echo -e "\e[92mSet Display-Type as ssd1322\e[0m" #
       return 0 #
       ;; #         
     3) #
       sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"Braun"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Set Display-Type as Braun-Specific" #
+      echo -e "\e[92mSet Display-Type as Braun-Specific\e[0m" #
       return 0 #
       ;; #  
     *) #
@@ -310,21 +335,21 @@ getDisplayType() { #
 until getDisplayType; do : ; done #
 echo "_________________________________________________________________ " #
 echo " " #
-echo " " #
-echo " " #
 getScreenLayout1306() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Screen"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Screen" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Display-Type as ssd1306" #
+      echo -e "\e[92mSet Layout as Spectrum-Screen\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Display-Type as ssd1322" #
+      echo -e "\e[92mSet Layout as Progress-Bar\e[0m" #
       return 0 #
       ;; #         
     *) #
@@ -338,56 +363,65 @@ getScreenLayout1322() { #
   case "$DisplayNumber" in #
     1) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Left"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Left" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as Spetrum-Left" #
+      echo -e "\e[92mSet Screen Layout as Spectrum-Left\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Spectrum-Center" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as Spetrum-Center" #
+      echo -e "\e[92mSet Screen Layout as Spectrum-Center\e[0m" #
       return 0 #
       ;; #         
     3) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Right"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Spectrum-Right" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as Spetrum-Right" #
+      echo -e "\e[92mSet Screen Layout as Spcetrum-Right\e[0m" #
       return 0 #
       ;; #  
     4) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as No-Spectrum" #
+      echo -e "\e[92mSet Screen Layout as No-Spectrum\e[0m" #
       return 0 #
       ;; #
     5) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as Modern" #
+      echo -e "\e[92mSet Screen Layout as Modern\e[0m" #
       return 0 #
       ;; #         
     6) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-1"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "VU-Meter-1" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as VU-Meter-1" #
+      echo -e "\e[92mSet Screen Layout as VU-Meter-1\e[0m" #
       return 0 #
       ;; #        
     7) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "VU-Meter-2" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as VU-Meter-2" #
+      echo -e "\e[92mSet Screen Layout as VU-Meter-2\e[0m" #
       return 0 #
       ;; #
     8) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "VU-Meter-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as VU-Meter-Bar" #
+      echo -e "\e[92mSet Screen Layout as VU-Meter-Bar\e[0m" #
       return 0 #
       ;; #         
     9) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern-simplistic"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "Modern-simplistic" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
-      echo "Set Screen Layout as Modern-simplistic" #
+      echo -e "\e[92mSet Screen Layout as Modern-simplistic\e[0m" #
       return 0 #
       ;; #  
     *) #
@@ -396,60 +430,83 @@ getScreenLayout1322() { #
       ;; #
   esac #
 } #
-echo "_________________________________" #
-echo "Please select your Screen Layout." #
-echo "_________________________________" #
-echo " " #
-echo "You can find Previews/Screenshots here: " #
-echo "https://github.com/Maschine2501/NR1-UI " #
-if [ $DisplayNumber -eq 1 ] #
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]];
 then #
-   echo "_____________________" #
-   echo "Valid selections are:" #
-   echo "1 -> Spectrum-Screen" #
-   echo "2 -> Progress-Bar" #
-   echo "---> " #
-   until getScreenLayout1306; do : ; done #
-else #
-   echo "_____________________ " #   
-   echo "Valid selections are:" #
-   echo "1 -> for Spectrum-Left" #
-   echo "2 -> for Spectrum-Center" #
-   echo "3 -> for Spectrum-Right" #
-   echo "4 -> for No-Spectrum" #
-   echo "5 -> for Modern" #
-   echo "6 -> for VU-Meter-1" #
-   echo "7 -> for VU-Meter-2" #
-   echo "8 -> for VU-Meter-Bar" #
-   echo "9 -> for Modern-simplistic" #
-   echo "---> " #
-   until getScreenLayout1322; do : ; done #
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+    echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+fi
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 2 ]];
+then
+#else
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+fi #
+if [[ $CAVATag -eq 1 ]];
+then
+    echo "" #
+    echo -e "\e[4;92mPlease select your Screen Layout.\e[0;;0m" #
+    echo ""#
+    echo -e "\e[93mYou can find Previews/Screenshots here: \e[0m" #
+    echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI \e[0m" #
+    if [ $DisplayNumber -eq 1 ]; #
+    then #
+       echo "_____________________" #
+       echo -e "\e[93mValid selections are:\e[0m" #
+       echo -e "1 -> \e[92mSpectrum-Screen\e[0m" #
+       echo -e "2 -> \e[92mProgress-Bar\e[0m" #
+       echo -e "\e[93m---> \e[0m" #
+       until getScreenLayout1306; do : ; done #
+    else #
+       echo "_____________________ " #   
+       echo -e "\e[93mValid selections are:\e[0m" #
+       echo -e "1 -> for \e[92mSpectrum-Left\e[0m" #
+       echo -e "2 -> for \e[92mSpectrum-Center\e[0m" #
+       echo -e "3 -> for \e[92mSpectrum-Right\e[0m" #
+       echo -e "4 -> for \e[92mNo-Spectrum\e[0m" #
+       echo -e "5 -> for \e[92mModern\e[0m" #
+       echo -e "6 -> for \e[92mVU-Meter-1\e[0m" #
+       echo -e "7 -> for \e[92mVU-Meter-2\e[0m" #
+       echo -e "8 -> for \e[92mVU-Meter-Bar\e[0m" #
+       echo -e "9 -> for \e[92mModern-simplistic\e[0m" #
+       echo -e "\e[93m---> \e[0m" #
+       until getScreenLayout1322; do : ; done #
+    fi
+fi #
+if [[ $CAVATag -eq 2 ]]; #
+then #
+    if [ $DisplayNumber -eq 1 ];
+    then #
+        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+        echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+    #fi
+    #if [ $DisplayNumber -eq 2 ]; #
+    else
+        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+        echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+    fi
 fi #
 echo "_________________________________________________________________ " #
 echo " " #
-echo " " #
-echo "_______________________________" #
-echo "Should the Display be rotated?" #
-echo "_______________________________"
+echo -e "\e[4;92mShould the Display be rotated? \e[0;0m" #
 echo " " #
 echo "_____________________ " #
-echo "Valid selections are:" #
-echo "1 -> Display not rotated" #
-echo "2 -> Display rotated 180 degrees " #
-echo "---> " #
+echo -e "\e[93mValid selections are:\e[0m" #
+echo -e "1 -> \e[92mDisplay not rotated\e[0m" #
+echo -e "2 -> \e[92mDisplay rotated 180 degrees \e[0m" #
+echo -e "\e[93m---> \e[0m" #
 getDisplayRotation() { #
   read -p "Enter your decision: " RotationNumber #
   case "$RotationNumber" in #
     1) #    
       sed -i 's/\(oledrotation = \)\(.*\)/\10/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Set Display-Rotation to zero Rotation." #
+      echo -e "\e[92mSet Display-Rotation to zero Rotation.\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(oledrotation = \)\(.*\)/\12/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Set Display-Rotation to 180 degrees Rotation" #
+      echo -e "\e[92mSet Display-Rotation to 180 degrees Rotation\e[0m" #
       return 0 #
       ;; #         
     *) #
@@ -461,33 +518,30 @@ getDisplayRotation() { #
 until getDisplayRotation; do : ; done #
 echo "_________________________________________________________________ " #
 echo " " #
+echo -e "\e[4;92mDo you use LED's?\e[0m" #
 echo " " #
-echo "__________________________________" #
-echo "Do you use LED's?" #
-echo "__________________________________" #
-echo " " #
-echo "More informations here: " #
-echo "https://github.com/Maschine2501/NR1-UI/wiki/LED-Wiring " #
+echo -e "\e[93mMore informations here: \e[0m" #
+echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/LED-Wiring \e[0m" #
 echo " " #
 echo "_____________________ " #
-echo "Valid selections are:" #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "---> " #
+echo -e "\e[93mValid selections are:\e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m---> \e[0m" #
 getLEDUsage() { #
   read -p "Enter your decision: " LEDUsageNumber #
   case "$LEDUsageNumber" in #
     1) #    
       sed -i 's/\(ledActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Activated LED-Option" #
+      echo -e "\e[92mActivated LED-Option\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(ledActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       sed -i 's/\(ledTechnology = \)\(.*\)/\1None/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo " " #
-      echo "Deactivated LED-Option" #
+      echo -e "\e[92mDeactivated LED-Option\e[0m" #
       return 0 #
       ;; #         
     *) #
@@ -502,15 +556,12 @@ getLEDType() { #
   case "$LEDTypeNumber" in #
     1) #    
       sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"GPIOusage"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
-      echo "Activated LED-Type: GPIO" #
+      echo -e "\e[92mActivated LED-Type: GPIO\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(ledTechnology = \)\(.*\)/\1"'"pcf8574usage"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo " " #
-      echo " " #
-      echo "Activated LED-Type: PCF8574" #
-      echo " " #
+      echo -e "\e[92mActivated LED-Type: PCF8574\e[0m" #
       echo " " #
       echo " " #
       /bin/bash /home/volumio/NR1-UI/pcf-i2c-adress-config.sh
@@ -525,38 +576,32 @@ getLEDType() { #
 if [ $LEDUsageNumber -eq 1 ]; then #
    echo "_________________________________________________________________ " #
    echo " " #
+   echo -e "\e[4;92mPlease select your LED Technology:\e[0;0m" #
    echo " " #
-   echo "__________________________________" #
-   echo "Please select your LED Technology:" #
-   echo "__________________________________" #
-   echo " " #
-   echo "More informations here: " #
-   echo "https://github.com/Maschine2501/NR1-UI/wiki/LED-Wiring " #
+   echo -e "\e[93mMore informations here: \e[0m" #
+   echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/LED-Wiring \e[0;0m" #
    echo " " #
    echo "_____________________" #
-   echo "Valid selections are:" #
-   echo "1 -> if you connect LED's directly to the GPIO's of the Raspberry" #
-   echo "2 -> if you use an PCF8574 i2c device" #
-   echo "---> " #
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> \e[92mif you connect LED's directly to the GPIO's of the Raspberry\e[0m" #
+   echo -e "2 -> \e[92mif you use an PCF8574 i2c device\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
    until getLEDType; do : ; done #
 fi #
 echo "_________________________________________________________________ " #
 echo " " #
+echo -e "\e[4;92mDo you use the Standby-Circuit?\e[0;0m" #
 echo " " #
-echo "________________________________" #
-echo "Do you use the Standby-Circuit?" #
-echo "________________________________" #
+echo -e "\e[93mMore informations here: \e[0m" #
+echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/Standby-Module \e[0;0m" #
 echo " " #
-echo "More informations here: " #
-echo "https://github.com/Maschine2501/NR1-UI/wiki/Standby-Module " #
-echo " " #
-echo "WARNING: Do not select YES if you do not have connected the circuit!!!" #
+echo -e "\e[4;91mWARNING: Do not select YES if you do not have connected the circuit!!!\e[0;0m" #
 echo " " #
 echo "______________________ " #
-echo "Valid selections are:" #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo " " #
+echo -e "\e[93mValid selections are:\e[0m" #
+echo -e "1 -> \e[92mYes\e[0m" #
+echo -e "2 -> \e[91mNo\e[0m" #
+echo -e "\e[93m----> \e[0m" #
 StandbyUsage() { #
   read -p "Enter your decision: " StandbyNumber #
   case "$StandbyNumber" in #
@@ -564,13 +609,13 @@ StandbyUsage() { #
       sed -i 's/\(StandbyActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "dtoverlay=gpio-shutdown" >> /boot/userconfig.txt #
       echo " " #
-      echo "Activated Standby-Function" #
+      echo -e "\e[92mActivated Standby-Function\e[0m" #
       return 0 #
       ;; #
     2) #
       sed -i 's/\(StandbyActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
-      echo "Deactivated Standby-Function" #
+      echo -e "\e[92mDeactivated Standby-Function\e[0m" #
       return 0 #
       ;; #         
     *) #
@@ -579,22 +624,18 @@ StandbyUsage() { #
       ;; #
   esac #
 } #
-until StandbyUsage; do : ; done #
 echo "_________________________________________________________________ " #
 echo " " #
+echo -e "\e[4;92mPlease select your Button- / Rotary- configuration\e[0;0m" #
 echo " " #
-echo "__________________________________________________" #
-echo "Please select your Button- / Rotary- configuration" #
-echo "__________________________________________________ " #
-echo " " #
-echo "*standard*-configuration means a conection like this: " #
-echo "https://raw.githubusercontent.com/Maschine2501/NR1-UI/master/wiki/wiring/Wiring.jpg" #
+echo -e "\e[93m*standard*-configuration means a conection like this: \e[0m" #
+echo -e "\e[93mhttps://raw.githubusercontent.com/Maschine2501/NR1-UI/master/wiki/wiring/Wiring.jpg\e[0m" #
 echo " " #
 echo "_____________________" #
-echo "Valid selections are:" #
-echo "1 -> standard" #
-echo "2 -> custom" #
-echo "--->" #
+echo -e "\e[93mValid selections are:\e[0m" #
+echo -e "\e[92m1 -> standard\e[0m" #
+echo -e "\e[91m2 -> custom\e[0m" #
+echo -e "\e[93m--->\e[0m" #
 getGPIONumberA() { #
   read -p "Please enter the BCM Number for Button A :" ANumber #
   case "$ANumber" in #
@@ -618,7 +659,7 @@ getGPIONumberB() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -632,7 +673,7 @@ getGPIONumberC() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -646,7 +687,7 @@ getGPIONumberD() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -660,7 +701,7 @@ getGPIONumberL() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -674,7 +715,7 @@ getGPIONumberR() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -688,7 +729,7 @@ getGPIONumberRB() { #
       return 0 #
       ;; #
     *) #
-      printf %s\\n "Number was out of range...(must be 0-26)" #
+      printf %s\\n "Number was out of range...(must be 0-27)" #
       return 1 #
       ;; #
   esac #
@@ -705,17 +746,17 @@ getButtonLayout() { #
       sed -i 's/\(oledRtrRight = \)\(.*\)/\123/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       sed -i 's/\(oledRtrBtn = \)\(.*\)/\127/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #  
       echo " " #
-      echo "Set standard-buttonlayout" #
+      echo -e "\e[92mSet standard-buttonlayout\e[0m" #
       return 0 #
       ;; #
     2) #
-      echo "Please Enter the BCM-(GPIO) Number for each Button." #
+      echo -e "\e[4;92mPlease Enter the BCM-(GPIO) Number for each Button.\e[0;0m" #
       echo " " #
-      echo "For BCM2 enter 2, for BCM17 enter 17..." #
-      echo "BCM-list: https://de.pinout.xyz/#" #
+      echo -e "\e[93mFor BCM2 enter 2, for BCM17 enter 17...\e[0m" #
+      echo -e "\e[93mBCM-list: https://de.pinout.xyz/#\e[0m" #
       echo " " #
-      echo "the input is not filtered!!!"  #
-      echo "-> if you enter something wrong, something wrong will happen!" #
+      echo -e "\e[91mthe input is not filtered!!!\e[0m" #
+      echo -e "\e[91m-> if you enter something wrong, something wrong will happen!\e[0m" #
       echo " " #
       until getGPIONumberA; do : ; done #
       until getGPIONumberB; do : ; done #
@@ -725,7 +766,7 @@ getButtonLayout() { #
       until getGPIONumberR; do : ; done #
       until getGPIONumberRB; do : ; done #      
       echo " " #
-      echo "Set custom-buttonlayout" #
+      echo -e "\e[92mSet custom-buttonlayout\e[0m" #
       return 0 #
       ;; #        
     *) #
@@ -737,17 +778,14 @@ getButtonLayout() { #
 until getButtonLayout; do : ; done #
 echo "_________________________________________________________________" #
 echo " " #
+echo -e "\e[4;92mPlease enter a Value for Pause -> to -> Stop -Time.\e[0;0m" #
 echo " " #
-echo "___________________________________________________" #
-echo "Please enter a Value for Pause -> to -> Stop -Time." #
-echo "___________________________________________________ " #
-echo " " #
-echo "Value is in Seconds = 15 = 15 Seconds." #
-echo "After this time, while playback is paused, player will Stop and return to Standby-Screen." #
+echo -e "\e[93mValue is in Seconds = 15 = 15 Seconds.\e[0m" #
+echo -e "\e[93mAfter this time, while playback is paused, player will Stop and return to Standby-Screen.\e[0;0m" #
 echo " " #
 echo "____________________________________________ " #
-echo "Valid values are numbers between 1 and 86400" #
-echo "86400 seconds are 24 hours..." #
+echo -e "\e[93mValid values are numbers between 1 and 86400\e[0m" #
+echo -e "\e[93m86400 seconds are 24 hours...\e[0m" #
 echo " " #
 getPlay2PauseTime() { #
   read -p "Enter a Time (in seconds): " Play2PauseT #
@@ -765,70 +803,20 @@ getPlay2PauseTime() { #
   esac #
 } #
 until getPlay2PauseTime; do : ; done #
-echo "_________________________________________________________________ " #
 echo " " #
 echo " " #
 echo " " #
 echo " " #
-echo "________________________________" #
-echo "Do you want to set a Buffertime?" #
-echo "________________________________" #
-echo " " #
-echo "What is a Buffertime, and why do I (may) need it? " #
-echo "------------------------------------------------- " #
-echo "The way of the audio-signal to your speaker is much faster," #
-echo "faster then the way to the spectrum display." #
-echo "--> This results in an asynchronous spectrum on the display. " #
-echo "" #
-echo "Do you want to set a Buffer-Time now?" #
-echo "(you also can do it later manually...) " #
-echo "" #
-echo "Valid selections are: " #
-echo "1 -> Yes" #
-echo "2 -> No" #
-echo "--->" #
-getBufferTimeT() { #
-  read -p "Enter your decision: " BufferTimeT #
-  case "$BufferTimeT" in #
-    1) #    
-      echo " " #
-      /bin/bash /home/volumio/NR1-UI/mpd-buffertime.sh #
-      echo "Buffertime was set..." #
-      echo " " #
-      echo "You can change the value anytime by typying: " #
-      echo "   cd' " #
-      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh"
-      echo " " #
-      return 0 #
-      ;; #
-    2) #
-      echo " " #
-      echo "Buffertime was not set..." #
-      echo " " #
-      echo "You can set it later by typying: " #
-      echo "   cd' " #
-      echo "   bash /home/volumio/NR1-UI/mpd-buffertime.sh" #
-      echo " " #
-      return 0 #
-      ;; #   
-    *) #
-      printf %s\\n "Please enter '1' or '2'..." #
-      return 1 #
-      ;; #
-  esac #
-} #
-until getBufferTimeT; do : ; done #
+echo -e "\e[4;92mConfiguration has finished, congratulations!\e[0;0m" #
 echo " " #
 echo " " #
+echo -e "\e[93mPlease have a look in the Installation instructions to finish setup.\e[0m" #                                                                                                                      
+echo " " #
+echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script)\e[0m" #
 echo " " #
 echo " " #
-echo "Installation has finished, congratulations!" #
+echo -e "\e[25;91mIf you use CAVA/Spectrum: \e[0;0m" #
 echo " " #
-echo " " #
-echo "Please have a look in the Installation instructions to finish setup." #                                                                                                                        
-echo " " #
-echo "https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script)" #
-echo " " #
-echo " " #
-echo " " #
-exit 0
+echo -e "\e[91mPlease set Audio-Output to HDMI or Headphones and save setting.\e[0m" #
+echo -e "\e[91mNow Select your DAC/Playback device and save aggain.\e[0m" #
+exit 0 #
