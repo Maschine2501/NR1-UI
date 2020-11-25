@@ -152,10 +152,20 @@ Screen33specYposNoTag = 63
 #Config TextPositions NowPlaying-/StandBy-Screen:
 Screen4text01 = 0, 0        #Artist
 Screen4text02 = 0, 19       #Title
-Screen4text06 = 12, 41       #format
-Screen4text07 = 159, 41     #samplerate
+Screen4text06 = 132, 41       #format
+Screen4text07 = 163, 41     #samplerate
 Screen4text08 = 220, 41     #bitdepth
-Screen4text28 = 2, 41       #Play/Pause Indicator
+Screen4text008 = 200, 41    #Webradio Bitrate
+Screen4Text0008 = 130,41    #Weebradio Tracktype
+Screen4text28 = 120, 40       #Play/Pause Indicator
+Screen4text29 = 15, 41       #Volume Text
+Screen4text30 = 0, 39        #VolumeOn Symbol
+Screen4text31 = 0, 39        #VolumeOff Speaker symbol
+Screen4text32 = 54, 38        #VolumeOff Forbidden Symbol
+
+Screen4text33 = 88, 40           #repeat symbol
+Screen4text34 = 81, 41           #repeat once one
+Screen4text35 = 104, 40           #shuffle
 
 #configuration of the duration and playtime (textbox-) positions
 Screen4ActualPlaytimeText = 1, 54
@@ -479,6 +489,7 @@ oledPla = 'Playtime :'     #sets the Playtime-text for the MediaLibrarayInfo
 
 #___________________________________________________________________
 #config for Icons:
+#entypo
 oledlibraryInfo = '\U0001F4D6'
 oledlibraryReturn = '\u2302'
 oledArtistIcon = '\uF0F3'
@@ -487,6 +498,14 @@ oledSongIcon = '\U0000F001'
 oledPlaytimeIcon = '\U0000F1DA'
 oledplayIcon = '\u25B6'
 oledpauseIcon = '\u2389'
+
+#entypo
+oledrepeat = '\U0001F501'
+oledshuffle = '\U0001F500'
+#fa
+oledblockSymbol = '\uF05E'
+oledvolumeoff = '\uF026'
+oledvolumeon = '\uF028'
 
 #____________________________________________________________________
 #config for Scrolling Text
