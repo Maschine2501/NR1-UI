@@ -3822,6 +3822,7 @@ GetIP()
 def PlaypositionHelper():
     while True:
         volumioIO.emit('getState')
+	now = datetime.now() 
         oled.date = now.strftime("%d.%m.%Y")
         sleep(1.0)
 
