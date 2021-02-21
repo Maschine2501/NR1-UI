@@ -1,6 +1,12 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 
 ### This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
+
+## February 2021:
+#### Hi everyone, I created a small survey about my code:
+### https://www.survio.com/survey/d/O5U8Y8N3M6V2O4X4Y
+#### I would appreciate it very much if you guys would answer this survey!
+### Thanks a lot! :-)
 ---
 
 # NR1-UI
