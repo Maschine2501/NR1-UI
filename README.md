@@ -123,3 +123,9 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 ### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
+
+
+## Does it work with Spotify or Squeezelite Addin?
+### Probably yes. 
+### I have tested the Spotify plugin: There is a problem with the delivered dataset, it is sometimes not complete after startup, this can crash nr1-ui. 
+### Squeezlite does not match my philosophy of use, so I will not support this (which does not mean that it does not work....)
