@@ -58,6 +58,27 @@ import ssl
 import re
 import fnmatch
 sleep(5.0)
+
+if SpectrumActive == True:
+    with open('/etc/mpd.conf') as f1:
+        if '/tmp/mpd.fifo' in f1.read():
+            print("CAVA1 Fifo-Output is present in mpd.conf")
+        else:
+            print('CAVA1 Fifo-Output is Missing in mpd.conf')
+            print('Please go to Web-UI, Playback, select another devive and press SAVE')
+            print('Then select your Playback Device aggain and press SAVE')
+            print('Please reboot afterwards')
+            sys.exit()
+    
+    with open('/etc/mpd.conf') as f2:
+        if '/tmp/mpd2.fifo' in f2.read():
+            print("CAVA2 Fifo-Output is present in mpd.conf")
+        else:
+            print('CAVA2 Fifo-Output is Missing in mpd.conf')
+            print('Please go to Web-UI, Playback, select another devive and press SAVE')
+            print('Then select your Playback Device aggain and press SAVE')
+            print('Please reboot afterwards')
+            sys.exit()
 #________________________________________________________________________________________
 #	
 #   ______            _____                        __  _                 
@@ -506,7 +527,7 @@ def onPushState(data):
         global ScrollSongFirstRound
         global ScrollSongNextRound
         OPDsave = data
-        #print('data: ', str(data).encode('utf-8'))    
+        print('data: ', str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
