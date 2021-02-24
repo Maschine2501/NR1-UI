@@ -527,7 +527,7 @@ def onPushState(data):
         global ScrollSongFirstRound
         global ScrollSongNextRound
         OPDsave = data
-        print('data: ', str(data).encode('utf-8'))    
+        #print('data: ', str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
