@@ -2185,7 +2185,7 @@ class NowPlayingScreen():
                 self.draw.text((Screen4ActualPlaytimeText), str(timedelta(seconds=round(float(oled.seek) / 1000))), font=font4, fill='white')
                 if oled.duration != None:
                     self.playbackPoint = oled.seek / oled.duration / 10
-                    self.bar = Screen2barwidth * self.playbackPoint / 100
+                    self.bar = Screen4barwidth * self.playbackPoint / 100
                     self.draw.text((Screen4DurationText), str(timedelta(seconds=oled.duration)), font=font4, fill='white')
                     self.draw.rectangle((Screen4barLineX , Screen4barLineThick1, Screen4barLineX+Screen4barwidth, Screen4barLineThick2), outline=Screen4barLineBorder, fill=Screen4barLineFill)
                     self.draw.rectangle((Screen4barLineX, Screen4barThick1, Screen4barX+self.bar, Screen4barThick2), outline=Screen4barBorder, fill=Screen4barFill)
