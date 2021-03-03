@@ -250,12 +250,12 @@ cd #
 if [[ $CAVATag -eq 1 ]];
 then
     echo -e "\e[92mInstalling Cava...\e[0m"
-    git clone https://github.com/Maschine2501/cava3.git #
+    git clone https://github.com/Maschine2501/cava.git #
     cd cava #
     sudo bash autogen.sh #
     ./configure && make -j4 && sudo make install #
     cd #
-    git clone https://github.com/Maschine2501/cava4.git /home/volumio/CAVAinstall #
+    git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
     cd /home/volumio/CAVAinstall #
     sudo bash ./autogen.sh #
     ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
