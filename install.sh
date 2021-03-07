@@ -244,7 +244,7 @@ sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install -U setuptools #
 sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libjpeg-dev python-rpi.gpio libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade setuptools pip wheel #
 sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install --upgrade luma.oled #
-sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests #
+sudo /home/volumio/src/Python-3.8.5/bin/pip3.8 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd #
 echo -e "\e[92mAll Python related modules are installed...\e[0m" #
 cd #
 if [[ $CAVATag -eq 1 ]];
@@ -304,6 +304,8 @@ echo -e "\e[93mValid selections are:\e[0m" #
 echo -e "1 -> for \e[92mssd1306\e[0m" #
 echo -e "2 -> for \e[92mssd1322\e[0m" #
 echo -e "3 -> for \e[92mBraun-specific\e[0m" #
+echo -e "4 -> for \e[92mssd1351\e[0m" #
+echo -e "5 -> for \e[92mst7735\e[0m" #
 echo -e "\e[93m---> \e[0m" #
 getDisplayType() { #
   read -p "Enter your decision: " DisplayNumber #
@@ -325,9 +327,21 @@ getDisplayType() { #
       echo " " #
       echo -e "\e[92mSet Display-Type as Braun-Specific\e[0m" #
       return 0 #
-      ;; #  
+      ;; # 
+    4) #
+      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"spi1351"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo " " #
+      echo -e "\e[92mSet Display-Type as ssd1351\e[0m" #
+      return 0 #
+      ;; #         
+    5) #
+      sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"st7735"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo " " #
+      echo -e "\e[92mSet Display-Type as st7735\e[0m" #
+      return 0 #
+      ;; #          
     *) #
-      printf %s\\n "Please enter '1' or '2' or '3'" #
+      printf %s\\n "Please enter '1' or '2' or '3' or '4' or '5'" #
       return 1 #
       ;; #
   esac #
@@ -358,6 +372,52 @@ getScreenLayout1306() { #
       ;; #
   esac #
 } #
+getScreenLayout1351() { #
+  read -p "Enter your decision: " DisplayNumber #
+  case "$DisplayNumber" in #
+    1) #    
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Center" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+      echo " " #
+      echo -e "\e[92mSet Layout as Spectrum-Center\e[0m" #
+      return 0 #
+      ;; #
+    2) #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+      echo " " #
+      echo -e "\e[92mSet Layout as No-Spectrum\e[0m" #
+      return 0 #
+      ;; #         
+    *) #
+      printf %s\\n "Please enter '1' or '2'" #
+      return 1 #
+      ;; #
+  esac #
+} #
+getScreenLayout7735() { #
+  read -p "Enter your decision: " DisplayNumber #
+  case "$DisplayNumber" in #
+    1) #    
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+      echo "Spectrum-Center" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+      echo " " #
+      echo -e "\e[92mSet Layout as Spectrum-Center\e[0m" #
+      return 0 #
+      ;; #
+    2) #
+      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+      echo " " #
+      echo -e "\e[92mSet Layout as No-Spectrum\e[0m" #
+      return 0 #
+      ;; #         
+    *) #
+      printf %s\\n "Please enter '1' or '2'" #
+      return 1 #
+      ;; #
+  esac #
+}
 getScreenLayout1322() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
@@ -396,34 +456,20 @@ getScreenLayout1322() { #
       echo -e "\e[92mSet Screen Layout as Modern\e[0m" #
       return 0 #
       ;; #         
-    6) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-1"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo "VU-Meter-1" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-      echo " " #
-      echo -e "\e[92mSet Screen Layout as VU-Meter-1\e[0m" #
-      return 0 #
-      ;; #        
-    7) #    
+    6) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo "VU-Meter-2" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as VU-Meter-2\e[0m" #
       return 0 #
       ;; #
-    8) #
+    7) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "VU-Meter-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as VU-Meter-Bar\e[0m" #
       return 0 #
       ;; #         
-    9) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern-simplistic"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo "Modern-simplistic" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-      echo " " #
-      echo -e "\e[92mSet Screen Layout as Modern-simplistic\e[0m" #
-      return 0 #
-      ;; #  
     *) #
       printf %s\\n "Please enter a number between '1' and '9'" #
       return 1 #
@@ -434,8 +480,20 @@ if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]];
 then #
     sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
     echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-fi
+fi #
 if [[ $CAVATag -eq 2 && $DisplayNumber -eq 2 ]];
+then
+#else
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+fi #
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 4 ]];
+then
+#else
+    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+fi #
+if [[ $CAVATag -eq 2 && $DisplayNumber -eq 5 ]];
 then
 #else
     sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
@@ -456,7 +514,9 @@ then
        echo -e "2 -> \e[92mProgress-Bar\e[0m" #
        echo -e "\e[93m---> \e[0m" #
        until getScreenLayout1306; do : ; done #
-    else #
+    fi #
+    if [ $DisplayNumber -eq 2 ]; #
+    then #
        echo "_____________________ " #   
        echo -e "\e[93mValid selections are:\e[0m" #
        echo -e "1 -> for \e[92mSpectrum-Left\e[0m" #
@@ -464,27 +524,57 @@ then
        echo -e "3 -> for \e[92mSpectrum-Right\e[0m" #
        echo -e "4 -> for \e[92mNo-Spectrum\e[0m" #
        echo -e "5 -> for \e[92mModern\e[0m" #
-       echo -e "6 -> for \e[92mVU-Meter-1\e[0m" #
-       echo -e "7 -> for \e[92mVU-Meter-2\e[0m" #
-       echo -e "8 -> for \e[92mVU-Meter-Bar\e[0m" #
-       echo -e "9 -> for \e[92mModern-simplistic\e[0m" #
+       echo -e "6 -> for \e[92mVU-Meter-2\e[0m" #
+       echo -e "7 -> for \e[92mVU-Meter-Bar\e[0m" #
        echo -e "\e[93m---> \e[0m" #
        until getScreenLayout1322; do : ; done #
-    fi
-fi #
-if [[ $CAVATag -eq 2 ]]; #
-then #
-    if [ $DisplayNumber -eq 1 ];
+    fi #
+    if [ $DisplayNumber -eq 3 ]; #
     then #
-        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-        echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-    #fi
-    #if [ $DisplayNumber -eq 2 ]; #
-    else
-        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
-        echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+       echo "_____________________ " #   
+       echo -e "\e[93mValid selections are:\e[0m" #
+       echo -e "1 -> for \e[92mSpectrum-Left\e[0m" #
+       echo -e "2 -> for \e[92mSpectrum-Center\e[0m" #
+       echo -e "3 -> for \e[92mSpectrum-Right\e[0m" #
+       echo -e "4 -> for \e[92mNo-Spectrum\e[0m" #
+       echo -e "5 -> for \e[92mModern\e[0m" #
+       echo -e "6 -> for \e[92mVU-Meter-2\e[0m" #
+       echo -e "7 -> for \e[92mVU-Meter-Bar\e[0m" #
+       echo -e "\e[93m---> \e[0m" #
+       until getScreenLayout1322; do : ; done #
+    fi #
+    if [ $DisplayNumber -eq 4 ]; #
+    then #
+       echo "_____________________" #
+       echo -e "\e[93mValid selections are:\e[0m" #
+       echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
+       echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
+       echo -e "\e[93m---> \e[0m" #
+       until getScreenLayout1351; do : ; done #
+    fi #
+    if [ $DisplayNumber -eq 5 ]; #
+    then #
+       echo "_____________________" #
+       echo -e "\e[93mValid selections are:\e[0m" #
+       echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
+       echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
+       echo -e "\e[93m---> \e[0m" #
+       until getScreenLayout7735; do : ; done #
     fi
 fi #
+#if [[ $CAVATag -eq 2 ]]; #
+#then #
+#    if [ $DisplayNumber -eq 1 ];
+#    then #
+#        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+#        echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+#    #fi
+#    #if [ $DisplayNumber -eq 2 ]; #
+#    else
+#        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
+#        echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+#    fi
+#fi #
 echo "_________________________________________________________________ " #
 echo " " #
 echo -e "\e[4;92mShould the Display be rotated? \e[0;0m" #
@@ -624,6 +714,7 @@ StandbyUsage() { #
       ;; #
   esac #
 } #
+until StandbyUsage; do : ; done #
 echo "_________________________________________________________________ " #
 echo " " #
 echo -e "\e[4;92mPlease select your Button- / Rotary- configuration\e[0;0m" #
