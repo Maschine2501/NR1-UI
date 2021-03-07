@@ -1,6 +1,7 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
 This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
----
+
+
 ## 07.03.2021 New:
 - [x] Tune the whole UI (fonts, positions... etc.)
 - [x] added Unicode Font (Support for TC/JP..)
