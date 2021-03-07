@@ -12,18 +12,18 @@ oledtext04 = 39, 42      #IP
 oledtext05 = 55, 29     #Date
 oledtext09 = 116, 54     #LibraryInfoIcon
 
-#_______Screen1_____________________________________________________
+#_______Screen1 'Spectrum-Screen'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen1text01 = 0, 2        #Artist
-Screen1text02 = 0, 22       #Title
-Screen1text06 = 8, 41       #format
-Screen1text07 = 32, 41     #samplerate
-Screen1text08 = 85, 41     #bitdepth
-Screen1text28 = 0, 41
+Screen1text01 = 0, 0        #Artist
+Screen1text02 = 0, 18       #Title
+Screen1text06 = 8, 38       #format
+Screen1text07 = 32, 38     #samplerate
+Screen1text08 = 85, 38     #bitdepth
+Screen1text28 = 0, 38
 
 #configuration of the duration and playtime (textbox-) positions
-Screen1ActualPlaytimeText = 0, 54
-Screen1DurationText = 78, 54
+Screen1ActualPlaytimeText = 0, 51
+Screen1DurationText = 78, 51
 
 #config for Progress-Bar
 Screen1barwidth = 28
@@ -46,29 +46,54 @@ Screen1specWide2 = 0
 Screen1specYposTag = 63
 Screen1specYposNoTag = 63
 
-#_______Screen4_____________________________________________________
-#Config TextPositions NowPlaying-/StandBy-Screen:
-Screen4text01 = 0, 2        #Artist
-Screen4text02 = 0, 22       #Title
-Screen4text06 = 8, 41       #format
-Screen4text07 = 32, 41     #samplerate
-Screen4text08 = 85, 41     #bitdepth
-Screen4text28 = 0, 41
+#_______Screen2 'Essential'_____________________________________________________
+Screen2text01 = 0, 24        #Artist
+Screen2text02 = 0, 0       #Title
+Screen2text06 = 8, 50       #format
+Screen2text07 = 38, 41     #samplerate
+Screen2text08 = 85, 41     #bitdepth
+Screen2text28 = 0, 50
 
 #configuration of the duration and playtime (textbox-) positions
-Screen4ActualPlaytimeText = 0, 54
-Screen4DurationText = 78, 54
+Screen2ActualPlaytimeText = 0, 54
+Screen2DurationText = 78, 54
 
 #config for Progress-Bar
-Screen4barwidth = 28
+Screen2barwidth = 128
+Screen2barLineBorder = 'white'
+Screen2barLineFill = 'black'
+Screen2barLineX = 0
+Screen2barLineThick1 = 63     #difference between both = thickness 
+Screen2barLineThick2 = 63     # 59 and 59 = 1 Pixel thick
+Screen2barBorder = 'white'
+Screen2barFill = 'white'
+Screen2barX = 0
+Screen2barThick1 = 63         #difference between both = thickness 
+Screen2barThick2 = 63         # 56 and 62 = 6 Pixel thick
+
+#_______Screen3 'Progress-Bar'_____________________________________________________
+#Config TextPositions NowPlaying-/StandBy-Screen:
+Screen4text01 = 0, 0        #Artist
+Screen4text02 = 0, 18       #Title
+Screen4text06 = 8, 38       #format
+Screen4text07 = 32, 38     #samplerate
+Screen4text08 = 85, 38     #bitdepth
+Screen4text28 = 0, 38
+
+#configuration of the duration and playtime (textbox-) positions
+Screen4ActualPlaytimeText = 0, 51
+Screen4DurationText = 84, 51
+
+#config for Progress-Bar
+Screen4barwidth = 32
 Screen4barLineBorder = 'white'
 Screen4barLineFill = 'black'
-Screen4barLineX = 45
+Screen4barLineX = 43
 Screen4barLineThick1 = 59     #difference between both = thickness 
 Screen4barLineThick2 = 59     # 59 and 59 = 1 Pixel thick
 Screen4barBorder = 'white'
 Screen4barFill = 'black'
-Screen4barX = 45
+Screen4barX = 43
 Screen4barThick1 = 56         #difference between both = thickness 
 Screen4barThick2 = 62         # 56 and 62 = 6 Pixel thick
 
@@ -114,3 +139,16 @@ oledSongIcon = '\U0000F001'
 oledPlaytimeIcon = '\U0000F1DA'
 oledplayIcon = '\u25B6'
 oledpauseIcon = '\u2389'
+
+#____________________________________________________________________
+#config for Scrolling Text
+ArtistScrollSpeed = 1
+ArtistEndScrollMargin = 2
+SongScrollSpeed = 1
+SongEndScrollMargin = 2
+
+#Menu
+oledMenuHighlightColor = 'black'
+oledMenuHighlightBackGround = 'white'
+oledMenuNotSelectedColor = 'white'
+oledMenuNotSelectedBackground = 'black'

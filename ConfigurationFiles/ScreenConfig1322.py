@@ -12,55 +12,10 @@ oledtext04 = 0, 52      #IP
 oledtext05 = 176, 52     #Date
 oledtext09 = 244, 51   #LibraryInfoIcon
 
-#_______'Spectrum-Left'_____________________________________________________
-#Config TextPositions NowPlaying-/StandBy-Screen:
-Screen1text01 = 0, 0        #Artist
-Screen1text02 = 0, 19       #Title
-Screen1text06 = 76, 41       #format
-Screen1text07 = 159, 41     #samplerate
-Screen1text08 = 220, 41     #bitdepth
-Screen1text28 = 66, 41       #Play/Pause Indicator
-
-#configuration of the duration and playtime (textbox-) positions
-Screen1ActualPlaytimeText = 65, 54
-Screen1DurationText = 210, 54
-
-#config for Progress-Bar
-Screen1barwidth = 88
-Screen1barLineBorder = 'white'
-Screen1barLineFill = 'black'
-Screen1barLineX = 114
-Screen1barLineThick1 = 59     #difference between both = thickness 
-Screen1barLineThick2 = 59     # 59 and 59 = 1 Pixel thick
-Screen1barBorder = 'white'
-Screen1barFill = 'black'
-Screen1barX = 114
-Screen1barThick1 = 57         #difference between both = thickness 
-Screen1barThick2 = 61         # 56 and 62 = 6 Pixel thick
-Screen1barNibbleWidth = 2
-
-#config for Spectrum
-Screen1specDistance = 0
-Screen1specBorder = (255, 255, 255)
-Screen1specFill = (255, 255, 255)
-Screen1specWide1 = 1
-Screen1specWide2 = 0
-Screen1specYposTag = 63
-Screen1specYposNoTag = 63
-
-#config for Spectrum2 NoProgress
-Screen11specDistance = 0
-Screen11specBorder = (130, 130, 130)
-Screen11specFill = (130, 130, 130)
-Screen11specWide1 = 4
-Screen11specWide2 = 0
-Screen11specYposTag = 63
-Screen11specYposNoTag = 63
-
 #_______'Spectrum-Center'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen2text01 = 0, 0        #Artist
-Screen2text02 = 0, 19       #Title
+Screen2text01 = 0, -4        #Artist
+Screen2text02 = 0, 16       #Title
 Screen2text06 = 0, 41       #format
 Screen2text07 = 159, 41     #samplerate
 Screen2text08 = 220, 41     #bitdepth
@@ -102,70 +57,34 @@ Screen22specWide2 = 0
 Screen22specYposTag = 63
 Screen22specYposNoTag = 63
 
-#_______'Spectrum-Right'_____________________________________________________
-#Config TextPositions NowPlaying-/StandBy-Screen:
-Screen3text01 = 0, 0        #Artist
-Screen3text02 = 0, 19       #Title
-Screen3text06 = 0, 41       #format
-Screen3text07 = 95, 41     #samplerate
-Screen3text08 = 156, 41     #bitdepth
-Screen3text28 = 25, 41       #Play/Pause Indicator
-
-#configuration of the duration and playtime (textbox-) positions
-Screen3ActualPlaytimeText = 1, 54
-Screen3DurationText = 146, 54
-
-#config for Progress-Bar
-Screen3barwidth = 88
-Screen3barLineBorder = 'white'
-Screen3barLineFill = 'black'
-Screen3barLineX = 50
-Screen3barLineThick1 = 59    #difference between both = thickness 
-Screen3barLineThick2 = 59     # 59 and 59 = 1 Pixel thick
-Screen3barBorder = 'white'
-Screen3barFill = 'black'
-Screen3barX = 50
-Screen3barThick1 = 56         #difference between both = thickness 
-Screen3barThick2 = 62         # 56 and 62 = 6 Pixel thick
-Screen3barNibbleWidth = 2
-
-#config for Spectrum
-Screen3specDistance = 255         #Inverted! 255 - 1x64 =196
-Screen3specBorder = (255, 255, 255)
-Screen3specFill = (255, 255, 255)
-Screen3specWide1 = 1
-Screen3specWide2 = 0
-Screen3specYposTag = 63
-Screen3specYposNoTag = 63
-
-#config for Spectrum2 NoProgress
-Screen33specDistance = 0
-Screen33specBorder = (130, 130, 130)
-Screen33specFill = (130, 130, 130)
-Screen33specWide1 = 4
-Screen33specWide2 = 0
-Screen33specYposTag = 63
-Screen33specYposNoTag = 63
-
-
 #_______'No-Spectrum'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen4text01 = 0, 0        #Artist
-Screen4text02 = 0, 19       #Title
+Screen4text01 = 0, -4        #Artist
+Screen4text02 = 0, 16       #Title
 Screen4text06 = 132, 41       #format
 Screen4text07 = 163, 41     #samplerate
 Screen4text08 = 220, 41     #bitdepth
 Screen4text008 = 200, 41    #Webradio Bitrate
-Screen4Text0008 = 130,41    #Weebradio Tracktype
+Screen4Text0008 = 130, 41    #Weebradio Tracktype
 Screen4text28 = 120, 40       #Play/Pause Indicator
 Screen4text29 = 15, 41       #Volume Text
 Screen4text30 = 0, 39        #VolumeOn Symbol
 Screen4text31 = 0, 39        #VolumeOff Speaker symbol
 Screen4text32 = 54, 38        #VolumeOff Forbidden Symbol
-
 Screen4text33 = 88, 40           #repeat symbol
 Screen4text34 = 81, 41           #repeat once one
 Screen4text35 = 104, 40           #shuffle
+
+#"No Progress"
+Screen4text60 = 120, 50       #Play/Pause Indicator
+Screen4Text61 = 130, 51    #Weebradio Tracktype
+Screen4text62 = 200, 51    #Webradio Bitrate
+Screen4text63 = 88, 50           #repeat symbol
+Screen4text64 = 81, 51           #repeat once one
+Screen4text65 = 104, 50           #shuffle
+Screen4text66 = 0, 49        #VolumeOn Symbol
+Screen4text67 = 0, 49        #VolumeOff Speaker symbol
+Screen4text68 = 15, 51       #Volume Text
 
 #configuration of the duration and playtime (textbox-) positions
 Screen4ActualPlaytimeText = 1, 54
@@ -187,10 +106,7 @@ Screen4barNibbleWidth =2
 
 #_______'Modern'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen5text01 = 0, 51        #Artist
-Screen5text02 = 0, 51       #Title
-Screen5text012 = 0, 0       #Artist
-Screen5text022 = 0, 19       #Title
+Screen5text01 = 0, 46        #Artist + Song
 Screen5text06 = 74, 39       #format
 Screen5text07 = 106, 39     #samplerate
 Screen5text08 = 156, 39     #bitdepth
@@ -268,28 +184,12 @@ Screen55rightVUWide2 = 0
 Screen55rightVUYpos1 = 39
 Screen55rightVUYpos2 = 45
 
-#_______'VU-Meter-1'_____________________________________________________
-#Config TextPositions NowPlaying-/StandBy-Screen:
-Screen6text01 = 0, 2        #Artist
-Screen6text28 = 1, 14       #Play/Pause Indicator
-
-#configuration of the duration and playtime (textbox-) positions
-Screen6ActualPlaytimeText = 1, 0
-Screen6DurationText = 220, 0
-
-#config for VU-Meter "Hand"/"Pointer"
-Screen6leftVUcoordinates = [(63, 160, 5, 47), (63, 160, 8, 45), (63, 160, 11, 43), (63, 160, 14, 41), (63, 160, 17, 40), (63, 160, 20, 39), (63, 160, 23, 37), (63, 160, 26, 35), (63, 160, 29, 34), (63, 160, 32, 33), (63, 160, 35, 32), (63, 160, 38, 31), (63, 160, 41, 31), (63, 160, 44, 30), (63, 160, 47, 30), (63, 160, 50, 29), (63, 160, 53, 28), (63, 160, 56, 28), (63, 160, 59, 28), (63, 160, 62, 28), (63, 160, 65, 29), (63, 160, 68, 29), (63, 160, 71, 29), (63, 160, 74, 29), (63, 160, 77, 30), (63, 160, 80, 30), (63, 160, 83, 31), (63, 160, 86, 31), (63, 160, 89, 32), (63, 160, 92, 32), (63, 160, 95, 33), (63, 160, 98, 33), (63, 160, 101, 34)]
-Screen6rightVUcoordinates = [(191, 160, 133, 47), (191, 160, 136, 45), (191, 160, 139, 43), (191, 160, 142, 41), (191, 160, 145, 40), (191, 160, 148, 39), (191, 160, 151, 37), (191, 160, 154, 35), (191, 160, 157, 34), (191, 160, 160, 33), (191, 160, 163, 32), (191, 160, 166, 31), (191, 160, 169, 31), (191, 160, 172, 30), (191, 160, 175, 30), (191, 160, 178, 29), (191, 160, 181, 28), (191, 160, 184, 28), (191, 160, 187, 28), (191, 160, 190, 28), (191, 160, 193, 29), (191, 160, 196, 29), (191, 160, 199, 29), (191, 160, 202, 29), (191, 160, 205, 30), (191, 160, 208, 30), (191, 160, 211, 31), (191, 160, 214, 31), (191, 160, 217, 32), (191, 160, 220, 32), (191, 160, 223, 33), (191, 160, 226, 33), (191, 160, 229, 34)]
-
 #_______'VU-Meter-2'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen7text01 = 0, 0        #Artist
-Screen7text02 = 0, 14       #Title
-Screen7text012 = 0, 0       #Artist
-Screen7text022 = 0, 19       #Title
+Screen7text01 = 0, -2        #Artist +Titel
 Screen7text06 = 86, 14       #format
-Screen7text07 = 109, 14     #samplerate
-Screen7text08 = 156, 14     #bitdepth
+#Screen7text07 = 109, 14     #samplerate
+#Screen7text08 = 156, 14     #bitdepth
 Screen7text28 = 74, 13       #Play/Pause Indicator
 
 #config for VU-Meter "Hand"/"Pointer"
@@ -316,10 +216,10 @@ Screen7barNibbleWidth = 2
 
 #_______'VU-Meter-Bar'_____________________________________________________
 #Config TextPositions NowPlaying-/StandBy-Screen:
-Screen8text01 = 60, 0        #Artist
-Screen8text02 = 60, 16       #Title
-Screen8text012 = 0, 0       #Artist
-Screen8text022 = 0, 19       #Title
+Screen8text01 = 60, -4        #Artist
+Screen8text02 = 60, 11       #Title
+Screen8text11 = 60, -4        #Artist
+Screen8text22 = 60, 14       #Title
 Screen8text06 = 0, 2       #format
 Screen8text07 = 10, 16     #samplerate
 Screen8text08 = 22, 2     #bitdepth
@@ -365,95 +265,6 @@ Screen8PeakWidth = 2          # wdith of the peak indicator in pixels
 Screen8specGradstart = 80
 Screen8specGradstop = 210
 Screen8specGradSamples = 32
-
-#_______'Modern-simplistic'_____________________________________________________
-#Config TextPositions NowPlaying-/StandBy-Screen:
-Screen9text01 = 110, 53        #Artist
-Screen9text02 = 92, 53       #Title
-Screen9text012 = 92, 53       #Artist
-Screen9text022 = 92, 53       #Title
-Screen9text06 = 91, 39       #format
-Screen9text07 = 123, 39     #samplerate
-Screen9text08 = 163, 39     #bitdepth
-Screen9text28 = 113, 37       #Play/Pause Indicator
-
-#configuration of the duration and playtime (textbox-) positions
-Screen9ActualPlaytimeText = 1, 41
-Screen9DurationText = 220, 41
-
-#config for Progress-Bar
-Screen9barwidth = 162
-Screen9barLineBorder = 'white'
-Screen9barLineFill = 'white'
-Screen9barLineX = 50
-Screen9barLineThick1 = 44     #difference between both = thickness 
-Screen9barLineThick2 = 44     # 59 and 59 = 1 Pixel thick
-Screen9barBorder = 'white'
-Screen9barFill = 'black'
-Screen9barX = 50
-Screen9barThick1 = 42         #difference between both = thickness 
-Screen9barThick2 = 46         # 56 and 62 = 6 Pixel thick
-Screen9barNibbleWidth = 2
-
-#config for Spectrum
-Screen9specDistance = 1
-Screen9specBorder = (130, 130, 130)
-Screen9specFill = (130, 130, 130)
-Screen9specWide1 = 4
-Screen9specWide2 = 1
-Screen9specYposTag = 38
-Screen9specYposNoTag = 38
-Screen9specHigh = 1.5
-
-#config for Spectrum2 NoProgress
-Screen99specDistance = 1
-Screen99specBorder = (130, 130, 130)
-Screen99specFill = (130, 130, 130)
-Screen99specWide1 = 4
-Screen99specWide2 = 1
-Screen99specYposTag = 43
-Screen99specYposNoTag = 43
-
-#config for leftVU
-Screen9leftVUDistance = 0
-Screen9leftVUBorder = (80, 80, 80)
-Screen9leftVUFill = (80, 80, 80)
-Screen9leftVUWide1 = 2
-Screen9leftVUWide2 = 0
-Screen9leftVUYpos1 = 53
-Screen9leftVUYpos2 = 58
-
-#config for leftVU NoProgress
-Screen99leftVUDistance = 0
-Screen99leftVUBorder = (80, 80, 80)
-Screen99leftVUFill = (80, 80, 80)
-Screen99leftVUWide1 = 2
-Screen99leftVUWide2 = 0
-Screen99leftVUYpos1 = 53
-Screen99leftVUYpos2 = 58
-
-#config for rightVU
-Screen9rightVUDistance = 255
-Screen9rightVUBorder = (80, 80, 80)
-Screen9rightVUFill = (80, 80, 80)
-Screen9rightVUWide1 = 2
-Screen9rightVUWide2 = 0
-Screen9rightVUYpos1 = 53
-Screen9rightVUYpos2 = 58
-
-#config for rightVU NoProgress
-Screen99rightVUDistance = 255
-Screen99rightVUBorder = (80, 80, 80)
-Screen99rightVUFill = (80, 80, 80)
-Screen99rightVUWide1 = 2
-Screen99rightVUWide2 = 0
-Screen99rightVUYpos1 = 53
-Screen99rightVUYpos2 = 58
-
-#config for gradient color of the VU
-Screen9specGradstart = 80
-Screen9specGradstop = 255
-Screen9specGradSamples = 32
 
 #___________________________________________________________________
 #Config TextPositions Media-Library-Info-Screen:
@@ -513,3 +324,9 @@ ArtistScrollSpeed = 1
 ArtistEndScrollMargin = 2
 SongScrollSpeed = 1
 SongEndScrollMargin = 2
+
+#Menu
+oledMenuHighlightColor = (255, 255, 255)
+oledMenuHighlightBackGround = (0, 0, 0)
+oledMenuNotSelectedColor = (80, 80, 80)
+oledMenuNotSelectedBackground = (0, 0, 0)
