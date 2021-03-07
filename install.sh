@@ -330,12 +330,14 @@ getDisplayType() { #
       ;; # 
     4) #
       sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"spi1351"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo -e "\e[92mSet Display-Type as ssd1351\e[0m" #
       return 0 #
       ;; #         
     5) #
       sed -i 's/\(DisplayTechnology = \)\(.*\)/\1"'"st7735"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+      sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo " " #
       echo -e "\e[92mSet Display-Type as st7735\e[0m" #
       return 0 #
