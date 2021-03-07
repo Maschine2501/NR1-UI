@@ -30,16 +30,13 @@ bars = 64
 # the bandwidth of the visualizer.
 # Note: there is a minimum total bandwidth of 43Mhz x number of bars.
 # Cava will automatically increase the higher cutoff if a too low band is specified.
-lower_cutoff_freq = 40
+lower_cutoff_freq = 30
 higher_cutoff_freq = 20000
 
-# FFT buffer is set in the exponent of 2 and must be between 8 - 16, 8 = 256, 16 = 65536
-# this is the audio buffer used to create the spectrum
-# increasing the will improve the accuracy of the visualization,
-# but will also make it slower and increase CPU usage
-# anything below 10 and above 13 is considered experimental.
-; FFTbufferSize = 12;
 
+# Seconds with no input before cava goes to sleep mode. Cava will not perform FFT or drawing and
+# only check for input once per second. Cava will wake up once input is detected. 0 = disable.
+sleep_timer = 0
 
 
 [input]
@@ -78,7 +75,7 @@ source = /tmp/mpd.fifo
 
 # Output method. Can be 'ncurses', 'noncurses' or 'raw'.
 # 'noncurses' uses a custom framebuffer technique and draws only changes
-# from frame to frame. As of version 0.7.0 'noncurses' is default.
+# from frame to frame. 'ncurses' is default if supported
 #
 # 'raw' is an 8 or 16 bit (configurable via the 'bit_format' option) data
 # stream of the bar heights that can be used to send to other applications.
