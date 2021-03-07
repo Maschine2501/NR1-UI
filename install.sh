@@ -292,7 +292,7 @@ echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
 echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
 echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
 echo "" #
-echo -e "\e[92mConfiguration Part 1...\e[0m" #
+echo -e "\e[92mConfiguration Part 2...\e[0m" #
 echo "" #
 echo "" #
 echo "" #
