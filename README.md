@@ -23,61 +23,51 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ## The Code is modular and has a Setup-Process.
 
-### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
-![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
-
-## Screenshots and Layout Overview:
-![Screenshots](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/Screenshots.png)
-
-## [Features](https://github.com/Maschine2501/NR1-UI/wiki/Features)
+#### [Features](https://github.com/Maschine2501/NR1-UI/wiki/Features)
 
 
-## [Allready Done](https://github.com/Maschine2501/NR1-UI/wiki/Allready-Done)
+#### [Allready Done](https://github.com/Maschine2501/NR1-UI/wiki/Allready-Done)
 
 
-## [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
+#### [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
 
 ---
 
-# [1. Basic Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps)
+## [1. Basic Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps)
 
 ---
 
-# [2. Main-Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
+## [2. Main-Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
 ---
 
-## Configuration Manual (will follow soon!)
+#### Configuration Manual (will follow soon!)
 ---
 
-
-### [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
+#### [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
 ---
 
-### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
+#### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
 ---
 
-### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
+#### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
 ---
 
-### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
+#### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
 ---
 
 ## Your Display is not supported yet? You have an idea for a function/feature?
+### -> Contact me:
+#### [E-Mail](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
+#### [Discord Server for direct contact: Click here to join...](https://discord.gg/GJ4ED3F)
 
-### [contact me :-)](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
 
----
+### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
+![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
 
-## Discord Server for direct contact:
-### [Click here to join...](https://discord.gg/GJ4ED3F)
-
----
-
-## You want to use a display which is not supported yet?
-### If you're willing to sponsor me the specific Display, I will implement it.
-
----
+### Screenshots and Layout Overview:
+![Screenshots](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/Screenshots.png)
 
 ### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
+
