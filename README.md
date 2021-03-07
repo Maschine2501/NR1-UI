@@ -1,4 +1,4 @@
-Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
+Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
 
@@ -39,11 +39,11 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ---
 
-## [Basic Installation Steps <-> First Installation](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps-----First-Installation)
+# [1. Basic Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps)
 
 ---
 
-# [Main-Installation steps (Python 3.8.5) (Bash-Script)](https://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Autoconfig-Bash-Script))
+# [2. Main-Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
 ---
 
 ## Configuration Manual (will follow soon!)
