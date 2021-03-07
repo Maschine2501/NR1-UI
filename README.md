@@ -1,25 +1,26 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI)
-
-#### This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
+This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 ---
+## 07.03.2021 New:
+- [x] Tune the whole UI (fonts, positions... etc.)
+- [x] added Unicode Font (Support for TC/JP..)
+- [x] Support for ssd1351(color Oled)
+- [x] Support for st7735 (color LCD)
+- [x] Enhanced stability when using cava
+- [x] prevented screenfreeze when using Roon
 
 # NR1-UI
-Im building a Network Hifi Receiver from scratch.
-Main components are a RaspberryPi4 and an HiFi-Berry-Dac.
-An old Braun T2 Tuner serves as case for the player.
-To keep as much as possible from the look of the device i needed an Interface for Volumio.
-And especialy one that supports a 3,2" ssd1322 SPI Oled with 256x64Pixel.
-After doing some research i found diehrdsk/Volumio-OledUI.
-It fullfills many points on my "wishlist" but not nearly all.
+Im building a Network Hifi Receiver from scratch. Main components are a RaspberryPi4 and an HiFi-Berry-Dac. An old Braun T2 Tuner serves as case for the player.
+To keep as much as possible from the look of the device I needed an Interface for Volumio. And especialy one that supports a 3,2" ssd1322 SPI Oled with 256x64Pixel.
+After doing some research I found diehrdsk/Volumio-OledUI. It fullfills many points on my "wishlist" but not nearly all.
 As we all know, the way is the destination, i spent some time (much time....) in modifying the original code.
-
 The project is not finished yet... but close the the goal!
 
-I try to assist you, if you got questions or even problems with the code, just contact me.
+I try to assist you, if you got questions or even problems with the code, just contact me. 
 
 Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1-UI/wiki) will follow...
 
-## The Code is now modular:
+## The Code is modular and has a Setup-Process.
 
 ### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
 ![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
@@ -29,15 +30,6 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ## [Features](https://github.com/Maschine2501/NR1-UI/wiki/Features)
 
-## To-Do: 
----
-- [ ] Tune the whole UI (fonts, positions... etc.)
-- [ ] Add RS232 -> Braun Master Control communication
-- [ ] Make versions for other displays? like ssd1351, ssd1309? Maybe...
-- [ ] More Layouts and redesigning the existing ones
-- [ ] Make an un-installer Script...
-- [ ] Make an Volumio-Plugin for NR1-UI
-- [ ] Re-implement a second Rotary for Volume Control (selectable in Installation Config Menu)
 
 ## [Allready Done](https://github.com/Maschine2501/NR1-UI/wiki/Allready-Done)
 
