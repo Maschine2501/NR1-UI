@@ -1,6 +1,17 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
+# 04.09.2021 Attention:
+Hi Guys, I have some bad news...
+At least with Volumio 2.907 the installation-script for NR1-UI is broken (I guess 2.882/2.873 should work fine...).
+Reason: Something in the Volumio-Core has changed, "build-essential" is not installable anymore. 
+Without "Build-essential" OpenSSL, Python 3.8.5, and CAVA could not be compiled and installed.
+And without this Tools NR1-UI wont run...
+-.-
+I tried many things to fix it, but did not found any solution yet.
+@everyone Maybe anyone of you has an idea for a fix?
+But i have slightly good news: As soon as Volumio Buster (actually in Beta-Testing) is released, the installation process will be much lighter (no openssl/python3.85 needed). 
+I tested it allready and it is running fine. But I wont release the new install script untill the Buster is released...
 
 ## 07.03.2021 New:
 - [x] Tune the whole UI (fonts, positions... etc.)
