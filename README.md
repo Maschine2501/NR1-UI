@@ -11,7 +11,10 @@ And without this Tools NR1-UI wont run...
 I tried many things to fix it, but did not found any solution yet.
 @everyone Maybe anyone of you has an idea for a fix?
 But i have slightly good news: As soon as Volumio Buster (actually in Beta-Testing) is released, the installation process will be much lighter (no openssl/python3.85 needed). 
-I tested it allready and it is running fine. But I wont release the new install script untill the Buster is released...
+I tested it allready and it is running fine.
+
+-> If you want, here is the Installation Instruction for the Buster-Beta:
+[Buster-Beta Installation Instructions](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-(Beta)-Installation)
 
 ## 07.03.2021 New:
 - [x] Tune the whole UI (fonts, positions... etc.)
