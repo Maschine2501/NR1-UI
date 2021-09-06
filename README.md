@@ -1,7 +1,12 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
-# 04.09.2021 Attention:
+# 06.09.2021 Workaround found:
+[2aCD](https://github.com/2aCD-creator) has found a workaround for the "build-essential"-issue: [Workaround-Thread](https://community.volumio.org/t/cannot-install-build-essential-package/46856/16?u=maschine2501).
+I've implemented his workaround in the [Install-Script](https://github.com/Maschine2501/NR1-UI/blob/master/install-buildfix.sh) between line 12 until line 24.
+Now the Installation is working fine aggain with latest stable volumio :-)
+
+## 04.09.2021 Attention:
 Hi Guys, I have some bad news...
 At least with Volumio 2.907 the installation-script for NR1-UI is broken (I guess 2.882/2.873 should work fine...).
 Reason: Something in the Volumio-Core has changed, "build-essential" is not installable anymore. 
