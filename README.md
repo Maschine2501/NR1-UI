@@ -6,6 +6,8 @@ This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.
 I've implemented his workaround in the [Install-Script](https://github.com/Maschine2501/NR1-UI/blob/master/install-buildfix.sh) between line 12 until line 24.
 Now the Installation is working fine aggain with latest stable volumio :-)
 
+Just follow the Instructions: [step 1](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps) and [step 2](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
+
 ## 04.09.2021 Attention:
 Hi Guys, I have some bad news...
 At least with Volumio 2.907 the installation-script for NR1-UI is broken (I guess 2.882/2.873 should work fine...).
