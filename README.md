@@ -7,6 +7,9 @@ I've implemented his workaround in the [Install-Script](https://github.com/Masch
 Now the Installation is working fine aggain with latest stable volumio :-)
 
 Just follow the Instructions: [step 1](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps) and [step 2](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
+## 13.09.2021 Fix only works with RPi4...
+Unfortuneatly the Fix wont work on a RPi3 (and I assume also RPi2...). The Buster Beta Version seems to run fine even on the older Pi's... I'll try to find a fix.
+
 
 ## 04.09.2021 Attention:
 Hi Guys, I have some bad news...
