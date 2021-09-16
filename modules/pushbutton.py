@@ -1,6 +1,9 @@
 from time import sleep
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM) 
+import Logger as logger
+
+log = logger.Logger(__name__, True)
 
 class PushButton:
 
@@ -27,5 +30,5 @@ class PushButton:
             measured_time += 0.02
             sleep(0.02)
         if measured_time >= self.minimum_time and channel == self.pin and self.callbackFunction:
-            print('PIN: '+str(self.pin)+', time: '+str(measured_time))
+            log.debug('PIN: [%d] \t time: [%d]' % (self.pin, measured_time))
             return self.callbackFunction(measured_time)

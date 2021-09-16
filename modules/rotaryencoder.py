@@ -1,4 +1,7 @@
 import RPi.GPIO as GPIO
+import Logger as logger
+
+log = logger.Logger(__name__, True)
 
 class RotaryEncoder:
 
@@ -13,15 +16,18 @@ class RotaryEncoder:
         self.ppc = pulses_per_cycle
         self.direction = RotaryEncoder.UNKNOWN
         self.prevState = 0b11
-        self.relposition = 0;
+        self.relposition = 0
 
         GPIO.setup(self.pinA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.pinB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def setCallback(self, callback_function):
         self.callbackFunction = callback_function
-        GPIO.add_event_detect(self.pinA, GPIO.BOTH, callback=self.decodeRotation)
-        GPIO.add_event_detect(self.pinB, GPIO.BOTH, callback=self.decodeRotation)
+        try:
+            GPIO.add_event_detect(self.pinA, GPIO.BOTH, callback=self.decodeRotation)
+            GPIO.add_event_detect(self.pinB, GPIO.BOTH, callback=self.decodeRotation)
+        except:
+            log.error("No encoder detected. Please make shure you have wired it rigth up")
 
     def decodeRotation(self, channel):
         self.direction = RotaryEncoder.UNKNOWN
@@ -37,11 +43,13 @@ class RotaryEncoder:
             if self.relposition <= -self.ppc:
                 self.relposition = 0
                 self.direction = RotaryEncoder.LEFT
+                log.debug("Rotaryencoder direction set to [LEFT]")
         elif (sm == 0b1110 or sm == 0b0111 or sm == 0b0001 or sm == 0b1000):
             self.relposition += 1
             if self.relposition >= self.ppc:
                 self.relposition = 0
                 self.direction = RotaryEncoder.RIGHT
+                log.debug("Rotaryencoder direction set to [Right]")
 
         if newState == 0b11:   #locking position
             self.relposition = 0 
