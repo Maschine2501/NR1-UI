@@ -80,8 +80,8 @@ if SpectrumActive == True:
         if '/tmp/mpd.fifo' in f1.read():
             log.debug("CAVA1 Fifo-Output is present in mpd.conf")
         else:
-            log.debug('CAVA1 FIFO-Output in /etc/mpd.conf is missing!')
-            log.debug('Rebuilding mpd.conf now, this will take ~5 seconds.')
+            log.warning('CAVA1 FIFO-Output in /etc/mpd.conf is missing!')
+            log.warning('Rebuilding mpd.conf now, this will take ~5 seconds.')
             volumioIO.emit('callMethod', ReNewMPDconf)
             sleep(4.0)
     
@@ -89,8 +89,8 @@ if SpectrumActive == True:
         if '/tmp/mpd2.fifo' in f2.read():
             log.debug("CAVA2 Fifo-Output is present in mpd.conf")
         else:
-            log.debug('CAVA2 FIFO-Output in /etc/mpd.conf is missing!')
-            log.debug('Rebuilding mpd.conf now, this will take ~5 seconds.')
+            log.warning('CAVA2 FIFO-Output in /etc/mpd.conf is missing!')
+            log.warning('Rebuilding mpd.conf now, this will take ~5 seconds.')
             volumioIO.emit('callMethod', ReNewMPDconf)
             sleep(4.0)
 #________________________________________________________________________________________
@@ -133,8 +133,8 @@ if DisplayTechnology == 'i2c1306':
         ScreenList = ['Progress-Bar', 'Essential']
 
 NowPlayingLayoutSave=open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt').readline().rstrip()
-log.debug('Layout selected during setup: %s'% NowPlayingLayout)
-log.debug('Last manually selected Layout: %s'% NowPlayingLayoutSave)
+log.info('Layout selected during setup: %s'% NowPlayingLayout)
+log.info('Last manually selected Layout: %s'% NowPlayingLayoutSave)
 
 if DisplayTechnology == 'spi1322':
     if NowPlayingLayout not in ScreenList:
@@ -687,10 +687,10 @@ def onPushState(data):
         global ScrollAlbumNextRound
         global ScrollSpecsTag
         global ScrollSpecsNext
-        global ScrollSpecsFirstRoun
+        global ScrollSpecsFirstRound
         global ScrollSpecsNextRound
         OPDsave = data
-        log.debug('data: ', str(data).encode('utf-8'))    
+        log.debug('data: [ %s ]' % str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
@@ -971,6 +971,10 @@ class NowPlayingScreen():
         global ScrollAlbumNext
         global ScrollAlbumFirstRound
         global ScrollAlbumNextRound
+        global ScrollSpecsFirstRound
+        global ScrollSpecsNextRound
+        global ScrollSpecsTag
+        global ScrollSpecsNext
 #__________________________________________________________________________________________________________
 #               _    ___________  ___      __                            __      
 #   _________  (_)  <  /__  /__ \|__ \    / /   ____ ___  ______  __  __/ /______
@@ -4177,10 +4181,6 @@ def ButtonA_PushEvent(hold_time):
             oled.modal.UpdateStandbyInfo()  
 
 def ButtonB_PushEvent(hold_time):
-    #if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
-    #    date_string = str(uuid.uuid1())
-    #    log.debug(date_string)
-    #    image.save('/home/volumio/'+date_string+'.png')
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
         log.debug('ButtonB short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
@@ -4220,7 +4220,7 @@ def ButtonD_PushEvent(hold_time):
             crl.perform()
             crl.close()
             get_body = b_obj.getvalue()
-            log.debug('getBody',get_body)
+            log.debug('function [getBody] = %d' % get_body)
             SetState(STATE_LIBRARY_INFO)
             oled.playState = 'info'
             onPushCollectionStats(get_body)
