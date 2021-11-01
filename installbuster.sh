@@ -425,48 +425,34 @@ getScreenLayout1322() { #
   read -p "Enter your decision: " DisplayNumber #
   case "$DisplayNumber" in #
     1) #    
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Left"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
-      echo "Spectrum-Left" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-      echo " " #
-      echo -e "\e[92mSet Screen Layout as Spectrum-Left\e[0m" #
-      return 0 #
-      ;; #
-    2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Center"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "Spectrum-Center" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as Spectrum-Center\e[0m" #
       return 0 #
       ;; #         
-    3) #
-      sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Spectrum-Right"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo "Spectrum-Right" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-      echo " " #
-      echo -e "\e[92mSet Screen Layout as Spcetrum-Right\e[0m" #
-      return 0 #
-      ;; #  
-    4) #    
+    2) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as No-Spectrum\e[0m" #
       return 0 #
       ;; #
-    5) #
+    3) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Modern"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as Modern\e[0m" #
       return 0 #
       ;; #         
-    6) #    
+    4) #    
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-2"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
       echo "VU-Meter-2" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
       echo -e "\e[92mSet Screen Layout as VU-Meter-2\e[0m" #
       return 0 #
       ;; #
-    7) #
+    5) #
       sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"VU-Meter-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
       echo "VU-Meter-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
       echo " " #
@@ -522,13 +508,11 @@ then
     then #
        echo "_____________________ " #   
        echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> for \e[92mSpectrum-Left\e[0m" #
-       echo -e "2 -> for \e[92mSpectrum-Center\e[0m" #
-       echo -e "3 -> for \e[92mSpectrum-Right\e[0m" #
-       echo -e "4 -> for \e[92mNo-Spectrum\e[0m" #
-       echo -e "5 -> for \e[92mModern\e[0m" #
-       echo -e "6 -> for \e[92mVU-Meter-2\e[0m" #
-       echo -e "7 -> for \e[92mVU-Meter-Bar\e[0m" #
+       echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
+       echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
+       echo -e "3 -> for \e[92mModern\e[0m" #
+       echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
+       echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
        echo -e "\e[93m---> \e[0m" #
        until getScreenLayout1322; do : ; done #
     fi #
@@ -536,13 +520,11 @@ then
     then #
        echo "_____________________ " #   
        echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> for \e[92mSpectrum-Left\e[0m" #
-       echo -e "2 -> for \e[92mSpectrum-Center\e[0m" #
-       echo -e "3 -> for \e[92mSpectrum-Right\e[0m" #
-       echo -e "4 -> for \e[92mNo-Spectrum\e[0m" #
-       echo -e "5 -> for \e[92mModern\e[0m" #
-       echo -e "6 -> for \e[92mVU-Meter-2\e[0m" #
-       echo -e "7 -> for \e[92mVU-Meter-Bar\e[0m" #
+       echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
+       echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
+       echo -e "3 -> for \e[92mModern\e[0m" #
+       echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
+       echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
        echo -e "\e[93m---> \e[0m" #
        until getScreenLayout1322; do : ; done #
     fi #
