@@ -1,6 +1,13 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
+# 26.01 Project is "on Hold"
+Due to some health-issues I am not able to keep up the development right now.
+I'm pretty sure, that I will return to development this year, but can't say when.
+So please be patient for a while :)
+Thank you!
+
+
 # 06.09.2021 Workaround found:
 [2aCD](https://github.com/2aCD-creator) has found a workaround for the "build-essential"-issue: [Workaround-Thread](https://community.volumio.org/t/cannot-install-build-essential-package/46856/16?u=maschine2501).
 I've implemented his workaround in the [Install-Script](https://github.com/Maschine2501/NR1-UI/blob/master/install-buildfix.sh) between line 12 until line 24.
