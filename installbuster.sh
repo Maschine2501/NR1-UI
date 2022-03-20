@@ -897,6 +897,11 @@ echo " " #
 echo " " #
 echo " " #
 echo " " #
+sudo pip3 install -U pip #
+sudo pip3 install -U setuptools #
+sudo pip3 install --upgrade setuptools pip wheel #
+sudo pip3 install --upgrade luma.oled #
+sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow #
 echo -e "\e[4;92mConfiguration has finished, congratulations!\e[0;0m" #
 echo " " #
 echo " " #
