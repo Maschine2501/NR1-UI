@@ -254,6 +254,19 @@ then
     sudo apt-get install libtool m4 automake
     git clone https://github.com/Maschine2501/cava.git #
     cd cava #
+    wget http://www.fftw.org/fftw-3.3.10.tar.gz #
+    tar zxvf fftw-3.3.10.tar.gz #
+    sudo mkdir /usr/local/fftw #
+    cd fftw-3.3.10 #
+    ./configure --prefix=/usr/local/fftw --disable-fortran #
+    make #
+    sudo make install #
+    make clean #
+    ./configure --enable-float --prefix=/usr/local/fftw --disable-fortran #
+    make #
+    sudo make install #
+    sudo apt install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev #
+    cd /home/cava #
     sudo bash autogen.sh #
     ./configure && make -j4 && sudo make install #
     cd #
