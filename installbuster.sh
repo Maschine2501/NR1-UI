@@ -12,7 +12,8 @@ echo "_________________________________________________________ " #
 sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
 #sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
-sudo apt-get install -y libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip3#
+#sudo apt-get install -y libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip3 python3-dev python3-setuptools python3-pip libfreetype6-dev libatlas-base-dev libjpeg-dev python-rpi.gpio libcurl4 libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libtool#
+sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip python3-dev python3-setuptools python3-pip libfreetype6-dev libatlas-base-dev libjpeg-dev python-rpi.gpio libcurl4 libssl-dev git autoconf make libfftw3-dev libasound2-dev libncursesw5-dev libtool m4 automake #
 cd #
 sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
 sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
@@ -240,7 +241,6 @@ mkdir /home/volumio/src #
 #./configure --prefix=/home/volumio/src/Python-3.8.5 --with-openssl=/home/volumio/src/openssl-1.1.1b && make -j4 && sudo make altinstall #
 #export PATH=/home/volumio/src/Python-3.8.5/bin:$PATH #
 #export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
-sudo apt-get install -y python3-dev python3-setuptools python3-pip libfreetype6-dev libatlas-base-dev libjpeg-dev python-rpi.gpio libcurl4-openssl-dev libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool #
 sudo pip3 install -U pip #
 sudo pip3 install -U setuptools #
 sudo pip3 install --upgrade setuptools pip wheel #
@@ -251,7 +251,7 @@ cd #
 if [[ $CAVATag -eq 1 ]];
 then
     echo -e "\e[92mInstalling Cava...\e[0m"
-    sudo apt-get install -y libtool m4 automake
+    #sudo apt-get install -y libtool m4 automake
     git clone https://github.com/Maschine2501/cava.git #
     cd cava #
     wget http://www.fftw.org/fftw-3.3.10.tar.gz #
@@ -265,7 +265,7 @@ then
     ./configure --enable-float --prefix=/usr/local/fftw --disable-fortran #
     make #
     sudo make install #
-    sudo apt install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev #
+    #sudo apt install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev #
     cd /home/cava #
     sudo bash autogen.sh #
     ./configure && make -j4 && sudo make install #
