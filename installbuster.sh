@@ -251,7 +251,7 @@ cd #
 if [[ $CAVATag -eq 1 ]];
 then
     echo -e "\e[92mInstalling Cava...\e[0m"
-    sudo apt-get install libtool m4 automake
+    sudo apt-get install -y libtool m4 automake
     git clone https://github.com/Maschine2501/cava.git #
     cd cava #
     wget http://www.fftw.org/fftw-3.3.10.tar.gz #
