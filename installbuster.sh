@@ -245,7 +245,7 @@ sudo pip3 install -U pip #
 sudo pip3 install -U setuptools #
 sudo pip3 install --upgrade setuptools pip wheel #
 sudo pip3 install --upgrade luma.oled #
-sudo pip3 install psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd #
+sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow #
 echo -e "\e[92mAll Python related modules are installed...\e[0m" #
 cd #
 if [[ $CAVATag -eq 1 ]];
