@@ -12,7 +12,7 @@ echo "_________________________________________________________ " #
 sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
 #sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
-sudo apt-get install -y libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
+sudo apt-get install -y libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip3#
 cd #
 sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
 sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
