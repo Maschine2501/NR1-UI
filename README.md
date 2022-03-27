@@ -1,37 +1,11 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
-This is the Python3.8.5 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
+This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
-# 26.01 Project is "on Hold"
-Due to some health-issues I am not able to keep up the development right now.
-I'm pretty sure, that I will return to development this year, but can't say when.
-So please be patient for a while :)
-Thank you!
-
-
-# 06.09.2021 Workaround found:
-[2aCD](https://github.com/2aCD-creator) has found a workaround for the "build-essential"-issue: [Workaround-Thread](https://community.volumio.org/t/cannot-install-build-essential-package/46856/16?u=maschine2501).
-I've implemented his workaround in the [Install-Script](https://github.com/Maschine2501/NR1-UI/blob/master/install-buildfix.sh) between line 12 until line 24.
-Now the Installation is working fine aggain with latest stable volumio :-)
-
-Just follow the Instructions: [step 1](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps) and [step 2](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
-## 13.09.2021 Fix only works with RPi4...
-Unfortuneatly the Fix wont work on a RPi3 (and I assume also RPi2...). The Buster Beta Version seems to run fine even on the older Pi's... I'll try to find a fix.
-
-
-## 04.09.2021 Attention:
-Hi Guys, I have some bad news...
-At least with Volumio 2.907 the installation-script for NR1-UI is broken (I guess 2.882/2.873 should work fine...).
-Reason: Something in the Volumio-Core has changed, "build-essential" is not installable anymore. 
-Without "Build-essential" OpenSSL, Python 3.8.5, and CAVA could not be compiled and installed.
-And without this Tools NR1-UI wont run...
--.-
-I tried many things to fix it, but did not found any solution yet.
-@everyone Maybe anyone of you has an idea for a fix?
-But i have slightly good news: As soon as Volumio Buster (actually in Beta-Testing) is released, the installation process will be much lighter (no openssl/python3.85 needed). 
-I tested it allready and it is running fine.
-
--> If you want, here is the Installation Instruction for the Buster-Beta:
-[Buster-Beta Installation Instructions](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-(Beta)-Installation)
+# 27.03.2022 Volumio 3.xx is now supported:
+Today I fixed the installation routine for the new Volumio 3.xx.
+I tested the Installation script twice on a fresh installed RPi4 -> Succeeded both times.
+If you have an issue, please report it :)
+Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx NR1-UI](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation)
 
 ## 07.03.2021 New:
 - [x] Tune the whole UI (fonts, positions... etc.)
