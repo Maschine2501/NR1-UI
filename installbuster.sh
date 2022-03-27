@@ -7,31 +7,31 @@ echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
 echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
 echo "" #
 echo -e "\e[92mSeting up...\e[0m" #
+echo -e "\e[92mIinstalling all needed Modules and Librarys\e[0m" #
 echo "" #
 echo "_________________________________________________________ " #
 sudo dpkg-reconfigure tzdata #
 sudo apt-get update #
-#sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev #
-#sudo apt-get install -y libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip3 python3-dev python3-setuptools python3-pip libfreetype6-dev libatlas-base-dev libjpeg-dev python-rpi.gpio libcurl4 libssl-dev git-core autoconf make libtool libfftw3-dev libasound2-dev libncursesw5-dev libtool#
-sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev python3-pip python3-dev python3-setuptools python3-pip libfreetype6-dev libatlas-base-dev libjpeg-dev python-rpi.gpio libcurl4 libssl-dev git autoconf make libfftw3-dev libasound2-dev libncursesw5-dev libtool m4 automake #
-cd #
+sudo apt-get install -y python3-setuptools python3-pip python-rpi.gpi #
+sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow #
+sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool libiniparser-dev libsdl2-2.0-0 libsdl2-dev libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libfreetype6-dev libatlas-base-dev libjpeg-dev libfftw3-dev libasound2-dev libncursesw5-dev libtool libcurl4 libssl-dev git autoconf automake make m4 #
+git clone https://github.com/Maschine2501/cava.git #
+git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
 sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh #
 sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh #
 sudo chmod +x /home/volumio/NR1-UI/ftp.sh #
 sudo echo "dtparam=spi=on" >> /boot/userconfig.txt #
 sudo echo "dtparam=i2c=on" >> /boot/userconfig.txt #
+sudo pip3 install -U pip #
+sudo pip3 install -U setuptools #
+sudo pip3 install --upgrade setuptools pip wheel #
+sudo pip3 install --upgrade luma.oled #
+cd #
 echo "_________________________________________________________________ " #
 echo " " #
 echo " " #
 echo " " #
 echo " " #
-echo -e "\e[92m    _   ______ ___      __  ______\e[0m" #
-echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m" #
-echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
-echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
-echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
-echo "" #
-echo -e "\e[92mConfiguration Part 1...\e[0m" #
 echo " " #
 echo -e "\e[4;92mDo you want to deactivate (onboard-)Bluetooth?\e[0;0m" #
 echo " " #
@@ -94,8 +94,8 @@ getWiFi() { #
 until getWiFi; do : ; done #
 echo "_______________________________________________________ " #
 echo " " #
-echo -e "\e[4;92mDo you want to activate Touch-Display-Support?\e[0;0m" #
-echo -e "\e[92mNeeded for "'"unofficial"'" displays...\e[0m" #
+echo -e "\e[4;92mDo you want to activate (Touch-)Display-Support?\e[0;0m" #
+echo -e "\e[92mNeeded for "'"unofficial"'" LCD displays...\e[0m" #
 echo "" #
 echo -e "\e[91m---> Touchdisplay Plugin in Volumio needed!!! \e[0m" #
 echo -e "\e[91m------> Please install Plugin after Setup. \e[0m" #
@@ -104,7 +104,8 @@ echo "______________________ " #
 echo -e "\e[93mValid selections are: \e[0m" #
 echo -e "1 -> \e[92m5-Inch / 800x480 Pixel\e[0m" #
 echo -e "2 -> \e[92m7-Inch / 1024x600 Pixel\e[0m" #
-echo -e "3 -> \e[91mNo Touchscreen\e[0m" #
+echo -e "3 -> \e[92m8,8-Inch / 1920x480 Pixel\e[0m" #
+echo -e "4 -> \e[91mNo (Touch-)screen\e[0m" #
 echo -e "\e[93m--->" #
 getDisp() { #
   read -p "Enter your decision: " Disp #
@@ -129,189 +130,78 @@ getDisp() { #
       echo -e "\e[92mTouch-Display-Support enabled...\e[0m" #
       return 0 #
       ;; #
-    3) #
+    3) #    
+      echo "hdmi_group=2" >> /boot/userconfig.txt #
+      echo "hdmi_mode=87" >> /boot/userconfig.txt #
+      echo "hdmi_timings=480 0 30 30 30 1920 0 6 6 6 0 0 0 60 0 55296000 8" >> /boot/userconfig.txt #
+      echo "hdmi_drive=2" >> /boot/userconfig.txt #
+      echo "display_rotate=1" >> /boot/userconfig.txt #
+      echo "hdmi_force_mode=1" >> /boot/userconfig.txt #
+      echo "framebuffer_width=1920" >> /boot/userconfig.txt #
+      echo "framebuffer_height=480" >> /boot/userconfig.txt #
+      echo "max_framebuffer_width=1920" >> /boot/userconfig.txt #
+      echo "max_framebuffer_height=1920" >> /boot/userconfig.txt #
+      echo " " #
+      echo -e "\e[92mTouch-Display-Support enabled...\e[0m" #
+      return 0 #
+      ;; #
+    4) #
       echo " " #
       echo -e "\e[92mTouch-Display-Support disabled...\e[0m" #
       return 0 #
       ;; #        
     *) #
-      printf %s\\n "Please enter '1', '2' or '3'" #
+      printf %s\\n "Please enter '1', '2', '3' or '4'" #
       return 1 #
       ;; #
   esac #
 } #
 until getDisp; do : ; done #
-echo "_________________________________________________________ " #
-echo " " #
-echo -e "\e[4;92mDo you want to use Spectrum/VU-Meter?\e[0;0m" #
-echo -e "\e[92m(This enables two CAVA instances)\e[0m" #
-echo "" #
-echo -e "\e[91m---> This needs some resources!!! " #
-echo -e "-> Better use Pi3 or above.\e[0m" #
-echo " " #
-echo "______________________ " #
-echo " " #
-echo -e "\e[93mValid selections are: \e[0m" #
-echo -e "1 -> \e[92mYes\e[0m" #
-echo -e "2 -> \e[91mNo\e[0m" #
-echo -e "\e[93m--->\e[0m" #" #
-getCAVATag() { #
-  read -p "Enter your decision: " CAVATag #
-  case "$CAVATag" in #
-    1) #    
-      sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo " " #
-      echo -e "\e[92mCAVA/Spectrum will be installed...\e[0m" #
-      return 0 #
-      ;; #
-    2) #
-      sed -i 's/\(SpectrumActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      echo " " #
-      echo -e "\e[92mCAVA/Spectrum won't be installed...\e[0m" #
-      return 0 #
-      ;; #        
-    *) #
-      printf %s\\n "Please enter '1' or '2'" #
-      return 1 #
-      ;; #
-  esac #
-} #
-until getCAVATag; do : ; done #
-echo "________________________________________________________________________ " #
-echo " " #
-echo " " #
-echo -e "\e[4;92mDo you want to activate Album-Art-Tool for NR1-UI-Remote?\e[0;0m" #
-echo " " #
-echo -e "More informations under: \e[93mhttps://github.com/Maschine2501/NR1-UI-Remote\e[0m" #
-echo " " #
-echo -e "\e[25;91mIf you select YES you'll get a promt, select: "'"Standalone"'" \e[0;0m" #
-echo "______________________ " #
-echo " " #
-echo -e "\e[93mValid selections are: \e[0m" #
-echo -e "1 -> \e[92mYes\e[0m" #
-echo -e "2 -> \e[91mNo\e[0m" #
-echo -e "\e[93m--->\e[0m" #
-cd #
-getRemote() { #
-  read -p "Enter your decision: " Remote #
-  case "$Remote" in #
-    1) #    
-      sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-      sudo apt install -y proftpd-basic #
-      sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftpd.conf /etc/proftpd #
-      sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftp-custom.conf /etc/proftpd/conf.d #
-      sudo mkdir /home/volumio/proftpd #
-      sudo chmod 777 /home/volumio/proftpd #
-      sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/controls.log /home/volumio/proftpd  #
-      sudo cp /home/volumio/NR1-UI/ConfigurationFiles/proftpd/proftpd.log /home/volumio/proftpd #
-      sudo service proftpd restart #
-      echo " " #
-      echo -e "\e[92mAlbum-Art-Tool is activated...\e[0m" #
-      return 0 #
-      ;; #
-    2) #
-      sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py
-      echo " " #
-      echo -e "\e[92mAlbum-Art-Tool is not active...\e[0m" #
-      return 0 #
-      ;; #        
-    *) #
-      printf %s\\n "Please enter '1' or '2'" #
-      return 1 #
-      ;; #
-  esac #
-} #
-until getRemote; do : ; done #
-echo -e "\e[92mInstalling OpenSSL 1.1.1b\e[0m" #
+sed -i 's/\(SpectrumActive = \)\(.*\)/\1True/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
+sed -i 's/\(NR1UIRemoteActive = \)\(.*\)/\1False/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py
 mkdir /home/volumio/src #
-#cd /home/volumio/src && mkdir openssl && cd openssl #
-#wget https://www.openssl.org/source/openssl-1.1.1b.tar.gz #
-#tar xvf openssl-1.1.1b.tar.gz && cd openssl-1.1.1b #
-#./config --prefix=/home/volumio/src/openssl-1.1.1b --openssldir=/home/volumio/src/openssl-1.1.1b && make && sudo make install #
-#cd #
-#sudo cp /home/volumio/NR1-UI/ConfigurationFiles/ldconf/libc.conf /etc/ld.so.conf.d #
-#sudo ldconfig #
-#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/volumio/src/openssl-1.1.1b/lib #
-#echo -e "\e[92mInstalling 3.8.5 and related modules\e[0m" #
-#cd /home/volumio/src && mkdir python && cd python #
-#wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz #
-#tar xf Python-3.8.5.tar.xz #
-#cd Python-3.8.5 #
-#sudo cp /home/volumio/NR1-UI/ConfigurationFiles/python/Setup /home/volumio/src/python/Python-3.8.5/Modules #
-#./configure --prefix=/home/volumio/src/Python-3.8.5 --with-openssl=/home/volumio/src/openssl-1.1.1b && make -j4 && sudo make altinstall #
-#export PATH=/home/volumio/src/Python-3.8.5/bin:$PATH #
-#export LD_LIBRARY_PATh=/home/volumio/src/Python-3.8.5/bin #
-sudo pip3 install -U pip #
-sudo pip3 install -U setuptools #
-sudo pip3 install --upgrade setuptools pip wheel #
-sudo pip3 install --upgrade luma.oled #
-sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow #
-echo -e "\e[92mAll Python related modules are installed...\e[0m" #
 cd #
-if [[ $CAVATag -eq 1 ]];
-then
-    echo -e "\e[92mInstalling Cava...\e[0m"
-    #sudo apt-get install -y libtool m4 automake
-    git clone https://github.com/Maschine2501/cava.git #
-    cd cava #
-    wget http://www.fftw.org/fftw-3.3.10.tar.gz #
-    tar zxvf fftw-3.3.10.tar.gz #
-    sudo mkdir /usr/local/fftw #
-    cd fftw-3.3.10 #
-    ./configure --prefix=/usr/local/fftw --disable-fortran #
-    make #
-    sudo make install #
-    make clean #
-    ./configure --enable-float --prefix=/usr/local/fftw --disable-fortran #
-    make #
-    sudo make install #
-    #sudo apt install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool automake libiniparser-dev libsdl2-2.0-0 libsdl2-dev #
-    cd /home/cava #
-    sudo bash autogen.sh #
-    ./configure && make -j4 && sudo make install #
-    cd #
-    git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
-    cd /home/volumio/CAVAinstall #
-    sudo bash ./autogen.sh #
-    ./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
-    cd #
-    sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
-    sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
-    sudo systemctl daemon-reload #
-    sudo systemctl enable cava1.service #
-    sudo systemctl enable cava2.service #
-fi
-echo -e "\e[92mInstalling NR1-UI...\e[0m"
+echo -e "\e[92mInstalling Cava...\e[0m"
+cd /home/volumio/src #
+wget http://www.fftw.org/fftw-3.3.10.tar.gz #
+tar zxvf fftw-3.3.10.tar.gz #
+sudo mkdir /usr/local/fftw #
+cd fftw-3.3.10 #
+./configure --prefix=/usr/local/fftw --disable-fortran #
+make #
+sudo make install #
+make clean #
+./configure --enable-float --prefix=/usr/local/fftw --disable-fortran #
+make #
+sudo make install #
+cd #
+cd /home/volumio/cava #
+sudo bash autogen.sh #
+./configure && make -j4 && sudo make install #
+cd #
+git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall #
+cd /home/volumio/CAVAinstall #
+sudo bash ./autogen.sh #
+./configure --prefix=/home/volumio/CAVA2 && make -j4 && sudo make install #
+cd #
+sudo cp /home/volumio/NR1-UI/service-files/cava1.service /lib/systemd/system/ #
+sudo cp /home/volumio/NR1-UI/service-files/cava2.service /lib/systemd/system/ #
+sudo systemctl daemon-reload #
+sudo systemctl enable cava1.service #
+sudo systemctl enable cava2.service #
+echo -e "\e[92mInstalling NR1-UI and Service File...\e[0m"
 chmod +x /home/volumio/NR1-UI/nr1ui.py #
 sudo cp /home/volumio/NR1-UI/service-files/nr1uibuster.service /lib/systemd/system/ #
 sudo systemctl daemon-reload #
 sudo systemctl enable nr1uibuster.service #
-if [[ $CAVATag -eq 1 ]];
-then
-    sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd #
-    echo " " #
-    echo " " #
-    echo -e "\e[92mFifo-Audio-Outputs for Cava has been added to mpd.conf\e[0m"
-    echo " " #
-    echo " " #
-    sudo service mpd restart #
-fi
+sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd #
+echo -e "\e[92mFifo-Audio-Outputs for Cava has been added to mpd.conf\e[0m"
+sudo service mpd restart #
 echo "_________________________________________________________________ " #
-echo " " #
-echo " " #
-echo " " #
-echo " " #
-echo -e "\e[92m    _   ______ ___      __  ______\e[0m" #
-echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m" #
-echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m" #
-echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m" #
-echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m" #
-echo "" #
-echo -e "\e[92mConfiguration Part 2...\e[0m" #
 echo "" #
 echo "" #
 echo "" #
-echo -e "\e[4;92mPlease select your Display-Type.\e[0;0m" #
+echo -e "\e[4;92mPlease select your SPI/I2C Display-Type.\e[0;0m" #
 echo " " #
 echo " " #
 echo "_____________________ " #
@@ -479,104 +369,65 @@ getScreenLayout1322() { #
       ;; #
   esac #
 } #
-if [[ $CAVATag -eq 2 && $DisplayNumber -eq 1 ]];
+echo "" #
+echo -e "\e[4;92mPlease select your Screen Layout.\e[0;;0m" #
+echo ""#
+echo -e "\e[93mYou can find Previews/Screenshots here: \e[0m" #
+echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI \e[0m" #
+if [ $DisplayNumber -eq 1 ]; #
 then #
-    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-    echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+   echo "_____________________" #
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> \e[92mSpectrum-Screen\e[0m" #
+   echo -e "2 -> \e[92mProgress-Bar\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
+   until getScreenLayout1306; do : ; done #
 fi #
-if [[ $CAVATag -eq 2 && $DisplayNumber -eq 2 ]];
-then
-#else
-    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+if [ $DisplayNumber -eq 2 ]; #
+then #
+   echo "_____________________ " #   
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
+   echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
+   echo -e "3 -> for \e[92mModern\e[0m" #
+   echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
+   echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
+   until getScreenLayout1322; do : ; done #
 fi #
-if [[ $CAVATag -eq 2 && $DisplayNumber -eq 4 ]];
-then
-#else
-    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+if [ $DisplayNumber -eq 3 ]; #
+then #
+   echo "_____________________ " #   
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
+   echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
+   echo -e "3 -> for \e[92mModern\e[0m" #
+   echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
+   echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
+   until getScreenLayout1322; do : ; done #
 fi #
-if [[ $CAVATag -eq 2 && $DisplayNumber -eq 5 ]];
-then
-#else
-    sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-    echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
+if [ $DisplayNumber -eq 4 ]; #
+then #
+   echo "_____________________" #
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
+   echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
+   until getScreenLayout1351; do : ; done #
 fi #
-if [[ $CAVATag -eq 1 ]];
-then
-    echo "" #
-    echo -e "\e[4;92mPlease select your Screen Layout.\e[0;;0m" #
-    echo ""#
-    echo -e "\e[93mYou can find Previews/Screenshots here: \e[0m" #
-    echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI \e[0m" #
-    if [ $DisplayNumber -eq 1 ]; #
-    then #
-       echo "_____________________" #
-       echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> \e[92mSpectrum-Screen\e[0m" #
-       echo -e "2 -> \e[92mProgress-Bar\e[0m" #
-       echo -e "\e[93m---> \e[0m" #
-       until getScreenLayout1306; do : ; done #
-    fi #
-    if [ $DisplayNumber -eq 2 ]; #
-    then #
-       echo "_____________________ " #   
-       echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
-       echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
-       echo -e "3 -> for \e[92mModern\e[0m" #
-       echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
-       echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
-       echo -e "\e[93m---> \e[0m" #
-       until getScreenLayout1322; do : ; done #
-    fi #
-    if [ $DisplayNumber -eq 3 ]; #
-    then #
-       echo "_____________________ " #   
-       echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> for \e[92mSpectrum-Center\e[0m" #
-       echo -e "2 -> for \e[92mNo-Spectrum\e[0m" #
-       echo -e "3 -> for \e[92mModern\e[0m" #
-       echo -e "4 -> for \e[92mVU-Meter-2\e[0m" #
-       echo -e "5 -> for \e[92mVU-Meter-Bar\e[0m" #
-       echo -e "\e[93m---> \e[0m" #
-       until getScreenLayout1322; do : ; done #
-    fi #
-    if [ $DisplayNumber -eq 4 ]; #
-    then #
-       echo "_____________________" #
-       echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
-       echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
-       echo -e "\e[93m---> \e[0m" #
-       until getScreenLayout1351; do : ; done #
-    fi #
-    if [ $DisplayNumber -eq 5 ]; #
-    then #
-       echo "_____________________" #
-       echo -e "\e[93mValid selections are:\e[0m" #
-       echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
-       echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
-       echo -e "\e[93m---> \e[0m" #
-       until getScreenLayout7735; do : ; done #
-    fi
-fi #
-#if [[ $CAVATag -eq 2 ]]; #
-#then #
-#    if [ $DisplayNumber -eq 1 ];
-#    then #
-#        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"Progress-Bar"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py #
-#        echo "Progress-Bar" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-#    #fi
-#    #if [ $DisplayNumber -eq 2 ]; #
-#    else
-#        sed -i 's/\(NowPlayingLayout = \)\(.*\)/\1"'"No-Spectrum"'"/' /home/volumio/NR1-UI/ConfigurationFiles/PreConfiguration.py # 
-#        echo "No-Spectrum" > /home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt #
-#    fi
-#fi #
+if [ $DisplayNumber -eq 5 ]; #
+then #
+   echo "_____________________" #
+   echo -e "\e[93mValid selections are:\e[0m" #
+   echo -e "1 -> \e[92mSpectrum-Center\e[0m" #
+   echo -e "2 -> \e[92mNo-Spectrum\e[0m" #
+   echo -e "\e[93m---> \e[0m" #
+   until getScreenLayout7735; do : ; done #
+fi
 echo "_________________________________________________________________ " #
 echo " " #
-echo -e "\e[4;92mShould the Display be rotated? \e[0;0m" #
+echo -e "\e[4;92mShould the SPI/I2C Display be rotated? \e[0;0m" #
 echo " " #
 echo "_____________________ " #
 echo -e "\e[93mValid selections are:\e[0m" #
@@ -897,21 +748,18 @@ echo " " #
 echo " " #
 echo " " #
 echo " " #
-sudo pip3 install -U pip #
-sudo pip3 install -U setuptools #
-sudo pip3 install --upgrade setuptools pip wheel #
-sudo pip3 install --upgrade luma.oled #
-sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow #
 echo -e "\e[4;92mConfiguration has finished, congratulations!\e[0;0m" #
 echo " " #
 echo " " #
 echo -e "\e[93mPlease have a look in the Installation instructions to finish setup.\e[0m" #                                                                                                                      
 echo " " #
-echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/Installation-Steps-(for-Python3.8.5-Version---Bash-Script)\e[0m" #
+echo -e "\e[93mhttps://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation\e[0m" #
 echo " " #
 echo " " #
-echo -e "\e[25;91mIf you use CAVA/Spectrum: \e[0;0m" #
 echo " " #
 echo -e "\e[91mPlease set Audio-Output to HDMI or Headphones and save setting.\e[0m" #
-echo -e "\e[91mNow Select your DAC/Playback device and save aggain.\e[0m" #
+echo -e "\e[91mNow re-select your DAC/Playback device and save aggain.\e[0m" #
+echo " " #
+echo " " #
+echo " " #
 exit 0 #
