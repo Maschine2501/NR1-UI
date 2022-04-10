@@ -38,11 +38,7 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ---
 
-## [1. Basic Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Basic-Installation-Steps)
-
----
-
-## [2. Main-Installation Steps](https://github.com/Maschine2501/NR1-UI/wiki/Main-Installation-Steps)
+## [1. Installation steps](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation)
 ---
 
 #### Configuration Manual (will follow soon!)
