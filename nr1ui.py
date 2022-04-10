@@ -667,7 +667,7 @@ def onPushState(data):
         global ScrollAlbumNextRound
         global ScrollSpecsTag
         global ScrollSpecsNext
-        global ScrollSpecsFirstRoun
+        global ScrollSpecsFirstRound
         global ScrollSpecsNextRound
         OPDsave = data
         #print('data: ', str(data).encode('utf-8'))    
