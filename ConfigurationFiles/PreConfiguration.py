@@ -26,4 +26,4 @@ oledrotation = 0
 oledPause2StopTime = 15.0
 
 #config for spectrum
-SpectrumActive = True
+SpectrumActive = True #Still needed -> Will be purged later. Do not Change!
