@@ -15,6 +15,7 @@ Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx 
 
 ## Wishlist/To-Do:
 - [ ] ILI9341 (Maybe ILI9488) display support
+- [ ] BGR / RGB Selection for ssd1351 displays
 - [ ] Sort out / Clean up Setup
 - [ ] Investigate Problem with some DAC's
 - [ ] Implement Volume Control
