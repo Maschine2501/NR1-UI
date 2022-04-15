@@ -7,13 +7,21 @@ I tested the Installation script twice on a fresh installed RPi4 -> Succeeded bo
 If you have an issue, please report it :)
 Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx NR1-UI](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation)
 
-## 07.03.2021 New:
-- [x] Tune the whole UI (fonts, positions... etc.)
-- [x] added Unicode Font (Support for TC/JP..)
-- [x] Support for ssd1351(color Oled)
-- [x] Support for st7735 (color LCD)
-- [x] Enhanced stability when using cava
-- [x] prevented screenfreeze when using Roon
+## Supported Displays:
+- [x] SSD1306 (monochrome Oled 128x64)
+- [x] SSD1322 (grayscale Oled 256x64)
+- [x] SSD1351  (full color Oled 128x128)
+- [x] ST7735 (full color LCD 160x128)
+
+## Wishlist/To-Do:
+- [x] ILI9341 (Maybe ILI9488) display support
+- [ ] Sort out / Clean up Setup
+- [ ] Investigate Problem with some DAC's
+- [ ] Implement Volume Control
+- [ ] Implement Source Dialog
+- [ ] Implement a "Settings Menu"
+
+
 
 # NR1-UI
 Im building a Network Hifi Receiver from scratch. Main components are a RaspberryPi4 and an HiFi-Berry-Dac. An old Braun T2 Tuner serves as case for the player.
