@@ -14,7 +14,7 @@ Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx 
 - [x] ST7735 (full color LCD 160x128)
 
 ## Wishlist/To-Do:
-- [x] ILI9341 (Maybe ILI9488) display support
+- [ ] ILI9341 (Maybe ILI9488) display support
 - [ ] Sort out / Clean up Setup
 - [ ] Investigate Problem with some DAC's
 - [ ] Implement Volume Control
