@@ -14,7 +14,9 @@ Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx 
 - [x] ST7735 (full color LCD 160x128)
 
 ## Wishlist/To-Do:
-- [ ] ILI9341 (Maybe ILI9488) display support
+- [ ] ILI9341 (Maybe ILI9488) display support(Alpha-phase)
+
+- [ ] SSD1309 (monochrome Oled 128x64)
 - [ ] BGR / RGB Selection for ssd1351 displays
 - [ ] Sort out / Clean up Setup
 - [ ] Investigate Problem with some DAC's
