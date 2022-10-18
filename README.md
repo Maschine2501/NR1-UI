@@ -1,7 +1,7 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
-# 18.10.2022: The Journey has an End.
+# 18.10.2022: The Journey came to an End.
 ### I wont push this project any further, cause I do not longer use Volumio. Feel free to fork this Project. I'll leave the Discord Chanel open for you, so you can reach out for each others support.
 
 ## It was a great time, Thank you! <3
