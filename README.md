@@ -86,5 +86,6 @@ Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1
 
 ### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
 
-![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MS2501.png)
+![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MadeByGloria.jpg)
+[Logo made by glorious @Klassik_Otaku](www.instagram.com/klassik_otaku)
 
