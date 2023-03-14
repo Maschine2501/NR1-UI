@@ -4,13 +4,17 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+import Logger as logger
+
+log = logger.Logger(__name__, True)
+
 def show_logo(filename, device):
     logoImage = Image.new('1', (device.width, device.height))
     img_path = os.path.dirname(os.path.realpath(__file__)) + '/../img/'
     try:
         logoImage = Image.open(img_path + filename).convert('1') #.resize((device.width, device.height), Image.ANTIALIAS)
     except IOError:
-        print("Cannot open file %s" % filename)
+        log.error("Cannot open file %s" % filename)
         pass
     device.display(logoImage)
 
@@ -19,7 +23,7 @@ def load_font(filename, font_size):
     try:
         font = ImageFont.truetype(font_path + filename, font_size)
     except IOError:
-        print('font file not found -> using default font')
+        log.error('font file not found -> using default font')
         font = ImageFont.load_default()
     return font
 

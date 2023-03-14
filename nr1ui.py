@@ -36,6 +36,9 @@ import pycurl
 import pprint
 import subprocess
 import RPi.GPIO as GPIO
+# initial Logger
+import Logger as logger
+
 from time import*
 from datetime import timedelta as timedelta
 from threading import Thread
@@ -57,6 +60,12 @@ from urllib.parse import urlencode
 import ssl
 import re
 import fnmatch
+# initial Logger
+#import Logger as logger
+
+log = logger.Logger(__name__, True)
+log.info('starting nr1ui service')
+
 sleep(5.0)
 
 # Socket-IO-Configuration for Rest API
@@ -69,19 +78,19 @@ ReNewMPDconf = {'endpoint': 'music_service/mpd', 'method': 'createMPDFile', 'dat
 if SpectrumActive == True:
     with open('/etc/mpd.conf') as f1:
         if '/tmp/mpd.fifo' in f1.read():
-            print("CAVA1 Fifo-Output is present in mpd.conf")
+            log.debug("CAVA1 Fifo-Output is present in mpd.conf")
         else:
-            print('CAVA1 FIFO-Output in /etc/mpd.conf is missing!')
-            print('Rebuilding mpd.conf now, this will take ~5 seconds.')
+            log.warning('CAVA1 FIFO-Output in /etc/mpd.conf is missing!')
+            log.warning('Rebuilding mpd.conf now, this will take ~5 seconds.')
             volumioIO.emit('callMethod', ReNewMPDconf)
             sleep(4.0)
     
     with open('/etc/mpd.conf') as f2:
         if '/tmp/mpd2.fifo' in f2.read():
-            print("CAVA2 Fifo-Output is present in mpd.conf")
+            log.debug("CAVA2 Fifo-Output is present in mpd.conf")
         else:
-            print('CAVA2 FIFO-Output in /etc/mpd.conf is missing!')
-            print('Rebuilding mpd.conf now, this will take ~5 seconds.')
+            log.warning('CAVA2 FIFO-Output in /etc/mpd.conf is missing!')
+            log.warning('Rebuilding mpd.conf now, this will take ~5 seconds.')
             volumioIO.emit('callMethod', ReNewMPDconf)
             sleep(4.0)
 #________________________________________________________________________________________
@@ -124,8 +133,8 @@ if DisplayTechnology == 'i2c1306':
         ScreenList = ['Progress-Bar', 'Essential']
 
 NowPlayingLayoutSave=open('/home/volumio/NR1-UI/ConfigurationFiles/LayoutSet.txt').readline().rstrip()
-print('Layout selected during setup: ', NowPlayingLayout)
-print('Last manually selected Layout: ', NowPlayingLayoutSave)
+log.info('Layout selected during setup: %s'% NowPlayingLayout)
+log.info('Last manually selected Layout: %s'% NowPlayingLayoutSave)
 
 if DisplayTechnology == 'spi1322':
     if NowPlayingLayout not in ScreenList:
@@ -492,10 +501,10 @@ def sigterm_handler(signal, frame):
 def GetIP():
     lanip = GetLANIP()
     LANip = str(lanip.decode('ascii'))
-    print('LAN IP: ', LANip)
+    log.debug('LAN IP: [%s]' % LANip)
     wanip = GetWLANIP()
     WLANip = str(wanip.decode('ascii'))
-    print('Wifi IP: ', WLANip)
+    log.debug('Wifi IP: [%s]' % WLANip)
     if LANip != '':
        ip = LANip
     elif WLANip != '':
@@ -559,7 +568,7 @@ def display_update_service():
         try:
             oled.modal.DrawOn(image)
         except AttributeError:
-            print("render error")
+            log.error("render error")
             sleep(1) 
         cimg = image.crop((0, 0, oled.WIDTH, oled.HEIGHT)) 
         oled.display(cimg)
@@ -594,25 +603,29 @@ def SetState(status):
 #/_____/\__,_/\__/\__,_/     /_/ /_/\__,_/_/ /_/\__,_/_/\___/_/     (_)  
 #   
 def JPGPathfinder(String):
-    print('JPGPathfinder')
+    log.debug('Path where JPGPathfinder is looking for\t[%s]' % String)
     albumstring = String
     global FullJPGPath
     try:
-        p1 = 'path=(.+?)&metadata'
-        result = re.search(p1, albumstring)
-        URL = result.group(1)
-        URLPath = "/mnt" + URL + '/'
+        try:
+            p1 = 'path=(.+?)&metadata'
+            result = re.search(p1, albumstring)
+            URL = result.group(1)
+        except:
+            URL = albumstring
+        URLPath = URL + '/'
         accepted_extensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp']
         filenames = [fn for fn in os.listdir(URLPath) if fn.split(".")[-1] in accepted_extensions]
         JPGName = filenames[0]
         FullJPGPath = URLPath + JPGName
-    except:
+    except Exception as e:
         FullJPGPath = '/home/volumio/NR1-UI/NoCover.bmp'
+        log.debug('[JPGPathfinder Exception] \t %s' % e)
+        log.debug("Use /home/volumio/NR1-UI/NoCover.bmp for cover")
     JPGSave(FullJPGPath)
-    print('FullJPGPath: ', FullJPGPath)
 
 def JPGSave(Path):
-    print('JPGSave')
+    log.debug('Path where JPGSave is looking for\t[%s]' % Path)
     FullJPGPath = Path
     img = Image.open(FullJPGPath)     # puts our image to the buffer of the PIL.Image object
     width, height = img.size
@@ -624,18 +637,25 @@ def JPGSave(Path):
     img.save('/home/volumio/album.bmp') 
 
 def JPGSaveURL(link):
-    print('JPGSaveURL')
+    log.debug('URL where JPGSaveURL is looking for\t[%s]' % link)
     try:
-        httpLink = urllib.parse.quote(link).replace('%3A',':')
-        ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
-        with urllib.request.urlopen(httpLink, context=ctx) as url:
-            with open('temp.jpg', 'wb') as f:
-                f.write(url.read())
+        #httpLink = urllib.parse.quote(link).replace('%3A',':')
+        #ctx = ssl.create_default_context()
+        #ctx.check_hostname = False
+        #ctx.verify_mode = ssl.CERT_NONE
+        #with urllib.request.urlopen(httpLink, context=ctx) as url:
+        #    with open('temp.jpg', 'wb') as f:
+        #        f.write(url.read())
+        urllib.request.urlretrieve(link, "temp.jpg")
         img = Image.open('temp.jpg')
-    except:
-        img = Image.open('/home/volumio/NR1-UI/NoCover.bmp')    
+    #except urllib.error.URLError as e: 
+    #    ResponseData = e.read().decode("utf8", 'ignore')
+    #    log.error(ResponseData)
+    #    img = Image.open('/home/volumio/NR1-UI/NoCover.bmp')
+    except Exception as e:
+        img = Image.open('/home/volumio/NR1-UI/NoCover.bmp')
+        log.debug('[JPGSaveURL Exception] \t %s' % e)
+        log.debug("Use /home/volumio/NR1-UI/NoCover.bmp for cover")    
     width, height = img.size
     asp_rat = width/height
     new_width = 90
@@ -670,7 +690,7 @@ def onPushState(data):
         global ScrollSpecsFirstRound
         global ScrollSpecsNextRound
         OPDsave = data
-        #print('data: ', str(data).encode('utf-8'))    
+        log.debug('data: [ %s ]' % str(data).encode('utf-8'))    
     
         if 'title' in data:
             newSong = data['title']
@@ -703,7 +723,7 @@ def onPushState(data):
         if newFormat == True and newSong == 'HiFiBerry ADC':
             newFormat = 'Live-Stream'
             oled.activeFormat = newFormat
-               	
+
         if 'samplerate' in data:
             newSamplerate = data['samplerate']
             oled.activeSamplerate = newSamplerate
@@ -859,7 +879,8 @@ def onPushState(data):
         if NR1UIRemoteActive == True:
             if newAlbumart != oled.activeAlbumart:
                 oled.activeAlbumart = newAlbumart
-                if AlbumArtHTTP is True and newFormat == 'WebRadio':
+                log.debug("AlbumartHTTP is [%s] \t newFormat is [%s]" % (AlbumArtHTTP, newFormat))
+                if AlbumArtHTTP is True and (newFormat == 'WebRadio' or newFormat == 'webradio'):    
                     JPGSaveURL(newAlbumart)
                 else:
                     albumdecode = urllib.parse.unquote(newAlbumart, encoding='utf-8', errors='replace')
@@ -950,6 +971,10 @@ class NowPlayingScreen():
         global ScrollAlbumNext
         global ScrollAlbumFirstRound
         global ScrollAlbumNextRound
+        global ScrollSpecsFirstRound
+        global ScrollSpecsNextRound
+        global ScrollSpecsTag
+        global ScrollSpecsNext
 #__________________________________________________________________________________________________________
 #               _    ___________  ___      __                            __      
 #   _________  (_)  <  /__  /__ \|__ \    / /   ____ ___  ______  __  __/ /______
@@ -4145,7 +4170,7 @@ class ScreenSelectMenu():
 #                                                                                       	
 def ButtonA_PushEvent(hold_time):
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
-        print('ButtonA short press event')
+        log.debug('ButtonA short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop' and oled.duration != None:
             if oled.playState == 'play':
                 volumioIO.emit('pause')
@@ -4156,29 +4181,25 @@ def ButtonA_PushEvent(hold_time):
             oled.modal.UpdateStandbyInfo()  
 
 def ButtonB_PushEvent(hold_time):
-    #if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
-    #    date_string = str(uuid.uuid1())
-    #    print(date_string)
-    #    image.save('/home/volumio/'+date_string+'.png')
     if hold_time < 2 and oled.state != STATE_LIBRARY_INFO:
-        print('ButtonB short press event')
+        log.debug('ButtonB short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('stop')
             oled.modal.UpdateStandbyInfo()  
 
 def ButtonC_PushEvent(hold_time):
     if hold_time < 2:
-        print('ButtonC short press event')
+        log.debug('ButtonC short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('prev')
         if oled.state == STATE_PLAYER and oled.playState == 'stop':
-            print ('RightKnob_PushEvent SHORT')
+            log.debug ('RightKnob_PushEvent SHORT')
             SetState(STATE_SCREEN_MENU)
             oled.state = 3
             oled.modal = ScreenSelectMenu(oled.HEIGHT, oled.WIDTH)
             sleep(0.2)
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
-        print('ButtonC long press event')
+        log.debug('ButtonC long press event')
         if repeatTag == False:
             volumioIO.emit('setRepeat', {"value":"true"})
             repeatTag = True            
@@ -4188,7 +4209,7 @@ def ButtonC_PushEvent(hold_time):
        
 def ButtonD_PushEvent(hold_time):
     if hold_time < 2:
-        print('ButtonD short press event')
+        log.debug('ButtonD short press event')
         if oled.state == STATE_PLAYER and oled.playState != 'stop':
             volumioIO.emit('next')
         if oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -4199,7 +4220,7 @@ def ButtonD_PushEvent(hold_time):
             crl.perform()
             crl.close()
             get_body = b_obj.getvalue()
-            print('getBody',get_body)
+            log.debug('function [getBody] = %d' % get_body)
             SetState(STATE_LIBRARY_INFO)
             oled.playState = 'info'
             onPushCollectionStats(get_body)
@@ -4207,7 +4228,7 @@ def ButtonD_PushEvent(hold_time):
         elif oled.state == STATE_LIBRARY_INFO:
             SetState(STATE_PLAYER)
     elif oled.state == STATE_PLAYER and oled.playState != 'stop':
-        print('ButtonD long press event')
+        log.debug('ButtonD long press event')
         if randomTag == False:
             volumioIO.emit('setRandom', {"value":"true"})
             randomTag = True
@@ -4229,7 +4250,7 @@ def RightKnob_RotaryEvent(dir):
         oled.selQueue = oled.modal.SelectedOption()
         emit_track = True
     elif oled.state == STATE_SCREEN_MENU and dir == RotaryEncoder.LEFT:
-        print('leftdir Rotary')
+        log.debug('leftdir Rotary')
         oled.modal.PrevOption()
         oled.SelectedScreen = oled.modal.SelectedOption()
     elif oled.state == STATE_SCREEN_MENU and dir == RotaryEncoder.RIGHT:
@@ -4239,10 +4260,10 @@ def RightKnob_RotaryEvent(dir):
 def RightKnob_PushEvent(hold_time):
     if hold_time < 1:
         if oled.state == STATE_QUEUE_MENU:
-            print ('RightKnob_PushEvent SHORT')
+            log.debug ('RightKnob_PushEvent SHORT')
             oled.stateTimeout = 0
         if oled.state == STATE_SCREEN_MENU:
-            print ('RightKnob_PushEvent Long')
+            log.debug ('RightKnob_PushEvent Long')
             global NowPlayingLayout
             oled.SelectedScreen = oled.modal.SelectedOption()
             Screen = ScreenList[oled.SelectedScreen]
@@ -4361,10 +4382,10 @@ PlayPosHelp.start()
 #/_/  /_/\__,_/_/_/ /_/     /_____/\____/\____/ .___/  (_)  
 #  
 while True:
-#    print('State: ', oled.state)
-#    print('palyState: ', oled.playState)
-#    print('newStatus: ', newStatus)
-#    print(oled.modal)
+#    log.debug('State: ', oled.state)
+#    log.debug('palyState: ', oled.playState)
+#    log.debug('newStatus: ', newStatus)
+#    log.debug(oled.modal)
     if emit_track and oled.stateTimeout < 4.5:
         emit_track = False
         try:
