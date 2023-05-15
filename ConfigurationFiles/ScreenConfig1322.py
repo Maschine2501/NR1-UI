@@ -7,7 +7,7 @@ oledShutdownLogo = "ShutdownScreen1322.bmp"
 
 #___________________________________________________________________
 #config for Clock/Standby:
-oledtext03 = 47, 4       #clock
+oledtext03 = 60, 15       #clock
 oledtext04 = 0, 52      #IP
 oledtext05 = 176, 52     #Date
 oledtext09 = 244, 51   #LibraryInfoIcon
@@ -293,8 +293,8 @@ oledListTextPosY = 16    #height of each Entry (4x16 = 64)
 
 #___________________________________________________________________
 #config for Text:
-oledArt = 'Interpreten :'  #sets the Artists-text for the MediaLibrarayInfo
-oledAlb = 'Alben :'        #sets the Albums-text for the MediaLibrarayInfo
+oledArt = 'Artist :'  #sets the Artists-text for the MediaLibrarayInfo
+oledAlb = 'Albums:'        #sets the Albums-text for the MediaLibrarayInfo
 oledSon = 'Songs :'        #sets the Songs-text for the MediaLibrarayInfo
 oledPla = 'Playtime :'     #sets the Playtime-text for the MediaLibrarayInfo
 

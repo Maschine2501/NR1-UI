@@ -2,28 +2,25 @@
 StandbyActive = False
 
 #config for NR1-UI-Remote
-NR1UIRemoteActive = True
+NR1UIRemoteActive = False
 
 #config for LED
-ledActive = True
-ledTechnology = "pcf8574usage"
+ledActive = False
+ledTechnology = None
 
 #config for GPIO Buttons
-oledBtnA = 4
-oledBtnB = 17
-oledBtnC = 5
-oledBtnD = 6
-oledRtrLeft = 22
-oledRtrRight = 23
-oledRtrBtn = 27
+oledRtrLeft = 13
+oledRtrRight = 6
+oledRtrBtn = 5
+
 
 #config for Display:
 DisplayTechnology = "spi1322"
-NowPlayingLayout = "No-Spectrum"
-oledrotation = 0
+NowPlayingLayout = "Standard"
+oledrotation = 2
 
 #config for timers:
-oledPause2StopTime = 15.0
+oledPause2StopTime = 5.0
 
 #config for spectrum
-SpectrumActive = True #Still needed -> Will be purged later. Do not Change!
+SpectrumActive = True

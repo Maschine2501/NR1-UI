@@ -1,12 +1,10 @@
-#from threading import Thread
+x#from threading import Thread
 import os
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
 def show_logo(filename, device):
-    print(device.width)
-    print(device.height)
     logoImage = Image.new('RGB', (device.width, device.height))
     img_path = os.path.dirname(os.path.realpath(__file__)) + '/../img/'
     try:
@@ -17,7 +15,7 @@ def show_logo(filename, device):
     device.display(logoImage)
 
 def load_font(filename, font_size):
-    font_path = "/home/volumio/NR1-UI/fonts/" #os.path.dirname(os.path.realpath(__file__)) + '/../fonts/'
+    font_path = os.path.dirname(os.path.realpath(__file__)) + '/../fonts/'
     try:
         font = ImageFont.truetype(font_path + filename, font_size)
     except IOError:
@@ -112,7 +110,7 @@ class Bar(Screen):
         self.filledPixels = int(self.barWidth*percent/100)
 
     def DrawOn(self, image, position):
-        self.draw.rectangle((0, 0, self.barWidth-1 , self.barHeight-1), outline="white", fill="black")
-        self.draw.rectangle((1, 1, self.filledPixels-2 , self.barHeight-2), fill=(0, 255, 0))
+        self.draw.rectangle((0, 0, self.barWidth-1 , self.barHeight-1), outline="white", fill="#2f2f2f")
+        self.draw.rectangle((1, 1, self.filledPixels-2 , self.barHeight-2), fill="white")
         image.paste(self.image, position)
 
