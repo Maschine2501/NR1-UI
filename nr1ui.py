@@ -1838,7 +1838,7 @@ monitor_thread = threading.Thread(target=monitor_volumio_state, args=(mcp23017,)
 monitor_thread.daemon = True
 monitor_thread.start()
 
-delay = 10
+delay = 5
 last_press_time = [0] * (len(ROW_PINS) * len(COLUMN_PINS))
 last_button_press_time = 0
 
