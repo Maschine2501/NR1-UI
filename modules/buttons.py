@@ -4,11 +4,11 @@ import RPi.GPIO as GPIO
 import time
 import threading
 from modules.mcp23017 import MCP23017, DEVICE_ADDR, IODIRA, GPIOA
-from modules.volumiosocket import activate_play, activate_pause, activate_back, activate_forward, activate_shuffle, activate_repeat
-from modules.leds import delay, turn_off_leds_after_delay, deactivate_play, deactivate_pause, deactivate_back, deactivate_forward, deactivate_shuffle, deactivate_repeat
+from modules.volumiosocket import activate_play, activate_pause, activate_back, activate_forward, activate_shuffle, activate_repeat, activate_favourites
+from modules.leds import delay, turn_off_leds_after_delay, deactivate_play, deactivate_pause, deactivate_back, deactivate_forward, deactivate_shuffle, deactivate_repeat, deactivate_favourites
 
 ROW_PINS = [4, 17, 23, 12]  # GPIO4, GPIO17, GPIO23, GPIO12
-COLUMN_PINS = [22, 27]        # GPIO pins for columns
+COLUMN_PINS = [27, 22]        # GPIO pins for columns
 DEBOUNCE_TIME = 200
 
 last_press_time = [0] * (len(ROW_PINS) * len(COLUMN_PINS))
@@ -41,8 +41,8 @@ def button_pressed(mcp23017, row, col, volumioIO, button_action_map):
         (1, 1): activate_forward,
         (2, 0): activate_shuffle,
         (2, 1): activate_repeat,
-        (3, 0): 'ButtonD',
-        (3, 1): 'ButtonC'
+        (3, 0): activate_favourites,
+        (3, 1): 'ButtonC',
     }
 
     action = button_actions.get((row, col), None)

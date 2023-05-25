@@ -10,13 +10,13 @@ ledTechnology = None
 
 #config for GPIO Buttons
 oledRtrLeft = 13
-oledRtrRight = 6
-oledRtrBtn = 5
+oledRtrRight = 5 
+oledRtrBtn = 6
 
 
 #config for Display:
 DisplayTechnology = "spi1322"
-NowPlayingLayout = "Standard"
+NowPlayingLayout = "Spectrum-Center"
 oledrotation = 0
 
 #config for timers:

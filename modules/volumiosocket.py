@@ -4,9 +4,9 @@ import time
 import requests
 import json
 from socketIO_client import SocketIO
-from modules.leds import turn_off_leds_after_delay, deactivate_play, deactivate_pause, deactivate_back, deactivate_forward, deactivate_shuffle, deactivate_repeat, deactivate_ButtonC, deactivate_ButtonD
+from modules.leds import turn_off_leds_after_delay, deactivate_favourites, deactivate_play, deactivate_pause, deactivate_back, deactivate_forward, deactivate_shuffle, deactivate_repeat, deactivate_ButtonC
 from modules.mcp23017 import MCP23017, DEVICE_ADDR, IODIRA, GPIOA
-from modules.button_functions import ButtonC_PushEvent, ButtonD_PushEvent
+from modules.button_functions import ButtonC_PushEvent
 
 VOLUMIO_URL = "http://localhost:3000/api/v1/commands/?cmd="
 
@@ -26,7 +26,7 @@ def activate_play(mcp23017):
         deactivate_back(mcp23017)
         deactivate_repeat(mcp23017)
         deactivate_shuffle(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
         mcp23017.set_output(GPIOA, 0, 1)
         print("Play button activated.")      
@@ -43,7 +43,7 @@ def activate_pause(mcp23017):
         deactivate_back(mcp23017)
         deactivate_repeat(mcp23017)
         deactivate_shuffle(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
         mcp23017.set_output(GPIOA, 0, 0)
         print("Play button deactivated.")
@@ -61,7 +61,7 @@ def activate_back(mcp23017):
         deactivate_forward(mcp23017)
         deactivate_repeat(mcp23017)
         deactivate_shuffle(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
 
 
@@ -77,7 +77,7 @@ def activate_forward(mcp23017):
         deactivate_back(mcp23017)
         deactivate_repeat(mcp23017)
         deactivate_shuffle(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
 
 
@@ -97,7 +97,7 @@ def activate_shuffle(mcp23017):
         deactivate_forward(mcp23017)
         deactivate_back(mcp23017)
         deactivate_repeat(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
 
 
@@ -118,34 +118,24 @@ def activate_repeat(mcp23017):
         deactivate_forward(mcp23017)
         deactivate_back(mcp23017)
         deactivate_shuffle(mcp23017)
-        deactivate_ButtonD(mcp23017)
+        deactivate_favourites(mcp23017)
         deactivate_ButtonC(mcp23017)
 
 
-def activate_ButtonD(mcp23017):
-    print("ButtonD pressed.")
-    deactivate_play(mcp23017)
-    deactivate_pause(mcp23017)
-    deactivate_forward(mcp23017)
-    deactivate_back(mcp23017)
-    deactivate_repeat(mcp23017)
-    deactivate_shuffle(mcp23017)
-    deactivate_ButtonC(mcp23017)
-    ButtonC_PushEvent()
 
-#def activate_favourites(mcp23017):
-#    try:
-#        volumioIO.emit('playPlaylist', {'name': 'favourites'})
-#    except Exception as e:
-#        print("Error: ", e)
-#    else:
-#        print("Favourites playlist loaded.")
-#        deactivate_play(mcp23017)
-#        deactivate_pause(mcp23017)
-#        deactivate_forward(mcp23017)
-#        deactivate_back(mcp23017)
-#        deactivate_repeat(mcp23017)
-#        deactivate_shuffle(mcp23017)
+def activate_favourites(mcp23017):
+    try:
+        volumioIO.emit('playPlaylist', {'name': 'favourites'})
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Favourites playlist loaded.")
+        deactivate_play(mcp23017)
+        deactivate_pause(mcp23017)
+        deactivate_forward(mcp23017)
+        deactivate_back(mcp23017)
+        deactivate_repeat(mcp23017)
+        deactivate_shuffle(mcp23017)
 
 
 def activate_ButtonC(mcp23017):
@@ -156,7 +146,7 @@ def activate_ButtonC(mcp23017):
     deactivate_back(mcp23017)
     deactivate_repeat(mcp23017)
     deactivate_shuffle(mcp23017)
-    deactivate_ButtonD(mcp23017)
+    deactivate_favourites(mcp23017)
     ButtonC_PushEvent()
     
 #==============================================================================================

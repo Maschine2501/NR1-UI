@@ -34,7 +34,7 @@ def deactivate_repeat(mcp23017):
     mcp23017.set_output(GPIOA, 5, 0)
     print("Forward button deactivated.")    
 
-def deactivate_ButtonD(mcp23017):
+def deactivate_favourites(mcp23017):
     mcp23017.set_output(GPIOA, 6, 0)
     print("Favourites deactivated.")
 
