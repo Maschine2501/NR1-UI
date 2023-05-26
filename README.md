@@ -57,6 +57,38 @@ g) Access Volumio on your network:
 After reconnecting to your regular Wi-Fi network, you can now access Volumio by entering "volumio.local" or the IP address assigned to the Raspberry Pi by your router in the web browser on any device connected to the same network.
 
 By following these steps, you should be able to connect to Volumio on your Raspberry Pi headlessly using its Wi-Fi access point and configure it to connect to your desired Wi-Fi network.
+
+---
+## [Step 2: Install Putty]
+
+a) Download PuTTY: 
+Go to the PuTTY website (www.putty.org) and download the PuTTY installer for your operating system. Choose the appropriate installer based on your system architecture (32-bit or 64-bit). (Don't worry if you choose the wrong one as your pc will let you know)
+
+b) Run the PuTTY installer: 
+Double-click on the downloaded PuTTY installer file to run the installation wizard.
+
+c) Follow the PuTTY installation steps: 
+The installation wizard will guide you through the installation process. Accept the license agreement, choose the installation location, and select additional components if desired. Leave the default settings unless you have specific preferences.
+
+d) Launch PuTTY: 
+After the installation is complete, launch PuTTY from your Start menu or desktop shortcut.
+
+e) Configure PuTTY for SSH connection:
+In the PuTTY configuration window, enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or IP address)" field.
+
+f) Set the connection type: 
+Make sure the connection type is set to "SSH."
+
+g) Connect to Volumio: 
+Click the "Open" button to initiate the SSH connection to your Raspberry Pi running Volumio.
+
+h) Enter login credentials: 
+When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
+
+i) Begin using Volumio through SSH: 
+Once successfully connected, you can use the command-line interface to control and configure Volumio.
+
+That's it! You have now installed PuTTY and established an SSH connection to your Volumio instance running on the Raspberry Pi. You can now interact with Volumio headlessly using the PuTTY terminal on your PC.
 ```
 git clone http://github.com/theshepherdmatt/NR1-UI.git
 
