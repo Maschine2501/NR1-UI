@@ -13,7 +13,8 @@ Here's a link to download the imager for windows https://downloads.raspberrypi.o
 And Mac https://downloads.raspberrypi.org/imager/imager_latest.dmg
 
 b) Insert the SD card: 
-Insert the SD card into your computer's SD card reader. You might need a usb sd card adapter like this https://amzn.eu/d/9YCCNkn
+Insert the SD card into your computer's SD card reader. 
+If your pc doesn't have a sd card slot you might need a usb sd card adapter like this https://amzn.eu/d/9YCCNkn
 
 c) Launch Raspberry Pi Imager: 
 Open the Raspberry Pi Imager software that you installed in step 1.
