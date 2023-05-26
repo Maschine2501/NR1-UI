@@ -5,7 +5,7 @@ This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/
 
 ## [1. Installation steps]
 ---
-In this process, we are connecting to the Raspberry Pi running Volumio using PuTTY, an SSH client. Once connected, we are cloning a specific repository from GitHub that contains the main software, in this case, called NR1-UI. After cloning the repository, we run an installation script to set up the software components. This process allows us to install and configure the main software on the Raspberry Pi remotely, without the need for direct physical access to the device.
+Alright, let's jazz up this Raspberry Pi adventure! First, we'll connect to the Raspberry Pi running Volumio using PuTTY, our trusty SSH sidekick. Once we're in, get ready to clone a super cool repository called NR1-UI from GitHub. It's like discovering a treasure trove of awesome software! After we've snagged that gem, we'll kick off the installation script and watch the magic happen. It's like sprinkling tech fairy dust! The best part? We can do all of this remotely, from the comfort of our own devices. No need to don a lab coat or wield a screwdriver—just pure digital fun awaits us!
 ---
 Step [1: Download Volumio onto your sd card]
 
