@@ -35,8 +35,8 @@ Once the writing process is finished, safely eject the SD card from your compute
 ## [Step 2: Install Volumio]
 
 
-a) Power on the Raspberry Pi: 
-Connect the power supply to the Raspberry Pi, and it will boot up.
+a) Insert your SD and power up:
+Insert you sd card into the slot underneath the Raspberry Pi, and connect the power supply to boot it up.
 
 b) Find Volumio's Wi-Fi access point: 
 Wait for a few minutes for Volumio to start up its Wi-Fi hotspot. It creates a temporary Wi-Fi network to allow you to connect and configure it. Look for a Wi-Fi network named something like "Volumio" or "Volumio-xxxx" (where "xxxx" represents a unique identifier).
