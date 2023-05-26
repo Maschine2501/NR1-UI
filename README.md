@@ -29,7 +29,7 @@ g) Eject the SD card:
 Once the writing process is finished, safely eject the SD card from your computer.
 
 ---
-Step 2: Install Volumio
+## [Step 2: Install Volumio]
 
 
 a) Power on the Raspberry Pi: 
@@ -52,6 +52,8 @@ Once you have configured the Wi-Fi settings in Volumio, disconnect from Volumio'
 
 g) Access Volumio on your network: 
 After reconnecting to your regular Wi-Fi network, you can now access Volumio by entering "volumio.local" or the IP address assigned to the Raspberry Pi by your router in the web browser on any device connected to the same network.
+
+By following these steps, you should be able to connect to Volumio on your Raspberry Pi headlessly using its Wi-Fi access point and configure it to connect to your desired Wi-Fi network.
 ```
 git clone http://github.com/theshepherdmatt/NR1-UI.git
 
