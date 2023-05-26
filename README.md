@@ -27,7 +27,6 @@ Click on "Write" to start writing the Volumio image to the SD card. This process
 
 g) Eject the SD card: 
 Once the writing process is finished, safely eject the SD card from your computer.
----
 
 Step 2: Install Volumio
 
