@@ -59,7 +59,7 @@ After reconnecting to your regular Wi-Fi network, you can now access Volumio by 
 By following these steps, you should be able to connect to Volumio on your Raspberry Pi headlessly using its Wi-Fi access point and configure it to connect to your desired Wi-Fi network.
 
 ---
-## [Step 2: Install Putty]
+## [Step 3: Install Putty]
 
 Now we are going 'Headless' which means operating the device without a dedicated monitor, keyboard, or mouse connected to it. Instead, you can access and control the Raspberry Pi remotely from another device, such as a computer or smartphone, using network protocols like SSH (Secure Shell) or VNC (Virtual Network Computing). This allows you to interact with and manage the Raspberry Pi without the need for physical peripherals directly connected to it, making it more convenient for certain use cases or environments.
 
@@ -91,6 +91,20 @@ i) Begin using Volumio through SSH:
 Once successfully connected, you can use the command-line interface to control and configure Volumio.
 
 That's it! You have now installed PuTTY and established an SSH connection to your Volumio instance running on the Raspberry Pi. You can now interact with Volumio headlessly using the PuTTY terminal on your PC.
+
+---
+## [Step 3: Install the main NR1-UI software]
+
+a) Open PuTTY: 
+Launch the PuTTY application on your computer (if its not already open)
+
+b) Connect to your Raspberry Pi: 
+Enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or IP address)" field. Make sure the connection type is set to "SSH." Click the "Open" button to initiate the SSH connection.
+
+c) Login: When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
+
+e) Clone the repository: In the PuTTY terminal, type the following command and press Enter:
+
 ```
 git clone http://github.com/theshepherdmatt/NR1-UI.git
 
