@@ -5,9 +5,9 @@ This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/
 
 ## [1. Installation steps]
 ---
-git clone http://github.com/theshepherdmatt/NR1-UI.git
+'''git clone http://github.com/theshepherdmatt/NR1-UI.git
 
-bash NR1-UI/install.sh
+bash NR1-UI/install.sh'''
 
 ---
 #### Configuration Manual (will follow soon!)
