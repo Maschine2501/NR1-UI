@@ -5,7 +5,7 @@ This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/
 
 ## [1. Installation steps]
 ---
-Get ready for a delightful Raspberry Pi escapade filled with fun and relaxation! Our journey begins with the installation of Raspberry Pi Imager, a magical tool that lets us breathe life into our Pi. With that in place, we'll dive into the enchanting world of Volumio, a music player that will make your ears dance with joy. Next, we'll unleash the power of PuTTY, our trusty companion who will connect us to our Pi remotely, no strings attached. But hold on tight, because the excitement doesn't end there! We'll embark on an exhilarating quest, cloning the mesmerizing NR1-UI repository from GitHub. It's like discovering a hidden treasure chest of amazing software wonders. So, grab your favorite beverage, sit back, and let's embark on this whimsical Raspberry Pi adventure together!
+Get ready for a jolly Raspberry Pi escapade full of charm and relaxation! Our adventure begins by installing the splendid Raspberry Pi Imager, a marvellous tool that breathes life into our Pi. With that sorted, we'll dive into the enchanting realm of Volumio, a music player that will make your ears twinkle with joy. Next, we'll unleash the power of PuTTY, our trusty companion who will connect us to our Pi remotely, without a hitch. But hang on tight, because the excitement doesn't stop there! We'll embark on an exhilarating quest, cloning the mesmerising NR1-UI repository from GitHub. It's like discovering a hidden treasure trove of marvellous software wonders. So, grab your favourite cuppa, settle in, and let's embark on this whimsical Raspberry Pi adventure together!
 ---
 Step [1: Download Volumio onto your sd card]
 
