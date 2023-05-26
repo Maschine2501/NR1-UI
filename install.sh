@@ -21,8 +21,6 @@ sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-de
 git clone https://github.com/Maschine2501/cava.git
 git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall
 
-sudo chmod +x /home/volumio/NR1-UI/PreConfiguration.sh
-sudo chmod +x /home/volumio/NR1-UI/pcf-i2c-adress-config.sh
 sudo chmod +x /home/volumio/NR1-UI/ftp.sh
 
 sudo echo "dtparam=spi=on" >> /boot/userconfig.txt
