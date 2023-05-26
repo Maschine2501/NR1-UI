@@ -101,9 +101,11 @@ Launch the PuTTY application on your computer (if its not already open)
 b) Connect to your Raspberry Pi: 
 Enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or IP address)" field. Make sure the connection type is set to "SSH." Click the "Open" button to initiate the SSH connection.
 
-c) Login: When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
+c) Login: 
+When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
 
-e) Clone the repository: In the PuTTY terminal, copy and paste the 2 lines below and press Enter:
+e) Clone the repository: 
+In the PuTTY terminal, copy and paste the 2 lines below and press Enter:
 
 ```
 git clone http://github.com/theshepherdmatt/NR1-UI.git
