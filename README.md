@@ -103,13 +103,14 @@ Enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or 
 
 c) Login: When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
 
-e) Clone the repository: In the PuTTY terminal, type the following command and press Enter:
+e) Clone the repository: In the PuTTY terminal, copy and paste the 2 lines below and press Enter:
 
 ```
 git clone http://github.com/theshepherdmatt/NR1-UI.git
 
 bash NR1-UI/install.sh
 ```
+This will take upto 40 - 50 minutes, so put the kettle on or walk the dog and let the pi do its thing.
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MadeByGloria.jpg)
 [Logo made by glorious @Klassik_Otaku](http://www.instagram.com/klassik_otaku)
