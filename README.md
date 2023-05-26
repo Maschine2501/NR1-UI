@@ -5,7 +5,7 @@ This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/
 
 ## [1. Installation steps]
 ---
-Step 1: Download Volumio
+Step 1: Download Volumio onto your sd card
 
 a) Download Raspberry Pi Imager: 
 Go to the Raspberry Pi website (www.raspberrypi.org) and download the Raspberry Pi Imager for your operating system (Windows, macOS, or Linux). Install the imager on your computer.
