@@ -11,8 +11,9 @@ Step [1: Download Volumio onto your sd card]
 
 a) Download Raspberry Pi Imager: 
 On your pc or laptop go to the Raspberry Pi website (www.raspberrypi.org) and download the Raspberry Pi Imager for your operating system (Windows, macOS, or Linux). Install the imager on your computer. 
+
 Here's a link to download the imager for windows https://downloads.raspberrypi.org/imager/imager_latest.exe
-And Mac https://downloads.raspberrypi.org/imager/imager_latest.dmg
+And for Mac https://downloads.raspberrypi.org/imager/imager_latest.dmg
 
 b) Insert the SD card: 
 Insert the SD card into your computer's SD card reader. 
