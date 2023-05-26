@@ -8,7 +8,7 @@ This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/
 Step [1: Download Volumio onto your sd card]
 
 a) Download Raspberry Pi Imager: 
-Go to the Raspberry Pi website (www.raspberrypi.org) and download the Raspberry Pi Imager for your operating system (Windows, macOS, or Linux). Install the imager on your computer.
+On your pc or laptop go to the Raspberry Pi website (www.raspberrypi.org) and download the Raspberry Pi Imager for your operating system (Windows, macOS, or Linux). Install the imager on your computer. Here's a link to download the imager onto using windows https://downloads.raspberrypi.org/imager/imager_latest.exe
 
 b) Insert the SD card: 
 Insert the SD card into your computer's SD card reader.
