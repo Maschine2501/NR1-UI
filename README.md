@@ -61,6 +61,8 @@ By following these steps, you should be able to connect to Volumio on your Raspb
 ---
 ## [Step 2: Install Putty]
 
+Now we are going 'Headless' which means operating the device without a dedicated monitor, keyboard, or mouse connected to it. Instead, you can access and control the Raspberry Pi remotely from another device, such as a computer or smartphone, using network protocols like SSH (Secure Shell) or VNC (Virtual Network Computing). This allows you to interact with and manage the Raspberry Pi without the need for physical peripherals directly connected to it, making it more convenient for certain use cases or environments.
+
 a) Download PuTTY: 
 Go to the PuTTY website (www.putty.org) and download the PuTTY installer for your operating system. Choose the appropriate installer based on your system architecture (32-bit or 64-bit). (Don't worry if you choose the wrong one as your pc will let you know)
 
