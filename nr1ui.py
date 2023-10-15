@@ -37,6 +37,7 @@ import urllib.request
 from urllib.parse import* #from urllib import*
 from urllib.parse import urlparse
 from urllib.parse import urlencode
+from modules.loading_sequence import show_loading_sequence
 import ssl
 import re
 import fnmatch
@@ -1825,8 +1826,14 @@ RightKnob_Rotation.setCallback(RightKnob_RotaryEvent)
 #/_____/\____/\____/\__/     /_____/\____/\__, /\____/  (_)  
 #    
 show_logo(oledBootLogo, oled)
+sleep(5)
+
 if ledActive == True and firstStart == True:
     SysStart()
+
+# Show loading sequence
+show_loading_sequence(oled, "NR1-UI/img")
+
 #show_logo(oled1BootLogo, oled)
 #show_logo2(oled2BootLogo, oled2)
 if ledActive == True and firstStart == True:
@@ -1836,7 +1843,7 @@ if ledActive == True and firstStart == True:
 else: 
     firstStart = False
 #sleep(2.0)
-sleep(2)
+sleep(5)
 SetState(STATE_PLAYER)
 #________________________________________________________________________________________
 #________________________________________________________________________________________
