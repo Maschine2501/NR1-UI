@@ -1,0 +1,16 @@
+--2023-10-16 09:28:15--  https://www.dropbox.com/scl/fi/yvebq3pd5zs9zw9e7hn7o/dot3.bmp?rlkey=oxau7e4ti5cc27gwqk4xenl0f
+Resolving www.dropbox.com (www.dropbox.com)... 162.125.64.18, 2620:100:6020:18::a27d:4012
+Connecting to www.dropbox.com (www.dropbox.com)|162.125.64.18|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com/cd/0/inline/CFtryXn94Bx-iBlVvTwQtstODwHMqgn9hqUxlq0GV4YqrGYaOLIOWuks75zNA1m7IzK8qcT2d1CAsFV1xio1r7ckCjE7vSMQuqrNmp5Eo_Wdzh0tK3BujFnfX0G46Q-HAIs/file# [following]
+--2023-10-16 09:28:16--  https://ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com/cd/0/inline/CFtryXn94Bx-iBlVvTwQtstODwHMqgn9hqUxlq0GV4YqrGYaOLIOWuks75zNA1m7IzK8qcT2d1CAsFV1xio1r7ckCjE7vSMQuqrNmp5Eo_Wdzh0tK3BujFnfX0G46Q-HAIs/file
+Resolving ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com (ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com)... 162.125.64.15, 2620:100:6020:15::a27d:400f
+Connecting to ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com (ucccc30057b4a92f6120f1075344.dl.dropboxusercontent.com)|162.125.64.15|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 49208 (48K) [image/x-ms-bmp]
+Saving to: 'dot3.bmp?rlkey=oxau7e4ti5cc27gwqk4xenl0f'
+
+          dot3.bmp?   0%[                    ]       0  --.-KB/s               dot3.bmp?rlkey=oxau 100%[===================>]  48.05K  --.-KB/s    in 0.03s   
+
+2023-10-16 09:28:16 (1.61 MB/s) - 'dot3.bmp?rlkey=oxau7e4ti5cc27gwqk4xenl0f' saved [49208/49208]
+
