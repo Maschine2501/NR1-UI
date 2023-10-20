@@ -38,6 +38,8 @@ from urllib.parse import* #from urllib import*
 from urllib.parse import urlparse
 from urllib.parse import urlencode
 from modules.loading_sequence import show_loading_sequence
+from modules.loading_animation import show_loading_gif
+from modules.bootlogo import show_boot_logo_gif
 import ssl
 import re
 import fnmatch
@@ -1825,14 +1827,22 @@ RightKnob_Rotation.setCallback(RightKnob_RotaryEvent)
 # / /_/ / /_/ / /_/ / /_/_____/ /___/ /_/ / /_/ / /_/ /  _   
 #/_____/\____/\____/\__/     /_____/\____/\__, /\____/  (_)  
 #    
-show_logo(oledBootLogo, oled)
-sleep(5)
+boot_logo_path = "/home/volumio/NR1-UI/img/bootlogo.gif"
+#show_logo(oledBootLogo, oled)
+#sleep(5)
+
+loading_logo_path = "/home/volumio/NR1-UI/img/loading.gif"
+show_boot_logo_gif(oled, boot_logo_path, display_time=10)
+
+# Display the loading logo for 30 seconds
+show_loading_gif(oled, loading_logo_path, display_time=30)
+
 
 if ledActive == True and firstStart == True:
     SysStart()
 
 # Show loading sequence
-show_loading_sequence(oled, "NR1-UI/img")
+#show_loading_sequence(oled, "NR1-UI/img")
 
 #show_logo(oled1BootLogo, oled)
 #show_logo2(oled2BootLogo, oled2)
@@ -1910,7 +1920,7 @@ last_press_time = [0] * (len(ROW_PINS) * len(COLUMN_PINS))
 last_button_press_time = 0
 
 turn_off_leds_after_delay(mcp23017, delay, last_press_time)
-light_up_leds(mcp23017)
+#light_up_leds(mcp23017)
 setup_pins()
 
 
