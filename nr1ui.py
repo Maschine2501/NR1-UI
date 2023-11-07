@@ -11,7 +11,7 @@ import json
 import pycurl
 import pprint
 import subprocess
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import*
 #from time import sleep
 from datetime import timedelta as timedelta
@@ -25,11 +25,8 @@ from PIL import ImageFont
 import smbus
 from modules.pushbutton import PushButton
 from modules.rotaryencoder import RotaryEncoder
-from modules.mcp23017 import MCP23017, DEVICE_ADDR
-from modules.leds import delay, light_up_leds, turn_off_leds_after_delay, deactivate_play, deactivate_pause, deactivate_back, deactivate_forward, deactivate_shuffle, deactivate_repeat, deactivate_ButtonC, deactivate_favourites
-from modules.volumiosocket import activate_favourites, activate_play, activate_pause, activate_back, activate_forward, activate_ButtonC
-from modules.volumiosocket import monitor_volumio_state, get_volumio_state
-from modules.buttons import setup_pins, button_pressed, read_buttons, ROW_PINS, COLUMN_PINS
+from modules.buttonsleds import ButtonC_PushEvent, update_leds_with_volumio_state, check_buttons_and_update_leds, read_button_matrix, control_leds, debounce_button, activate_play, activate_pause, activate_back, activate_forward, activate_shuffle, activate_repeat, activate_favourites, activate_ButtonC
+#from modules.button_functions import ButtonC_PushEvent
 import uuid
 import numpy as np
 from ConfigurationFiles.PreConfiguration import*
@@ -44,6 +41,8 @@ import ssl
 import re
 import fnmatch
 sleep(5.0)
+
+GPIO.setwarnings(False)
 
 # Socket-IO-Configuration for Rest API
 volumio_host = 'localhost'
@@ -117,7 +116,7 @@ oledPlayFormatRefreshLoopCount = 3
 # ___/ / /_/ /_/ / /  / /_/_____/ /_/ /  __/ __/ / / / / / /_/ / /_/ / / / (__  )  _   
 #/____/\__/\__,_/_/   \__/      \__,_/\___/_/ /_/_/ /_/_/\__/_/\____/_/ /_/____/  (_)  
 #     
-
+0
 firstStart = True
 
 if DisplayTechnology == 'spi1322':
@@ -1738,6 +1737,7 @@ class ScreenSelectMenu():
 #/_____/\__,_/\__/\__/\____/_/ /_/  /_/  \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/  (_)  
 #                                                                                       	
 
+
 def ButtonC_PushEvent():
     print('ButtonC short press event')
     if oled.state == STATE_PLAYER and oled.playState == 'stop':
@@ -1746,7 +1746,7 @@ def ButtonC_PushEvent():
         oled.state = 3
         oled.modal = ScreenSelectMenu(oled.HEIGHT, oled.WIDTH)
         sleep(0.2)
-
+    pass
 
 def ButtonD_PushEvent():
     print('ButtonD short press event')
@@ -1768,6 +1768,7 @@ def ButtonD_PushEvent():
 
 
 button_action_map = {
+    'ButtonD': ButtonD_PushEvent,
     'ButtonC': ButtonC_PushEvent,
 }
 
@@ -1908,24 +1909,9 @@ def PlaypositionHelper():
 PlayPosHelp = threading.Thread(target=PlaypositionHelper, daemon=True)
 PlayPosHelp.start()
 
-bus = smbus.SMBus(1)
-mcp23017 = MCP23017(bus, DEVICE_ADDR)
-
-monitor_thread = threading.Thread(target=monitor_volumio_state, args=(mcp23017,))
-monitor_thread.daemon = True
-monitor_thread.start()
-
-delay = 5
-last_press_time = [0] * (len(ROW_PINS) * len(COLUMN_PINS))
-last_button_press_time = 0
-
-turn_off_leds_after_delay(mcp23017, delay, last_press_time)
-#light_up_leds(mcp23017)
-setup_pins()
-
-
 while True:
-    read_buttons(mcp23017, volumioIO, button_action_map)
+    update_leds_with_volumio_state()
+    check_buttons_and_update_leds(ButtonC_PushEvent)
     if emit_track and oled.stateTimeout < 4.5:
         emit_track = False
         try:
