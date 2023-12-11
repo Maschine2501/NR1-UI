@@ -21,9 +21,9 @@ bus = smbus.SMBus(1)
 
 print("SMBus initialized.")
 
-# Port B: Set PB0-PB3 as input with pull-up resistors, PB4-PB5 as output
-bus.write_byte_data(MCP23017_ADDRESS, MCP23017_IODIRB, 0x0F)  # Inputs: PB0-PB3
-bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPPUB, 0x0F)   # Enable pull-ups: PB0-PB3
+# Port B: Set PB0 and PB1 as output, PB2-PB5 as input with pull-up resistors
+bus.write_byte_data(MCP23017_ADDRESS, MCP23017_IODIRB, 0x3C)  # 0b00111100 - PB0-PB1 as output, PB2-PB5 as input
+bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPPUB, 0x3C)   # Enable pull-ups for PB2-PB5
 
 # Port A: Set as outputs for LEDs
 bus.write_byte_data(MCP23017_ADDRESS, MCP23017_IODIRA, 0x00)  # Outputs: PA0-PA7
@@ -40,24 +40,25 @@ print("Connected to Volumio over SocketIO.")
 
 prev_button_state = 0  # Initialize a variable to hold the previous button state
 
-# 4 rows, 2 columns
+# 4 rows, 2 columns with swapped column numbers
 button_map = [
-    [1, 2],  # Row 1
-    [3, 4],  # Row 2
-    [5, 6],  # Row 3
-    [7, 8]   # Row 4
+    [2, 1],  # Row 1
+    [4, 3],  # Row 2
+    [6, 5],  # Row 3
+    [8, 7]   # Row 4
 ]
 
 def read_button_matrix():
     button_matrix_state = [[0]*2 for _ in range(4)]  # Create a 4x2 matrix filled with zeros
     for column in range(2):
-        # Drive one column low at a time
-        bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB, ~(1 << (column + 4)) & 0xF0)
-        # Read the state of the row pins
-        row_state = bus.read_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB) & 0x0F
+        # Drive one column low at a time (for PB0 and PB1)
+        bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB, ~(1 << column) & 0x03)
+        # Read the state of the row pins (PB2-PB5)
+        row_state = bus.read_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB) & 0x3C
         # Update the button matrix state
         for row in range(4):
-            button_matrix_state[row][column] = (row_state >> row) & 1
+            # Shift row_state right by 2 to align with PB2 starting position
+            button_matrix_state[row][column] = (row_state >> (row + 2)) & 1
     return button_matrix_state
 
 
@@ -183,15 +184,13 @@ def check_buttons_and_update_leds(button_c_callback=None):
     global prev_button_state  # Use the global variable prev_button_state
     button_matrix = read_button_matrix()
 
-    # Iterate through each button and check its state
     for row in range(4):  # Assuming 4 rows
-        for col in range(2):  # Assuming 2 columns
-            button_id = button_map[row][col]  # Get the button ID from the button_map
-            current_button_state = button_matrix[row][col]  # Get the current button state
+        for col in range(2):  # Assuming 2 columns (but swapped)
+            button_id = button_map[row][col]
+            current_button_state = button_matrix[row][col]
 
-            # Check for button press (assuming 0 means pressed)
+            # Check for rising edge (button press)
             if current_button_state == 0 and prev_button_state[row][col] != current_button_state:
-                # Here, button_id is already assigned, so you can safely use it
                 print(f"Button {button_id} pressed")
                 
                 # Check if the pressed button is ButtonC, whose ID is 8
@@ -228,8 +227,8 @@ def check_buttons_and_update_leds(button_c_callback=None):
                 if button_id in button_action_map:
                     button_action_map[button_id]()
 
-                # Update the LED state here if needed
-                led_state = 1 << (row * 2 + col)
+                swapped_col = 1 - col  # Swap 0 to 1 and 1 to 0
+                led_state = 1 << (row * 2 + swapped_col)
                 control_leds(led_state)
 
             # Update the previous button state
@@ -237,4 +236,3 @@ def check_buttons_and_update_leds(button_c_callback=None):
 
             # Wait a bit before checking again to debounce
     time.sleep(0.1)
-
