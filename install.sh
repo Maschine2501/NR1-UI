@@ -80,4 +80,6 @@ sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/
 echo -e "\e[92mFifo-Audio-Outputs for Cava have been added to mpd.conf\e[0m"
 sudo service mpd restart
 
+echo -e "\e[92m**** Script has downloaded and executed successfully! ****\e[0m"
+
 exit 0
