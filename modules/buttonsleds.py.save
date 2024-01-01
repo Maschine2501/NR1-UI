@@ -1,0 +1,226 @@
+import smbus
+import time
+import subprocess
+import requests
+import json
+from socketIO_client import SocketIO
+
+MCP23017_IODIRA = 0x00  # I/O direction register for Port A
+MCP23017_IODIRB = 0x01  # I/O direction register for Port B
+MCP23017_GPIOA = 0x12   # Register for outputs on Port A
+MCP23017_GPIOB = 0x13   # Register for outputs on Port B
+MCP23017_GPPUA = 0x0C   # Pull-up resistors configuration for Port A
+MCP23017_GPPUB = 0x0D   # Pull-up resistors configuration for Port B
+MCP23017_ADDRESS = 0x27
+
+print("Configuring MCP23017 I/O expander.")
+
+# Initialize SMBus
+bus = smbus.SMBus(1)
+
+print("SMBus initialized.")
+
+# Port B: Set PB0-PB3 as input with pull-up resistors, PB4-PB5 as output
+bus.write_byte_data(MCP23017_ADDRESS, MCP23017_IODIRB, 0x0F)  # Inputs: PB0-PB3
+bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPPUB, 0x0F)   # Enable pull-ups: PB0-PB3
+
+# Port A: Set as outputs for LEDs
+bus.write_byte_data(MCP23017_ADDRESS, MCP23017_IODIRA, 0x00)  # Outputs: PA0-PA7
+
+print("MCP23017 ports configured.")
+
+
+print("Starting the Volumio button interface script.")
+
+VOLUMIO_URL = "http://localhost:3000/api/v1/commands/?cmd="
+
+volumioIO = SocketIO('localhost', 3000)
+
+print("Connected to Volumio over SocketIO.")
+
+prev_button_state = 0  # Initialize a variable to hold the previous button state
+
+# 4 rows, 2 columns
+button_map = [
+    [1, 2],  # Row 1
+    [3, 4],  # Row 2
+    [5, 6],  # Row 3
+    [7, 8]   # Row 4
+]
+
+def read_button_matrix():
+    button_matrix_state = [[0]*2 for _ in range(4)]  # Create a 4x2 matrix filled with zeros
+    for column in range(2):
+        # Drive one column low at a time
+        bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB, ~(1 << (column + 4)) & 0xF0)
+        # Read the state of the row pins
+        row_state = bus.read_byte_data(MCP23017_ADDRESS, MCP23017_GPIOB) & 0x0F
+        # Update the button matrix state
+        for row in range(4):
+            button_matrix_state[row][column] = (row_state >> row) & 1
+    return button_matrix_state
+
+
+def control_leds(led_state):
+    print(f"Setting LED state to {led_state}.")
+    bus.write_byte_data(MCP23017_ADDRESS, MCP23017_GPIOA, led_state)
+
+# Debounce function
+def debounce_button(button_state):
+    debounce_time = 0.25  # Adjust this delay as needed
+    time.sleep(debounce_time)
+    new_button_state = read_button_matrix()
+    return new_button_state == button_state
+
+# Volumio Activation Functions (These are your provided functions)
+def activate_play():
+    print("Activating play.")
+    try:
+        volumioIO.emit('play')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Playback started.")
+
+def activate_pause():
+    print("Activating pause.")
+    try:
+        volumioIO.emit('pause')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Playback paused.")
+
+def activate_back():
+    print("Activating previous track.")
+    try:
+        volumioIO.emit('previous')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Track skipped back.")
+
+def activate_forward():
+    print("Activating next track.")
+    try:
+        volumioIO.emit('next')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Track skipped forward.")
+    
+def activate_shuffle():
+    print("Toggling random mode.")
+    try:
+        volumioIO.emit('random')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Random mode toggled.")
+
+def activate_repeat():
+    print("Toggling repeat mode.")
+    try:
+        volumioIO.emit('repeat')
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Repeat mode toggled.")
+    
+def activate_favourites():
+    print("Loading favourites playlist.")
+    try:
+        volumioIO.emit('playPlaylist', {'name': 'favourites'})
+    except Exception as e:
+        print("Error: ", e)
+    else:
+        print("Favourites playlist loaded.")
+
+def activate_ButtonC():
+    print("ButtonC pressed.")
+    # Call any additional functionality you'd like when ButtonC is pressed.
+
+def get_volumio_state():
+    print("Fetching Volumio state.")
+    try:
+        response = requests.get("http://localhost:3000/api/v1/getState")
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print("Error: ", e)
+        return None
+    else:
+        return json.loads(response.text)
+
+print("Starting button check loop.")
+
+
+VOLUMIO_STATE_TO_LED = {
+    'play': 0b00000001,  # Example LED pattern for play state
+    'stop': 0b00000010,  # Example LED pattern for pause state
+    # ... other states
+}
+
+startup_complete = False
+
+def update_leds_with_volumio_state():
+    global startup_complete
+    if not startup_complete:
+        return  # Do nothing if the startup sequence is not complete
+
+    volumio_state = get_volumio_state()
+    if volumio_state:
+        status = volumio_state.get('status')
+        # Update the LEDs based on the Volumio state, but only if it's not 'play', 
+        # because the 'play' LED is already on as a startup indicator.
+        if status == 'stop':
+            # When playback stops, turn on the 'stop' LED
+            control_leds(1 << STOP_LED_PIN)  # Replace STOP_LED_PIN with the actual pin for the 'stop' LED
+        elif status == 'play':
+            # If playback starts, turn off the 'stop' LED (if it was on)
+            control_leds(1 << PLAY_LED_PIN)  # Keep the 'play' LED on
+        # Add additional conditions for other statuses if needed
+
+
+# Initialize prev_button_state at the top level of your script
+prev_button_state = [[1]*2 for _ in range(4)]  # Default to 'not pressed' state
+
+# This function can be called from your main script to check buttons and update LEDs
+def check_buttons_and_update_leds():
+    global prev_button_state  # Declare as global to modify it within this function
+    button_matrix = read_button_matrix()
+
+    # Check if a button is pressed
+    for row in range(4):  # Assuming 4 rows
+        for col in range(2):  # Assuming 2 columns
+            button_id = button_map[row][col]
+            current_button_state = button_matrix[row][col]
+
+            # Check for rising edge (button press)
+            if current_button_state == 0 and prev_button_state != current_button_state:
+                print(f"Button {button_id} pressed")
+                if button_id == 1:
+                    activate_play()
+                elif button_id == 2:
+                    activate_pause()
+                elif button_id == 3:
+                    activate_back()
+                elif button_id == 4:
+                    activate_forward()
+                elif button_id == 5:
+                    activate_shuffle()
+                elif button_id == 6:
+                    activate_repeat()
+                elif button_id == 7:
+                    activate_favourites()
+                elif button_id == 8:
+                    activate_ButtonC()
+
+                # Update the LED state here if needed
+                led_state = 1 << (row * 2 + col)
+                control_leds(led_state)
+
+            # Update the previous button state
+            prev_button_state = current_button_state
+
+            # Wait a bit before checking again to debounce
+    time.sleep(0.1) 

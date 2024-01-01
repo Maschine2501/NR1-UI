@@ -1,90 +1,121 @@
 Inspired by: [diehardsk/Volumio-OledUI](https://github.com/diehardsk/Volumio-OledUI) // 
 This is the Python3 version of [Maschine2501/Volumio-OledUI](https://github.com/Maschine2501/Volumio-OledUI/)
 
-# 18.10.2022: The Journey came to an End.
-### I wont push this project any further, cause I do not longer use Volumio. Feel free to fork this Project. I'll leave the Discord Chanel open for you, so you can reach out for each others support.
-
-## It was a great time, Thank you! <3
-
-# 27.03.2022 Volumio 3.xx is now supported:
-Today I fixed the installation routine for the new Volumio 3.xx.
-I tested the Installation script twice on a fresh installed RPi4 -> Succeeded both times.
-If you have an issue, please report it :)
-Here is the instruction for the Installation: [Install-Manuall for Volumio 3.xx NR1-UI](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation)
-
-## Supported Displays:
-- [x] SSD1306 (monochrome Oled 128x64)
-- [x] SSD1322 (grayscale Oled 256x64)
-- [x] SSD1351  (full color Oled 128x128)
-- [x] ST7735 (full color LCD 160x128)
-
-## Wishlist/To-Do:
-- [ ] ILI9341 (Maybe ILI9488) display support(Alpha-phase)
-
-- [ ] SSD1309 (monochrome Oled 128x64)
-- [ ] BGR / RGB Selection for ssd1351 displays
-- [ ] Sort out / Clean up Setup
-- [ ] Investigate Problem with some DAC's
-- [ ] Implement Volume Control
-- [ ] Implement Source Dialog
-- [ ] Implement a "Settings Menu"
-
-
-
-# NR1-UI
-Im building a Network Hifi Receiver from scratch. Main components are a RaspberryPi4 and an HiFi-Berry-Dac. An old Braun T2 Tuner serves as case for the player.
-To keep as much as possible from the look of the device I needed an Interface for Volumio. And especialy one that supports a 3,2" ssd1322 SPI Oled with 256x64Pixel.
-After doing some research I found diehrdsk/Volumio-OledUI. It fullfills many points on my "wishlist" but not nearly all.
-As we all know, the way is the destination, i spent some time (much time....) in modifying the original code.
-The project is not finished yet... but close the the goal!
-
-I try to assist you, if you got questions or even problems with the code, just contact me. 
-
-Time by time more informations in the [wiki](https://github.com/Maschine2501/NR1-UI/wiki) will follow...
-
-## The Code is modular and has a Setup-Process.
-
-#### [Features](https://github.com/Maschine2501/NR1-UI/wiki/Features)
-
-
-#### [Allready Done](https://github.com/Maschine2501/NR1-UI/wiki/Allready-Done)
-
-
-#### [Project on Volumio-Forum](https://community.volumio.org/t/oled-user-inteface-for-volumio-with-rotary-and-4-buttons-modular-highly-configurable-supports-ssd1306-and-ssd1322/40378?u=maschine2501)
-
 ---
 
-## [1. Installation steps](https://github.com/Maschine2501/NR1-UI/wiki/Volumio-Buster-Installation)
+## [1. Installation steps]
 ---
-
-#### Configuration Manual (will follow soon!)
+Welcome to the Raspberry Pi installation extravaganza! This comprehensive guide will take you through a series of steps to set up your Raspberry Pi with Volumio, the magical music player. We'll begin by installing the Raspberry Pi Imager, a handy tool that brings your Pi to life. Then, we'll dive into Volumio, a music player that will make your ears tingle with joy. To connect and control your Pi remotely, we'll harness the power of PuTTY, allowing for seamless access. And the grand finale awaits as we clone the NR1-UI repository from GitHub, unlocking a treasure trove of marvelous software wonders. So, fasten your seatbelts and get ready for a whimsical Raspberry Pi adventure that will leave you with a fully-equipped music powerhouse!
 ---
+Step [1: Download Volumio onto your sd card]
 
-#### [wiring / button-layout / truthtable](https://github.com/Maschine2501/NR1-UI/wiki/wiring-and-button-truth-table)
+a) Download Raspberry Pi Imager: 
+On your pc or laptop go to the Raspberry Pi website (www.raspberrypi.org) and download the Raspberry Pi Imager for your operating system (Windows, macOS, or Linux). Install the imager on your computer. 
+
+Here's a link to download the imager for windows https://downloads.raspberrypi.org/imager/imager_latest.exe
+And for Mac https://downloads.raspberrypi.org/imager/imager_latest.dmg
+
+b) Insert the SD card: 
+Insert the SD card into your computer's SD card reader. 
+If your pc doesn't have a sd card slot you might need a usb sd card adapter like this https://amzn.eu/d/9YCCNkn
+
+c) Launch Raspberry Pi Imager: 
+Open the Raspberry Pi Imager software that you installed in step 1.
+
+d) Select the operating system: 
+In Raspberry Pi Imager, click on "Choose OS" and scroll down to find "Media Player OS" in the list. Then select "Volumio" from the options.
+
+e) Choose the target storage: 
+Click on "Choose SD Card" and select the SD card that you inserted in step 2. Make sure to choose the correct one, as the imager will erase all data on the selected card.
+
+f) Write the image: 
+Click on "Write" to start writing the Volumio image to the SD card. This process may take a few minutes to complete.
+
+g) Eject the SD card: 
+Once the writing process is finished, safely eject the SD card from your computer.
+
 ---
+## [Step 2: Install Volumio]
 
-#### [hardware](https://github.com/Maschine2501/NR1-UI/wiki/hardware)
+
+a) Insert your SD and power up:
+Insert you sd card into the slot underneath the Raspberry Pi, and connect the power supply to boot it up.
+
+b) Find Volumio's Wi-Fi access point: 
+Wait for a few minutes for Volumio to start up its Wi-Fi hotspot. It creates a temporary Wi-Fi network to allow you to connect and configure it. Look for a Wi-Fi network named something like "Volumio" or "Volumio-xxxx" (where "xxxx" represents a unique identifier).
+
+c) Connect to Volumio's Wi-Fi network: 
+On your computer or mobile device, go to the Wi-Fi settings and select the Volumio Wi-Fi network. Connect to it using the default password, which is typically "volumio2" (without quotes).
+
+d) Access the Volumio web interface: 
+Once connected to the Volumio Wi-Fi network, open a web browser and enter "volumio.local" or "http://192.168.211.1" in the address bar. This will take you to the Volumio web interface.
+
+e) Set up Wi-Fi: 
+In the Volumio web interface, navigate to the "Network" section. Here, you can select your Wi-Fi network from the available networks and enter the necessary credentials (such as SSID and password). Save the settings.
+
+f) Reconnect to your regular Wi-Fi network: 
+Once you have configured the Wi-Fi settings in Volumio, disconnect from Volumio's Wi-Fi network on your computer or mobile device. Reconnect to your regular Wi-Fi network.
+
+g) Access Volumio on your network: 
+After reconnecting to your regular Wi-Fi network, you can now access Volumio by entering "volumio.local" or the IP address assigned to the Raspberry Pi by your router in the web browser on any device connected to the same network.
+
+By following these steps, you should be able to connect to Volumio on your Raspberry Pi headlessly using its Wi-Fi access point and configure it to connect to your desired Wi-Fi network.
+
 ---
+## [Step 3: Install Putty]
 
-#### [dependencies](https://github.com/Maschine2501/NR1-UI/wiki/dependencies)
+Now we are going 'Headless' which means operating the device without a dedicated monitor, keyboard, or mouse connected to it. Instead, you can access and control the Raspberry Pi remotely from another device, such as a computer or smartphone, using network protocols like SSH (Secure Shell) or VNC (Virtual Network Computing). This allows you to interact with and manage the Raspberry Pi without the need for physical peripherals directly connected to it, making it more convenient for certain use cases or environments.
+
+a) Download PuTTY: 
+Go to the PuTTY website (www.putty.org) and download the PuTTY installer for your operating system. Choose the appropriate installer based on your system architecture (32-bit or 64-bit). (Don't worry if you choose the wrong one as your pc will let you know)
+
+b) Run the PuTTY installer: 
+Double-click on the downloaded PuTTY installer file to run the installation wizard.
+
+c) Follow the PuTTY installation steps: 
+The installation wizard will guide you through the installation process. Accept the license agreement, choose the installation location, and select additional components if desired. Leave the default settings unless you have specific preferences.
+
+d) Launch PuTTY: 
+After the installation is complete, launch PuTTY from your Start menu or desktop shortcut.
+
+e) Configure PuTTY for SSH connection:
+In the PuTTY configuration window, enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or IP address)" field.
+
+f) Set the connection type: 
+Make sure the connection type is set to "SSH."
+
+g) Connect to Volumio: 
+Click the "Open" button to initiate the SSH connection to your Raspberry Pi running Volumio.
+
+h) Enter login credentials: 
+When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
+
+i) Begin using Volumio through SSH: 
+Once successfully connected, you can use the command-line interface to control and configure Volumio.
+
+That's it! You have now installed PuTTY and established an SSH connection to your Volumio instance running on the Raspberry Pi. You can now interact with Volumio headlessly using the PuTTY terminal on your PC.
+
 ---
+## [Step 3: Install the main NR1-UI software]
 
-#### [font-info and source](https://github.com/Maschine2501/NR1-UI/wiki/font-information-(source))
----
+a) Open PuTTY: 
+Launch the PuTTY application on your computer (if its not already open)
 
-## Your Display is not supported yet? You have an idea for a function/feature?
-### -> Contact me:
-#### [E-Mail](mailto:Maschine2501@gmx.de?subject=[GitHub]%20Source%20Han%20Sans)
-#### [Discord Server for direct contact: Click here to join...](https://discord.gg/GJ4ED3F)
+b) Connect to your Raspberry Pi: 
+Enter the IP address of your Raspberry Pi running Volumio in the "Host Name (or IP address)" field. Make sure the connection type is set to "SSH." Click the "Open" button to initiate the SSH connection.
 
+c) Login: 
+When prompted, enter the login credentials for Volumio. By default, the username is "volumio," and the password is "volumio."
 
-### To change the look/layout just press Button-C in "Standby-Screen" (Clock), select the desired Layout with the Rotary-Rotation and push the Rotary once to apply selection -> 
-![Screenselect](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/ssd1322Screenselect.png)
+e) Clone the repository: 
+In the PuTTY terminal, copy and paste the 2 lines below and press Enter:
 
-### Screenshots and Layout Overview:
-![Screenshots](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/screenshots/Screenshots.png)
+```
+git clone http://github.com/theshepherdmatt/NR1-UI.git
 
-### [buy me a coffee, or tip me ;-)](https://paypal.me/maschine2501)
+bash NR1-UI/install.sh
+```
+This will take upto 40 - 50 minutes, so put the kettle on or walk the dog and let the pi do its thing.
 
 ![MS2501](https://github.com/Maschine2501/NR1-UI/blob/master/wiki/MadeByGloria.jpg)
 [Logo made by glorious @Klassik_Otaku](http://www.instagram.com/klassik_otaku)

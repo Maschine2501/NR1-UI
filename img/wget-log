@@ -1,0 +1,16 @@
+--2023-10-17 12:02:11--  https://www.dropbox.com/scl/fi/nm72rpjtwau81gbfh1t9k/bootlogonew.gif?rlkey=e5rchjhbxndlmvbx59wvoez6z
+Resolving www.dropbox.com (www.dropbox.com)... 162.125.64.18, 2620:100:6020:18::a27d:4012
+Connecting to www.dropbox.com (www.dropbox.com)|162.125.64.18|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com/cd/0/inline/CFx46LEpf5kCGNI9TF-HzrGw5PF49t4YoCHAVsJaOa3HlsN0j55KHoiiDEufyhTYc4Ntd16NfD-O9B9E0vpolDR2Tkv3C31vqaEMAgKQsVsgZdzHo4yd47jZjyi9VHaLLvs/file# [following]
+--2023-10-17 12:02:12--  https://uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com/cd/0/inline/CFx46LEpf5kCGNI9TF-HzrGw5PF49t4YoCHAVsJaOa3HlsN0j55KHoiiDEufyhTYc4Ntd16NfD-O9B9E0vpolDR2Tkv3C31vqaEMAgKQsVsgZdzHo4yd47jZjyi9VHaLLvs/file
+Resolving uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com (uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com)... 162.125.64.15, 2620:100:6020:15::a27d:400f
+Connecting to uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com (uc3aa9b0353fe00af0bbb3a4b060.dl.dropboxusercontent.com)|162.125.64.15|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 116645 (114K) [image/gif]
+Saving to: 'bootlogonew.gif?rlkey=e5rchjhbxndlmvbx59wvoez6z'
+
+                    bootlogonew.gif?rlk   0%[                                                                             ]       0  --.-KB/s               bootlogonew.gif?rlkey=e5rchjhbxndlmvbx5 100%[============================================================================>] 113.91K  --.-KB/s    in 0.05s   
+
+2023-10-17 12:02:12 (2.46 MB/s) - 'bootlogonew.gif?rlkey=e5rchjhbxndlmvbx59wvoez6z' saved [116645/116645]
+
