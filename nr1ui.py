@@ -247,7 +247,7 @@ if DisplayTechnology == 'spi1322':
     iconfontBottom = load_font('entypo.ttf', 10)                      #used for icons under the screen / button layout
     labelfontfa = load_font('fa-solid-900.ttf', 12)                   #used for icons under the screen / button layout
     labelfontfa2 = load_font('fa-solid-900.ttf', 14)
-    fontClock = load_font('DSG.ttf', 30)                              #used for clock
+    fontClock = load_font('DSG.ttf', 45)                              #used for clock
     fontDate = load_font('Oxanium-Light.ttf', 12)                  #used for Date 'DSEG7Classic-Regular.ttf'
     fontIP = load_font('Oxanium-Light.ttf', 12)                    #used for IP 'DSEG7Classic-Regular.ttf'
 
