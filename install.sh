@@ -75,8 +75,10 @@ sudo systemctl enable cava2.service
 echo -e "\e[92mInstalling NR1-UI and Service File...\e[0m"
 chmod +x /home/volumio/NR1-UI/nr1ui.py
 sudo cp /home/volumio/NR1-UI/service-files/nr1uibuster.service /lib/systemd/system/
-sudo systemctl daemon-reload
+sudo cp /home/volumio/NR1-UI/service-files/mystreamerinit.service /lib/systemd/system/
+sudo systemctl enable mystreamerinit.service
 sudo systemctl enable nr1uibuster.service
+sudo systemctl daemon-reload
 sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd
 echo -e "\e[92mFifo-Audio-Outputs for Cava have been added to mpd.conf\e[0m"
 sudo service mpd restart
