@@ -1,0 +1,17 @@
+[Unit]
+
+Description=Initialize MCP23017 and LED on Boot
+
+After=network-online.target
+
+[Service]
+
+Type=oneshot
+
+ExecStart=/usr/bin/python3 home/volumio/indicatorLEDS/startup_init.py
+
+RemainAfterExit=yes
+
+[Install]
+
+WantedBy=multi-user.target
