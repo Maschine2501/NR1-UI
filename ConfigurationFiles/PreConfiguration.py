@@ -17,7 +17,7 @@ oledRtrBtn = 6
 #config for Display:
 DisplayTechnology = "spi1322"
 NowPlayingLayout = "Spectrum-Center"
-oledrotation = 0
+oledrotation = 2
 
 #config for timers:
 oledPause2StopTime = 5.0
