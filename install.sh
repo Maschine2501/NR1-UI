@@ -15,8 +15,9 @@ echo "_________________________________________________________"
 sudo dpkg-reconfigure tzdata
 sudo apt-get update
 sudo apt-get install -y python3-setuptools python3-pip python-rpi.gpi
-sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar numpy requests luma.lcd readchar pillow
+sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar requests luma.lcd readchar pillow
 sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool libiniparser-dev libsdl2-2.0-0 libsdl2-dev libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libfreetype6-dev libatlas-base-dev libjpeg-dev libfftw3-dev libasound2-dev libncursesw5-dev libtool libcurl4 libssl-dev git autoconf automake make m4
+sudo apt install python3-numpy
 
 git clone https://github.com/Maschine2501/cava.git
 git clone https://github.com/Maschine2501/cava2.git /home/volumio/CAVAinstall
