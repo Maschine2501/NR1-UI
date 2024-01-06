@@ -8,7 +8,7 @@ After=network-online.target
 
 Type=oneshot
 
-ExecStart=/usr/bin/python3 home/volumio/indicatorLEDS/startup_init.py
+ExecStart=/usr/bin/python3 home/volumio/NR1-UI/modules/startup_init.py
 
 RemainAfterExit=yes
 
