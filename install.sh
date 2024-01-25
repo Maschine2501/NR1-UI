@@ -1,21 +1,25 @@
 #!/bin/bash
 set +e
 
-echo -e "\e[92m    _   ______ ___      __  ______\e[0m"
-echo -e "\e[92m   / | / / __ <  /     / / / /  _/\e[0m"
-echo -e "\e[92m  /  |/ / /_/ / /_____/ / / // /  \e[0m"
-echo -e "\e[92m / /|  / _, _/ /_____/ /_/ // /   \e[0m"
-echo -e "\e[92m/_/ |_/_/ |_/_/      \____/___/   \e[0m"
-echo ""
 echo -e "\e[92mSetting up...\e[0m"
 echo -e "\e[92mInstalling all needed Modules and Libraries\e[0m"
 echo ""
-echo "_________________________________________________________"
 
 sudo dpkg-reconfigure tzdata
 sudo apt-get update
-sudo apt-get install -y python3-setuptools python3-pip python-rpi.gpi
-sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 pycurl gpiozero readchar requests luma.lcd readchar pillow
+
+# Installing dependencies for pycurl and other packages
+sudo apt-get install -y build-essential libffi-dev libc6-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev
+
+# Upgrade pip and setuptools before installing any packages
+sudo apt-get install -y python3-pip
+
+sudo pip3 install -U pip setuptools
+
+# Installing Python packages including pycurl
+sudo pip3 install pycurl rpi.gpio psutil socketIO-client pcf8574 RPi.GPIO gpiozero readchar requests luma.lcd pillow
+
+# Additional system dependencies
 sudo apt-get install -y libfftw3-dev libasound2-dev libncursesw5-dev libpulse-dev libtool libiniparser-dev libsdl2-2.0-0 libsdl2-dev libffi-dev libbz2-dev libexpat1-dev liblzma-dev libncurses5-dev libncursesw5-dev libreadline-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libfreetype6-dev libatlas-base-dev libjpeg-dev libfftw3-dev libasound2-dev libncursesw5-dev libtool libcurl4 libssl-dev git autoconf automake make m4
 sudo apt install python3-numpy
 
@@ -27,8 +31,7 @@ sudo chmod +x /home/volumio/NR1-UI/ftp.sh
 sudo echo "dtparam=spi=on" >> /boot/userconfig.txt
 sudo echo "dtparam=i2c=on" >> /boot/userconfig.txt
 
-sudo pip3 install -U pip
-sudo pip3 install -U setuptools
+sudo pip3 install -U pip setuptools
 sudo pip3 install --upgrade setuptools pip wheel
 sudo pip3 install --upgrade luma.oled
 
@@ -82,7 +85,7 @@ sudo cp /home/volumio/NR1-UI/service-files/mystreamerinit.service /lib/systemd/s
 sudo systemctl daemon-reload
 sudo systemctl enable mystreamerinit.service
 
-sudo sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd
+sudo cp /home/volumio/NR1-UI/ConfigurationFiles/mpd.conf.tmpl /volumio/app/plugins/music_service/mpd
 echo -e "\e[92mFifo-Audio-Outputs for Cava have been added to mpd.conf\e[0m"
 sudo service mpd restart
 
